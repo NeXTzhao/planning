@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11   CMakeFiles/AStar.dir/AStar.cpp.o CMakeFiles/AStar.dir/main.cpp.o  -o AStar 
