@@ -1,3 +1,0 @@
-/home/next/ros_workspace/map_file/AStart/build/CMakeFiles/rebuild_cache.dir
-/home/next/ros_workspace/map_file/AStart/build/CMakeFiles/edit_cache.dir
-/home/next/ros_workspace/map_file/AStart/build/CMakeFiles/AStar.dir
