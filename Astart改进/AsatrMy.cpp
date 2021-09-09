@@ -17,6 +17,8 @@
 
 using namespace std;
 
+cout << "few" << endl;
+
 const int kCost1 = 10;    //直移一格消耗
 const int kCost2 = 14;    //斜移一格消耗
 const int kcost3 = 50000; //在边界一定范围内（也就是kcostmap），cost增加,
