@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/AStart.dir/AStar.cpp.o CMakeFiles/AStart.dir/main.cpp.o  -o AStart 

@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/next/ros_workspace/map_file/AStart/AStar.cpp
+math.h
+-
+Astar.h
+/home/next/ros_workspace/map_file/AStart/Astar.h
+
+/home/next/ros_workspace/map_file/AStart/AStar.h
+vector
+-
+list
+-
+
+/home/next/ros_workspace/map_file/AStart/main.cpp
+iostream
+-
+AStar.h
+/home/next/ros_workspace/map_file/AStart/AStar.h
+
