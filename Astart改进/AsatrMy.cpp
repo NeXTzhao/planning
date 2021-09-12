@@ -66,7 +66,7 @@ list<Point *> closeList; //关闭列表,被排除的点,也就是被归为父节
 // 计算G值:可以斜着走,计算起始点到中转点的距离
 int calcG(Point *temp_start, Point *point)
 {
-    //斜着走向走距离 > 1 -->KCost2=14 ;
+    //斜着走向走距离 > 1 -->KCost2=14
     int extraG = ((abs(point->x - temp_start->x) + abs(point->y - temp_start->y)) == 1) ? kCost1 : kCost2;
     //判断父节点是否存在,初始节点的父节点为空
     int parentG = (point->parent == nullptr) ? 0 : point->parent->G;
