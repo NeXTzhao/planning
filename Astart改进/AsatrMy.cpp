@@ -76,7 +76,7 @@ int calcG(Point *temp_start, Point *point)
 // 计算H值:只能横纵向移动,计算中转点到终点的距离
 int calcH(Point *point, Point *end)
 {
-    //用简单的欧几里得距离计算H，这个H的计算是关键
+    //欧几里得距离计算H，这个H的计算是关键
     // return sqrt((double)(end->x - point->x) * (double)(end->x - point->x) + (double)(end->y - point->y) * (double)(end->y - point->y)) * kCost1;
 
     // 由于欧几里得距离的sqrt运算开销过大，另外道路的转换一般只存在四个方向的变换，故采用Manhattan评价函数
