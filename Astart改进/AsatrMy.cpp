@@ -17,10 +17,6 @@
 
 using namespace std;
 
-cout << "few" << endl;
-cout << "few" << endl;
-
-
 const int kCost1 = 10;    //直移一格消耗
 const int kCost2 = 14;    //斜移一格消耗
 const int kcost3 = 50000; //在边界一定范围内（也就是kcostmap），cost增加,
@@ -81,7 +77,10 @@ int calcG(Point *temp_start, Point *point)
 int calcH(Point *point, Point *end)
 {
     //用简单的欧几里得距离计算H，这个H的计算是关键
-    return sqrt((double)(end->x - point->x) * (double)(end->x - point->x) + (double)(end->y - point->y) * (double)(end->y - point->y)) * kCost1;
+    // return sqrt((double)(end->x - point->x) * (double)(end->x - point->x) + (double)(end->y - point->y) * (double)(end->y - point->y)) * kCost1;
+
+    // 由于欧几里得距离的sqrt运算开销过大，另外道路的转换一般只存在四个方向的变换，故采用Manhattan评价函数
+    return (abs((double)(end->x - point->x)) + abs((double)(end->y - point->y))) * kCost1;
 }
 
 //计算p值：表示离车道距离的代价，距离路沿越近代价越高，这里只有150 和 0两个档位,150表示可以走但是cost会加大
@@ -385,7 +384,7 @@ cv::Mat imageToVector(string filePath, char num)
     imshow("二值化图", mapNew);
 
     // 保存像素信息的txt文本路径, 方便查找起点和终点坐标
-    fstream file("/home/next/ros_workspace/map_file/AStart/mapPointsShow.txt", ios::out);
+    fstream file("/home/next/ros_workspace/routing_planning/Astart改进/mapPointsShow.txt", ios::out);
     stringstream ss;
     string data;
 
@@ -491,7 +490,7 @@ void loadToMap(vector<vector<int>> array)
     }
     imshow("loadToMap", img);
     waitKey(10000);
-    imwrite("/home/next/ros_workspace/map_file/AStart/loadToMap.jpg", img);
+    imwrite("/home/next/ros_workspace/routing_planning/Astart改进/loadToMap.jpg", img);
 }
 
 /*============================================================================*/
@@ -573,7 +572,7 @@ int main()
 {
     /*============================================================================*/
     cout << "开始处理地图" << endl;
-    string filePath = "/home/next/ros_workspace/map_file/AStart/mapload4.jpg";
+    string filePath = "/home/next/ros_workspace/routing_planning/Astart改进/mapload4.jpg";
     char flags = 'n';
     cv::Mat map = imageToVector(filePath, flags);
 
