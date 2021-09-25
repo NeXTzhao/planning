@@ -1,3 +1,11 @@
+/*
+ * @Author: wangdezhao
+ * @Date: 2021-09-08 20:07:45
+ * @LastEditTime: 2021-09-14 12:46:12
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /apollo-r3.0.0/home/next/ros_workspace/routing_planning/Astart改进/AsatrMy.cpp
+ */
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,7 +27,7 @@ using namespace std;
 
 const int kCost1 = 10;    //直移一格消耗
 const int kCost2 = 14;    //斜移一格消耗
-const int kcost3 = 50000; //在边界一定范围内（也就是kcostmap），cost增加,
+const int kcost3 = 5000; //在边界一定范围内（也就是kcostmap），cost增加,
 const int kconstmap = 3;  //设置膨胀距离
 const int sampling = 6;   // 设置采样范围
 

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-08-31 14:59:41
+ * @LastEditTime: 2021-09-20 12:01:24
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: /ros/home/next/ros_workspace/routing_planning/数据处理脚本/pointsToArray.cpp
+ */
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,12 +18,14 @@ using namespace std;
 #define row 720
 #define low 1281
 
-/*
- 将图片写入二维数组
-*/
+/**
+ * @brief 将csv,txt写入数组的另一种方法
+ * 
+ * @return int 
+ */
 int main()
 {
-    vector< vector<int> > vecLoad(row, vector<int>(low));
+    vector<vector<int>> vecLoad(row, vector<int>(low));
 
     int data[720][1281] = {0};    //定义一个矩阵，用于存放数据
     ifstream infile;              //定义读取文件流

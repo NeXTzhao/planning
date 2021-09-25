@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/next/ros_workspace/routing_planning/ros/install/setup.sh

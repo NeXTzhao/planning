@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Spline.h
+
+/home/next/ros_workspace/routing_planning/lattice/Spline/src/Spline.cpp
+Spline.h
+/home/next/ros_workspace/routing_planning/lattice/Spline/src/Spline.h
+cstring
+-
+algorithm
+-
+
+/home/next/ros_workspace/routing_planning/lattice/Spline/src/main.cpp
+cstdio
+-
+iostream
+-
+Spline.h
+/home/next/ros_workspace/routing_planning/lattice/Spline/src/Spline.h
+

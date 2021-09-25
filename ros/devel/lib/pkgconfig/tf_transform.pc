@@ -1,0 +1,8 @@
+prefix=/home/next/ros_workspace/routing_planning/ros/devel
+
+Name: tf_transform
+Description: Description of tf_transform
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

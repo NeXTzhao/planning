@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="path" type="pathload" name="path_node"/>
+    <node pkg="path" type="shower" name="shower_node"/>
+</launch>
