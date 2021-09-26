@@ -116,10 +116,7 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
-)
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -207,3 +204,6 @@ include_directories(
 # catkin_add_nosetests(test)
 add_executable(pathloadNew src/pathloadNew.cpp)
 target_link_libraries(pathloadNew ${catkin_LIBRARIES})
+
+add_executable(splinepathNew src/splinepath.cpp)
+target_link_libraries(splinepathNew ${catkin_LIBRARIES})

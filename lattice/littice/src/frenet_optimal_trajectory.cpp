@@ -44,22 +44,17 @@
 #define ROBOT_RADIUS 1.5 // robot radius [m]
 
 // #惩罚jerk
-// KJ = 0.01
-// #制动时间
-// KT = 0.1
-// #偏离中心线
-// KD = 2.0
-// KLAT = 1.0
-// KLON = 1.0
 #define KJ 0.1
+// #制动时间
 #define KT 0.1
+// #偏离中心线
 #define KD 1.0
 #define KLAT 1.0
 #define KLON 1.0
 
 using namespace cpprobotics;
 
-// 总和
+// 求各种代价的总和
 float sum_of_power(std::vector<float> value_list)
 {
   float sum = 0;
@@ -108,7 +103,7 @@ Vec_Path calc_frenet_paths(float c_speed, float c_d, float c_d_d, float c_d_dd, 
            tv < TARGET_SPEED + D_T_S * N_S_SAMPLE;
            tv += D_T_S)
       {
-        // 横向采样
+        // 依据纵向距离来进行横向采样
         FrenetPath fp_bot = fp;
         QuarticPolynomial lon_qp(s0, c_speed, 0.0, tv, 0.0, Ti);
         // std::numeric_limits<float>::min()计算浮点的最小值
@@ -155,8 +150,8 @@ Vec_Path calc_frenet_paths(float c_speed, float c_d, float c_d_d, float c_d_dd, 
 /**
  * @brief 转换成全局路径
  * 
- * @param path_list 
- * @param csp 
+ * @param path_list 产选出的路径
+ * @param csp 插值离散路径点
  */
 void calc_global_paths(Vec_Path &path_list, Spline2D csp)
 {
@@ -164,12 +159,16 @@ void calc_global_paths(Vec_Path &path_list, Spline2D csp)
   {
     for (unsigned int i = 0; i < path_p->s.size(); i++)
     {
+      // 如果弧长比最大弧长还大，那说明已经离开轨迹，直接终止
       if (path_p->s[i] >= csp.s.back())
       {
         break;
       }
+      // 记录实际路径s对应路径离散点的x，y，yaw,
       std::array<float, 2> poi = csp.calc_postion(path_p->s[i]);
       float iyaw = csp.calc_yaw(path_p->s[i]);
+
+      // 转换到笛卡尔坐标系
       float di = path_p->d[i];
       float x = poi[0] + di * std::cos(iyaw + M_PI / 2.0);
       float y = poi[1] + di * std::sin(iyaw + M_PI / 2.0);
@@ -217,11 +216,13 @@ bool check_collision(FrenetPath path, const Vec_Poi ob)
   return true;
 };
 
+// 筛选路径
 Vec_Path check_paths(Vec_Path path_list, const Vec_Poi ob)
 {
   Vec_Path output_fp_list;
   for (FrenetPath path : path_list)
   {
+    // 筛选速度、加速度、曲率和碰撞
     if (path.max_speed < MAX_SPEED && path.max_accel < MAX_ACCEL && path.max_curvature < MAX_CURVATURE && check_collision(path, ob))
     {
       output_fp_list.push_back(path);
@@ -303,8 +304,8 @@ int main()
 
   for (int i = 0; i < SIM_LOOP; i++)
   {
-    FrenetPath final_path = frenet_optimal_planning(
-        csp_obj, s0, c_speed, c_d, c_d_d, c_d_dd, obstcles);
+    FrenetPath final_path = frenet_optimal_planning(csp_obj, s0, c_speed, c_d, c_d_d, c_d_dd, obstcles);
+
     s0 = final_path.s[1];
     c_d = final_path.d[1];
     c_d_d = final_path.d_d[1];

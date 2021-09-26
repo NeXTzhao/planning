@@ -1,5 +1,0 @@
-build
-bin
-.vscode
-code-server
-deploy.sh
