@@ -1,3 +1,0 @@
-/home/next/ros_workspace/routing_planning/lattice/Spline/build/CMakeFiles/rebuild_cache.dir
-/home/next/ros_workspace/routing_planning/lattice/Spline/build/CMakeFiles/edit_cache.dir
-/home/next/ros_workspace/routing_planning/lattice/Spline/build/CMakeFiles/Spline.dir

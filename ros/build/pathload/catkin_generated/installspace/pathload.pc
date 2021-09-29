@@ -1,8 +1,0 @@
-prefix=/home/next/ros_workspace/routing_planning/ros/install
-
-Name: pathload
-Description: Description of pathload
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

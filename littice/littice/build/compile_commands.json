@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/next/ros_workspace/routing_planning/lattice/littice/build",
-  "command": "/usr/bin/x86_64-linux-gnu-g++-5   -I/home/next/ros_workspace/routing_planning/lattice/littice/include -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv  -std=c++11 -O3 -DNDEBUG   -o CMakeFiles/frenet.dir/src/frenet_optimal_trajectory.cpp.o -c /home/next/ros_workspace/routing_planning/lattice/littice/src/frenet_optimal_trajectory.cpp",
-  "file": "/home/next/ros_workspace/routing_planning/lattice/littice/src/frenet_optimal_trajectory.cpp"
-}
-]
