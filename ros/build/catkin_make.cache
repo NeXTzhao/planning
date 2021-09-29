@@ -1,0 +1,2 @@
+car_model:path:pathload
+-DCATKIN_DEVEL_PREFIX=/home/next/ros_workspace/routing_planning/ros/devel -DCMAKE_INSTALL_PREFIX=/home/next/ros_workspace/routing_planning/ros/install -G Unix Makefiles
