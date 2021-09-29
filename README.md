@@ -17,3 +17,8 @@ g++编译:g++ -std=c++11  xxx.cpp -o xx $(pkg-config --cflags --libs opencv) （
 ![loadToMap7](https://user-images.githubusercontent.com/68492981/132976579-f1298c8a-17c5-4eeb-8fc4-a1b2bfde91ae.jpg)
 
 
+ros更新：
+1. 运用spline插值进行简单轨迹生成
+2. 编写pure_persuit纯路径跟踪算法，对生成的轨迹进行跟踪
+
+![选区_005](https://user-images.githubusercontent.com/68492981/135197827-8088dada-fe1e-4724-853e-b176589bf162.png)
