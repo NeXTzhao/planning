@@ -285,6 +285,19 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
+# Target rules for targets named _catkin_empty_exported_target
+
+# Build rule for target.
+_catkin_empty_exported_target: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _catkin_empty_exported_target
+.PHONY : _catkin_empty_exported_target
+
+# fast build rule for target.
+_catkin_empty_exported_target/fast:
+	$(MAKE) -f car_model/CMakeFiles/_catkin_empty_exported_target.dir/build.make car_model/CMakeFiles/_catkin_empty_exported_target.dir/build
+.PHONY : _catkin_empty_exported_target/fast
+
+#=============================================================================
 # Target rules for targets named path_genpy
 
 # Build rule for target.
@@ -727,6 +740,19 @@ splinepathNew/fast:
 .PHONY : splinepathNew/fast
 
 #=============================================================================
+# Target rules for targets named nav_msgs_generate_messages_py
+
+# Build rule for target.
+nav_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_py
+.PHONY : nav_msgs_generate_messages_py
+
+# fast build rule for target.
+nav_msgs_generate_messages_py/fast:
+	$(MAKE) -f pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build.make pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build
+.PHONY : nav_msgs_generate_messages_py/fast
+
+#=============================================================================
 # Target rules for targets named nav_msgs_generate_messages_eus
 
 # Build rule for target.
@@ -857,32 +883,6 @@ actionlib_msgs_generate_messages_lisp/fast:
 .PHONY : actionlib_msgs_generate_messages_lisp/fast
 
 #=============================================================================
-# Target rules for targets named nav_msgs_generate_messages_py
-
-# Build rule for target.
-nav_msgs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 nav_msgs_generate_messages_py
-.PHONY : nav_msgs_generate_messages_py
-
-# fast build rule for target.
-nav_msgs_generate_messages_py/fast:
-	$(MAKE) -f pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build.make pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build
-.PHONY : nav_msgs_generate_messages_py/fast
-
-#=============================================================================
-# Target rules for targets named _catkin_empty_exported_target
-
-# Build rule for target.
-_catkin_empty_exported_target: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _catkin_empty_exported_target
-.PHONY : _catkin_empty_exported_target
-
-# fast build rule for target.
-_catkin_empty_exported_target/fast:
-	$(MAKE) -f pathload/CMakeFiles/_catkin_empty_exported_target.dir/build.make pathload/CMakeFiles/_catkin_empty_exported_target.dir/build
-.PHONY : _catkin_empty_exported_target/fast
-
-#=============================================================================
 # Target rules for targets named pathloadNew
 
 # Build rule for target.
@@ -894,6 +894,19 @@ pathloadNew: cmake_check_build_system
 pathloadNew/fast:
 	$(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/build
 .PHONY : pathloadNew/fast
+
+#=============================================================================
+# Target rules for targets named purepursuit
+
+# Build rule for target.
+purepursuit: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 purepursuit
+.PHONY : purepursuit
+
+# fast build rule for target.
+purepursuit/fast:
+	$(MAKE) -f pathload/CMakeFiles/purepursuit.dir/build.make pathload/CMakeFiles/purepursuit.dir/build
+.PHONY : purepursuit/fast
 
 # Help Target
 help:
@@ -917,6 +930,7 @@ help:
 	@echo "... gmock"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... _catkin_empty_exported_target"
 	@echo "... path_genpy"
 	@echo "... shower"
 	@echo "... path_generate_messages_nodejs"
@@ -951,6 +965,7 @@ help:
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... splinepathNew"
+	@echo "... nav_msgs_generate_messages_py"
 	@echo "... nav_msgs_generate_messages_eus"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_eus"
@@ -961,9 +976,8 @@ help:
 	@echo "... nav_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_lisp"
-	@echo "... nav_msgs_generate_messages_py"
-	@echo "... _catkin_empty_exported_target"
 	@echo "... pathloadNew"
+	@echo "... purepursuit"
 .PHONY : help
 
 

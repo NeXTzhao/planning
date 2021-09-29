@@ -126,6 +126,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/next/ros_workspace/routing_planning/ros/build/gtest/cmake_install.cmake")
+  include("/home/next/ros_workspace/routing_planning/ros/build/car_model/cmake_install.cmake")
   include("/home/next/ros_workspace/routing_planning/ros/build/path/cmake_install.cmake")
   include("/home/next/ros_workspace/routing_planning/ros/build/pathload/cmake_install.cmake")
 

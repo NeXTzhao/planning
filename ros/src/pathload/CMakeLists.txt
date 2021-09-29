@@ -202,8 +202,11 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-add_executable(pathloadNew src/pathloadNew.cpp)
+add_executable(pathloadNew src/pathloadOld.cpp)
 target_link_libraries(pathloadNew ${catkin_LIBRARIES})
 
 add_executable(splinepathNew src/splinepath.cpp)
 target_link_libraries(splinepathNew ${catkin_LIBRARIES})
+
+add_executable(purepursuit src/purepursuit.cpp)
+target_link_libraries(purepursuit ${catkin_LIBRARIES})

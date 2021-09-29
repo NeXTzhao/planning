@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="pathload" type="purepursuit" name="purepursuit_node" output="screen"/>
+</launch>

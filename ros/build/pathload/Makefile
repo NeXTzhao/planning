@@ -56,18 +56,6 @@ CMAKE_BINARY_DIR = /home/next/ros_workspace/routing_planning/ros/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -78,6 +66,18 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # Special rule for the target test
 test:
@@ -102,17 +102,17 @@ install/fast: preinstall/fast
 	/usr/local/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -241,6 +241,21 @@ splinepathNew: pathload/CMakeFiles/splinepathNew.dir/rule
 splinepathNew/fast:
 	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/splinepathNew.dir/build.make pathload/CMakeFiles/splinepathNew.dir/build
 .PHONY : splinepathNew/fast
+
+# Convenience name for target.
+pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f CMakeFiles/Makefile2 pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
+.PHONY : pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+nav_msgs_generate_messages_py: pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
+
+.PHONY : nav_msgs_generate_messages_py
+
+# fast build rule for target.
+nav_msgs_generate_messages_py/fast:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build.make pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build
+.PHONY : nav_msgs_generate_messages_py/fast
 
 # Convenience name for target.
 pathload/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule:
@@ -393,36 +408,6 @@ actionlib_msgs_generate_messages_lisp/fast:
 .PHONY : actionlib_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f CMakeFiles/Makefile2 pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
-.PHONY : pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-nav_msgs_generate_messages_py: pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/rule
-
-.PHONY : nav_msgs_generate_messages_py
-
-# fast build rule for target.
-nav_msgs_generate_messages_py/fast:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build.make pathload/CMakeFiles/nav_msgs_generate_messages_py.dir/build
-.PHONY : nav_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-pathload/CMakeFiles/_catkin_empty_exported_target.dir/rule:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f CMakeFiles/Makefile2 pathload/CMakeFiles/_catkin_empty_exported_target.dir/rule
-.PHONY : pathload/CMakeFiles/_catkin_empty_exported_target.dir/rule
-
-# Convenience name for target.
-_catkin_empty_exported_target: pathload/CMakeFiles/_catkin_empty_exported_target.dir/rule
-
-.PHONY : _catkin_empty_exported_target
-
-# fast build rule for target.
-_catkin_empty_exported_target/fast:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/_catkin_empty_exported_target.dir/build.make pathload/CMakeFiles/_catkin_empty_exported_target.dir/build
-.PHONY : _catkin_empty_exported_target/fast
-
-# Convenience name for target.
 pathload/CMakeFiles/pathloadNew.dir/rule:
 	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f CMakeFiles/Makefile2 pathload/CMakeFiles/pathloadNew.dir/rule
 .PHONY : pathload/CMakeFiles/pathloadNew.dir/rule
@@ -437,32 +422,74 @@ pathloadNew/fast:
 	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/build
 .PHONY : pathloadNew/fast
 
-src/pathloadNew.o: src/pathloadNew.cpp.o
+# Convenience name for target.
+pathload/CMakeFiles/purepursuit.dir/rule:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f CMakeFiles/Makefile2 pathload/CMakeFiles/purepursuit.dir/rule
+.PHONY : pathload/CMakeFiles/purepursuit.dir/rule
 
-.PHONY : src/pathloadNew.o
+# Convenience name for target.
+purepursuit: pathload/CMakeFiles/purepursuit.dir/rule
+
+.PHONY : purepursuit
+
+# fast build rule for target.
+purepursuit/fast:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/purepursuit.dir/build.make pathload/CMakeFiles/purepursuit.dir/build
+.PHONY : purepursuit/fast
+
+src/pathloadOld.o: src/pathloadOld.cpp.o
+
+.PHONY : src/pathloadOld.o
 
 # target to build an object file
-src/pathloadNew.cpp.o:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadNew.cpp.o
-.PHONY : src/pathloadNew.cpp.o
+src/pathloadOld.cpp.o:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadOld.cpp.o
+.PHONY : src/pathloadOld.cpp.o
 
-src/pathloadNew.i: src/pathloadNew.cpp.i
+src/pathloadOld.i: src/pathloadOld.cpp.i
 
-.PHONY : src/pathloadNew.i
+.PHONY : src/pathloadOld.i
 
 # target to preprocess a source file
-src/pathloadNew.cpp.i:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadNew.cpp.i
-.PHONY : src/pathloadNew.cpp.i
+src/pathloadOld.cpp.i:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadOld.cpp.i
+.PHONY : src/pathloadOld.cpp.i
 
-src/pathloadNew.s: src/pathloadNew.cpp.s
+src/pathloadOld.s: src/pathloadOld.cpp.s
 
-.PHONY : src/pathloadNew.s
+.PHONY : src/pathloadOld.s
 
 # target to generate assembly for a file
-src/pathloadNew.cpp.s:
-	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadNew.cpp.s
-.PHONY : src/pathloadNew.cpp.s
+src/pathloadOld.cpp.s:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/pathloadNew.dir/build.make pathload/CMakeFiles/pathloadNew.dir/src/pathloadOld.cpp.s
+.PHONY : src/pathloadOld.cpp.s
+
+src/purepursuit.o: src/purepursuit.cpp.o
+
+.PHONY : src/purepursuit.o
+
+# target to build an object file
+src/purepursuit.cpp.o:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/purepursuit.dir/build.make pathload/CMakeFiles/purepursuit.dir/src/purepursuit.cpp.o
+.PHONY : src/purepursuit.cpp.o
+
+src/purepursuit.i: src/purepursuit.cpp.i
+
+.PHONY : src/purepursuit.i
+
+# target to preprocess a source file
+src/purepursuit.cpp.i:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/purepursuit.dir/build.make pathload/CMakeFiles/purepursuit.dir/src/purepursuit.cpp.i
+.PHONY : src/purepursuit.cpp.i
+
+src/purepursuit.s: src/purepursuit.cpp.s
+
+.PHONY : src/purepursuit.s
+
+# target to generate assembly for a file
+src/purepursuit.cpp.s:
+	cd /home/next/ros_workspace/routing_planning/ros/build && $(MAKE) -f pathload/CMakeFiles/purepursuit.dir/build.make pathload/CMakeFiles/purepursuit.dir/src/purepursuit.cpp.s
+.PHONY : src/purepursuit.cpp.s
 
 src/splinepath.o: src/splinepath.cpp.o
 
@@ -497,13 +524,14 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... actionlib_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... geometry_msgs_generate_messages_lisp"
 	@echo "... rebuild_cache"
 	@echo "... splinepathNew"
+	@echo "... install/local"
+	@echo "... nav_msgs_generate_messages_py"
 	@echo "... test"
 	@echo "... nav_msgs_generate_messages_eus"
 	@echo "... geometry_msgs_generate_messages_cpp"
@@ -516,15 +544,17 @@ help:
 	@echo "... nav_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... actionlib_msgs_generate_messages_lisp"
-	@echo "... install/local"
-	@echo "... nav_msgs_generate_messages_py"
-	@echo "... _catkin_empty_exported_target"
 	@echo "... pathloadNew"
+	@echo "... install/strip"
+	@echo "... purepursuit"
 	@echo "... edit_cache"
 	@echo "... list_install_components"
-	@echo "... src/pathloadNew.o"
-	@echo "... src/pathloadNew.i"
-	@echo "... src/pathloadNew.s"
+	@echo "... src/pathloadOld.o"
+	@echo "... src/pathloadOld.i"
+	@echo "... src/pathloadOld.s"
+	@echo "... src/purepursuit.o"
+	@echo "... src/purepursuit.i"
+	@echo "... src/purepursuit.s"
 	@echo "... src/splinepath.o"
 	@echo "... src/splinepath.i"
 	@echo "... src/splinepath.s"

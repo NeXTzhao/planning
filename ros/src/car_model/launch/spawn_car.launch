@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<!-- 在Gazebo中创建一个新的world，并使用上述参数进行设置，一般无需修改 -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+	</include>
+
+	<include file="$(find car_model)/launch/spawn_xacro.launch">
+
+		<arg name="x" value="0.0"/>
+		<arg name="y" value="0.0"/>
+		<arg name="z" value="0.0"/>
+		<arg name="urdf_robot_file" value="$(find car_model)/urdf/smart.xacro"/>
+		<arg name="robot_name" value="smart"/>
+
+	</include>
+
+	<include file="$(find car_model)/launch/control.launch">
+		<arg name="robot_name" value="smart"/>
+		<arg name="config_file" value="smart_control_config.yaml"/>
+	</include>
+
+	<!-- 	
+	<include file="$(find waypoint_loader)/launch/waypoint_loader.launch"/>
+	<include file="$(find waypoint_updater)/launch/waypoint_updater.launch"/> -->
+
+
+
+</launch>
