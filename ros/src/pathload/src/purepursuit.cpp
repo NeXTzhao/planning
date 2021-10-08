@@ -1,10 +1,11 @@
-// #include <math.h>
 #include <ros/ros.h>
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Path.h>
@@ -15,7 +16,7 @@
 #include "cpprobotics_types.h"
 #include "cubic_spline.h"
 
-#define PREVIEW_DIS 4.8  //预瞄距离
+#define PREVIEW_DIS 3 //预瞄距离
 
 #define Ld 1.868  //轴距
 
@@ -49,7 +50,11 @@ cpprobotics::Vec_f r_y_;
 
 int pointNum = 0;  //保存路径点的个数
 int targetIndex = pointNum - 1;
-vector<int> bestPoints_ = {pointNum - 1};
+/*方案一*/
+// vector<int> bestPoints_ = {pointNum - 1};
+/*方案二*/
+vector<float> bestPoints_ = {0.0};
+
 //计算发送给模型车的转角
 void poseCallback(const geometry_msgs::PoseStamped &currentWaypoint) {
   auto currentPositionX = currentWaypoint.pose.position.x;
@@ -64,6 +69,9 @@ void poseCallback(const geometry_msgs::PoseStamped &currentWaypoint) {
   std::array<float, 3> calRPY =
       calQuaternionToEuler(currentQuaternionX, currentQuaternionY,
                            currentQuaternionZ, currentQuaternionW);
+
+  /*************************************************************************************************
+  //  方案一：通过累加路径距离，和预瞄距离进行比较以及夹角方向
   // 寻找匹配目标点
   for (int i = 0; i < pointNum; i++) {
     float lad = 0.0;  //累加前视距离
@@ -74,17 +82,52 @@ void poseCallback(const geometry_msgs::PoseStamped &currentWaypoint) {
                 pow(next_y - currentPositionY, 2));
     // cos(aAngle)判断方向
     float aAngle =
-        atan2(next_y - currentPositionY, next_x - currentPositionX) - calRPY[2];
+        atan2(next_y - currentPositionY, next_x - currentPositionX) -
+        calRPY[2];
     if (lad > preview_dis && cos(aAngle) >= 0) {
       targetIndex = i + 1;
       bestPoints_.push_back(targetIndex);
       break;
     }
   }
-
   // 取容器中的最大值
   int index = *max_element(bestPoints_.begin(), bestPoints_.end());
-  // cout << "index:" << index << endl;
+  ***************************************************************************************************/
+
+  /**************************************************************************************************/
+  // 方案二:通过计算当前坐标和目标轨迹距离，找到一个最小距离的索引号
+  int index;
+  vector<float> bestPoints_;
+  for (int i = 0; i < pointNum; i++) {
+    // float lad = 0.0;
+    float path_x = r_x_[i];
+    float path_y = r_y_[i];
+    // 遍历所有路径点和当前位置的距离，保存到数组中
+    float lad = sqrt(pow(path_x - currentPositionX, 2) +
+                     pow(path_y - currentPositionY, 2));
+
+    bestPoints_.push_back(lad);
+  }
+  // 找到数组中最小横向距离
+  auto smallest = min_element(bestPoints_.begin(), bestPoints_.end());
+  // 找到最小横向距离的索引位置
+  index = distance(bestPoints_.begin(), smallest);
+
+  int temp_index;
+  for (int i = index; i < pointNum; i++) {
+    //遍历路径点和预瞄点的距离，从最小横向位置的索引开始
+    float dis =
+        sqrt(pow(r_y_[index] - r_y_[i], 2) + pow(r_x_[index] - r_x_[i], 2));
+    //判断跟预瞄点的距离
+    if (dis < preview_dis) {
+      temp_index = i;
+    } else {
+      break;
+    }
+  }
+  index = temp_index;
+  /**************************************************************************************************/
+
   float alpha =
       atan2(r_y_[index] - currentPositionY, r_x_[index] - currentPositionX) -
       calRPY[2];

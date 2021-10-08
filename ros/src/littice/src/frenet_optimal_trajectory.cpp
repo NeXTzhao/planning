@@ -180,7 +180,7 @@ void calc_global_paths(Vec_Path &path_list, Spline2D csp) {
       }
     }
   }
-};
+}
 
 // 检查碰撞
 bool check_collision(FrenetPath path, const Vec_Poi ob) {
@@ -194,7 +194,7 @@ bool check_collision(FrenetPath path, const Vec_Poi ob) {
     }
   }
   return true;
-};
+}
 
 // 筛选路径
 Vec_Path check_paths(Vec_Path path_list, const Vec_Poi ob) {
@@ -207,7 +207,7 @@ Vec_Path check_paths(Vec_Path path_list, const Vec_Poi ob) {
     }
   }
   return output_fp_list;
-};
+}
 
 // frenet 最优规划
 FrenetPath frenet_optimal_planning(Spline2D csp, float s0, float c_speed,
@@ -226,7 +226,7 @@ FrenetPath frenet_optimal_planning(Spline2D csp, float s0, float c_speed,
     }
   }
   return final_path;
-};
+}
 
 // 刷新动画
 cv::Point2i cv_offset(float x, float y, int image_width = 2000,
@@ -235,7 +235,7 @@ cv::Point2i cv_offset(float x, float y, int image_width = 2000,
   output.x = int(x * 100) + 300;
   output.y = image_height - int(y * 100) - image_height / 3;
   return output;
-};
+}
 
 int main() {
   Vec_f wx({0.0, 10.0, 20.5, 35.0, 70.5});
@@ -271,7 +271,6 @@ int main() {
 
   float area = 20.0;
 
-  cv::namedWindow("frenet", cv::WINDOW_NORMAL);
   int count = 0;
 
   for (int i = 0; i < SIM_LOOP; i++) {
@@ -289,44 +288,6 @@ int main() {
         1.0) {
       break;
     }
-
-    // visualization`
-    cv::Mat bg(2000, 8000, CV_8UC3, cv::Scalar(255, 255, 255));
-    for (unsigned int i = 1; i < r_x.size(); i++) {
-      cv::line(bg, cv_offset(r_x[i - 1], r_y[i - 1], bg.cols, bg.rows),
-               cv_offset(r_x[i], r_y[i], bg.cols, bg.rows), cv::Scalar(0, 0, 0),
-               10);
-    }
-    for (unsigned int i = 0; i < final_path.x.size(); i++) {
-      cv::circle(bg,
-                 cv_offset(final_path.x[i], final_path.y[i], bg.cols, bg.rows),
-                 40, cv::Scalar(255, 0, 0), -1);
-    }
-
-    cv::circle(bg, cv_offset(final_path.x.front(), final_path.y.front(),
-                             bg.cols, bg.rows),
-               50, cv::Scalar(0, 255, 0), -1);
-
-    for (unsigned int i = 0; i < obstcles.size(); i++) {
-      cv::circle(bg,
-                 cv_offset(obstcles[i][0], obstcles[i][1], bg.cols, bg.rows),
-                 40, cv::Scalar(0, 0, 255), 5);
-    }
-
-    cv::putText(bg,
-                "Speed: " + std::to_string(c_speed * 3.6).substr(0, 4) + "km/h",
-                cv::Point2i((int)bg.cols * 0.5, (int)bg.rows * 0.1),
-                cv::FONT_HERSHEY_SIMPLEX, 5, cv::Scalar(0, 0, 0), 10);
-
-    cv::imshow("frenet", bg);
-    cv::waitKey(5);
-
-    // save image in build/bin/pngs
-    // struct timeval tp;
-    // gettimeofday(&tp, NULL);
-    // long int ms = tp.tv_sec * 1000 + tp.tv_usec / 1000;
-    // std::string int_count = std::to_string(ms);
-    // cv::imwrite("./pngs/"+int_count+".png", bg);
   }
   return 0;
-};
+}
