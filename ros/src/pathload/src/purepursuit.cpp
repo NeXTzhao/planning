@@ -135,7 +135,7 @@ void poseCallback(const geometry_msgs::PoseStamped &currentWaypoint) {
   // 当前点和目标点的距离Id
   float dl = sqrt(pow(r_y_[index] - currentPositionY, 2) +
                   pow(r_x_[index] - currentPositionX, 2));
-
+  // 发布小车运动指令及运动轨迹
   if (dl > 0.2) {
     float theta = atan(2 * Ld * sin(alpha) / dl);
     geometry_msgs::Twist vel_msg;

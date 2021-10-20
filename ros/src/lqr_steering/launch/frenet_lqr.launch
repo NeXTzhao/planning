@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="lqr_steering" type="lqrstring" name="frenetlqr_node" output="screen"/>
+</launch>
