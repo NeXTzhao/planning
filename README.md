@@ -64,7 +64,7 @@ sudo apt-get install -y ros-kinetic-gazebo-ros-control
 **实现思路：**
 
 1. 运用spline插值进行简单轨迹生成
-2. 编写Pure_Pursuit纯路径跟踪算法，对生成的轨迹进行跟踪
+2. 编写pure_pursuit纯路径跟踪算法，对生成的轨迹进行跟踪
 
 **操作步骤：（新开终端窗口）**
 
