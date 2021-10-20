@@ -28,7 +28,7 @@ ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样�
 
 2.A*算法生成的路径不平滑且贴近路沿，故增加道路膨胀层并加入靠近路沿的启发函数:
 
-<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 150%;" />
+<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 200%;" />
 
 <img src="https://user-images.githubusercontent.com/68492981/132976596-99eee2ee-7b96-464c-9700-36805340588b.jpg" alt="loadToMap4" style="zoom: 80%;" />
 
@@ -50,15 +50,15 @@ sudo apt-get install -y ros-kinetic-gazebo-ros-control
 
 ```shell
 1.创建src文件，放置功能包源码：
-mkdir -p ~/catkin_ws/src
+	mkdir -p ~/catkin_ws/src
 2.进入src文件夹
-cd ~/catkin_ws/src
+	cd ~/catkin_ws/src
 3.将路径ros/src下的功能包复制粘贴到创建的src目录下
 4.初始化文件夹
-catkin_init_workspace
+	catkin_init_workspace
 5.编译工作空间catkin_make
-cd ~/catkin_ws/
-catkin_make
+	cd ~/catkin_ws/
+	catkin_make
 ```
 
 ### 2.2.3 pure_pursuit算法：
@@ -71,16 +71,16 @@ catkin_make
 **操作步骤：（新开终端窗口）**
 
 ```shell
-编译完成之后source devel/setup.sh 依次运行以下节点
+source devel/setup.sh
 roslaunch car_model spawn_car.launch
 roslaunch purepursuit splinepath.launch 
 roslaunch purepursuit purepursuit.launch
 rviz 中add /splinepoints /rvizpath  /smart
 ```
 
-**仿真结果：**
+**Pure_pursuit仿真结果：**
 
-<img src="/home/next/图片/purepursuit.png" style="zoom: 67%;" />
+<img src="/home/next/图片/purepursuit.png" style="zoom: 80%;" />
 
 ### 2.2.4 lqr横向控制算法：
 
@@ -89,7 +89,7 @@ rviz 中add /splinepoints /rvizpath  /smart
 1. 运用五次多项式生成控制算法所需要的轨迹
 2. 编写lqr路径跟踪算法，对轨迹进行横向跟踪控制
 
-**操作步骤：**（新开终端窗口）
+**操作步骤：（新开终端窗口）**
 
 ```shell
 source devel/setup.sh
@@ -98,6 +98,6 @@ roslaunch lqr_steering frenet_lqr.launch
 rviz add /trajector_ypath /rviz_path  /smart
 ```
 
-**仿真结果：**
+**LQR仿真结果：**
 
-<img src="/home/next/图片/lqr.png" style="zoom:67%;" />
+<img src="/home/next/图片/lqr.png" style="zoom: 80%;" />
