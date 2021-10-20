@@ -44,19 +44,19 @@ sudo apt-get install -y ros-kinetic-gazebo-ros-control
 
 ```shell
 1.创建src文件，放置功能包源码：
-mkdir -p ~/catkin_ws/src
+	mkdir -p ~/catkin_ws/src
 
 2.进入src文件夹
-cd ~/catkin_ws/src
+	cd ~/catkin_ws/src
 
 3.将路径ros/src下的功能包复制粘贴到创建的src目录下
 
 4.初始化文件夹
-catkin_init_workspace
+	catkin_init_workspace
 
 5.编译工作空间catkin_make
-cd ~/catkin_ws/
-catkin_make
+	cd ~/catkin_ws/
+	catkin_make
 ```
 
 ### 2.2.3 pure_pursuit算法：
@@ -92,7 +92,7 @@ rviz 中add /splinepoints /rvizpath  /smart
 source devel/setup.sh
 roslaunch car_model spawn_car.launch
 roslaunch lqr_steering frenet_lqr.launch 
-rviz add /trajector_ypath /rviz_path  /smart
+rviz 中add /trajector_ypath /rviz_path  /smart
 ```
 
 **LQR仿真结果：**
