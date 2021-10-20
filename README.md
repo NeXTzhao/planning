@@ -1,3 +1,7 @@
+Astart改进目录，对A*算法做出优化：加入靠近路沿的启发函数，并对生成的轨迹点做了均值滤波处理，使轨迹更加平滑。
+
+ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steerin功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
+
 Astart改进:
 
 g++编译:g++ -std=c++11  xxx.cpp -o xx $(pkg-config --cflags --libs opencv) （需要安装opencv）
