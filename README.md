@@ -30,7 +30,7 @@ ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样�
 
 <img src="https://user-images.githubusercontent.com/68492981/132976579-f1298c8a-17c5-4eeb-8fc4-a1b2bfde91ae.jpg" alt="loadToMap7" style="zoom:80%;" />
 
-***2.2 ROS（Gazebo仿真）***
+### ***2.2 ROS（Gazebo仿真）***
 
 ### 2.2.1 使用Gazebo仿真需要安装的功能包
 
