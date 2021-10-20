@@ -34,6 +34,7 @@ ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样�
 
 ### 2.2.1 使用Gazebo仿真需要安装的功能包
 
+
 ```shell
 sudo apt-get install -y ros-kinetic-gazebo-ros-control
 sudo apt-get install -y ros-kinetic-ros-control ros-kinetic-ros-controllers
@@ -77,7 +78,8 @@ rviz 中add /splinepoints /rvizpath  /smart
 ```
 
 **Pure_pursuit仿真结果：**
-![purepursuit](https://user-images.githubusercontent.com/68492981/138087474-cde076f8-40a6-48d3-9869-4975db7e12f7.png)
+![lqr](https://user-images.githubusercontent.com/68492981/138087447-17d95d78-afaf-4b3c-bd9c-b964d1bb3e0e.png)
+
 
 ### 2.2.4 lqr横向控制算法：
 
@@ -96,6 +98,7 @@ rviz 中add /trajector_ypath /rviz_path  /smart
 ```
 
 **LQR仿真结果：**
-![lqr](https://user-images.githubusercontent.com/68492981/138087447-17d95d78-afaf-4b3c-bd9c-b964d1bb3e0e.png)
+
+![purepursuit](https://user-images.githubusercontent.com/68492981/138087474-cde076f8-40a6-48d3-9869-4975db7e12f7.png)
 
 
