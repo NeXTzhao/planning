@@ -36,6 +36,9 @@
 
 ### ***2.2 ROS（Gazebo仿真）***
 
+```shell
+系统要求：ubuntu16.04 + ros-kinetic +gazebo7
+```
 ### 2.2.1 使用Gazebo仿真需要安装的功能包
 
 
