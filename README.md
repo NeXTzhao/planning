@@ -30,7 +30,7 @@
 
 <img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 300%;" />         <img src="https://user-images.githubusercontent.com/68492981/132976596-99eee2ee-7b96-464c-9700-36805340588b.jpg" alt="loadToMap4" style="zoom: 80%;" />
 
-3. 运用均值滤波对路径做平滑处理并加大膨胀半径:
+3. 利用均值滤波对路径做平滑处理并加大膨胀半径:
 
 <img src="https://user-images.githubusercontent.com/68492981/132976579-f1298c8a-17c5-4eeb-8fc4-a1b2bfde91ae.jpg" alt="loadToMap7" style="zoom:80%;" />
 
