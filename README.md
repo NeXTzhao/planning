@@ -1,8 +1,11 @@
 # 1 目录概述
 
-Astart改进目录，对A*算法做出优化：加入靠近路沿的启发函数，并对生成的轨迹点做了均值滤波处理，使轨迹更加平滑。
+***Astart改进***
 
-ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steering功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
+  针对A*算法做出优化：加入靠近路沿的启发函数，并对生成的轨迹点做了均值滤波处理，使轨迹更加平滑。
+
+***ros***
+ros工作空间中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steering功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
 
 ## 2 功能包介绍
 
@@ -22,7 +25,7 @@ ros目录中，purepursuit功能包使用purepursuit算法对spline生成的样�
 
 2. A*算法生成的路径不平滑且贴近路沿，故增加道路膨胀层并加入靠近路沿的启发函数:
 
-<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 200%;" />
+<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 300%;" />
 
 <img src="https://user-images.githubusercontent.com/68492981/132976596-99eee2ee-7b96-464c-9700-36805340588b.jpg" alt="loadToMap4" style="zoom: 80%;" />
 
