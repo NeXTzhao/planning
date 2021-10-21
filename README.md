@@ -1,11 +1,12 @@
 # 1 目录概述
 
-***Astart改进***
+***routing_planning/Astart改进***
 
   针对A*算法做出优化：加入靠近路沿的启发函数，并对生成的轨迹点做了均值滤波处理，使轨迹更加平滑。
 
-***ros***
-ros工作空间中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steering功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
+***routing_planning/ros/src***
+
+  ros工作空间中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steering功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
 
 ## 2 功能包介绍
 
