@@ -78,7 +78,7 @@ rviz 中add /splinepoints /rvizpath  /smart
 ```
 
 **Pure_pursuit仿真结果：**
-![lqr](https://user-images.githubusercontent.com/68492981/138087447-17d95d78-afaf-4b3c-bd9c-b964d1bb3e0e.png)
+![pure_pursuit](https://user-images.githubusercontent.com/68492981/138196938-870ce64e-2e64-4948-b9ae-9c8617924550.png)
 
 
 ### 2.2.4 lqr横向控制算法：
@@ -98,7 +98,7 @@ rviz 中add /trajector_ypath /rviz_path  /smart
 ```
 
 **LQR仿真结果：**
+![lqr](https://user-images.githubusercontent.com/68492981/138196914-fa28cc20-9e5a-4300-adde-77ffc9852b69.png)
 
-![purepursuit](https://user-images.githubusercontent.com/68492981/138087474-cde076f8-40a6-48d3-9869-4975db7e12f7.png)
 
 
