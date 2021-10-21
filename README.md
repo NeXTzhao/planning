@@ -28,9 +28,7 @@
 
 2. A*算法生成的路径不平滑且贴近路沿，故增加道路膨胀层并加入靠近路沿的启发函数:
 
-<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 300%;" />
-
-<img src="https://user-images.githubusercontent.com/68492981/132976596-99eee2ee-7b96-464c-9700-36805340588b.jpg" alt="loadToMap4" style="zoom: 80%;" />
+<img src="https://user-images.githubusercontent.com/68492981/133076047-7c432bd4-a349-4288-8f30-e6b61ddbc2e9.jpg" alt="loadToMap1" style="zoom: 300%;" /><img src="https://user-images.githubusercontent.com/68492981/132976596-99eee2ee-7b96-464c-9700-36805340588b.jpg" alt="loadToMap4" style="zoom: 80%;" />
 
 3. 运用均值滤波对路径做平滑处理并加大膨胀半径:
 
