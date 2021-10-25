@@ -81,7 +81,7 @@ source devel/setup.sh
 roslaunch car_model spawn_car.launch
 roslaunch purepursuit splinepath.launch 
 roslaunch purepursuit purepursuit.launch
-rviz 中add /splinepoints /rvizpath  /smart
+rviz 中add /splinepoints /rvizpath  /smart（在rviz显示中，红色为小车运动轨迹，绿色为规划模块给出的轨迹）
 ```
 
 **Pure_pursuit仿真结果：**
@@ -101,7 +101,7 @@ rviz 中add /splinepoints /rvizpath  /smart
 source devel/setup.sh
 roslaunch car_model spawn_car.launch
 roslaunch lqr_steering frenet_lqr.launch 
-rviz 中add /trajector_ypath /rviz_path  /smart
+rviz 中add /trajector_ypath /rviz_path  /smart　（在rviz显示中，红色为小车运动轨迹，绿色为规划模块给出的轨迹）
 ```
 
 **LQR仿真结果：**
