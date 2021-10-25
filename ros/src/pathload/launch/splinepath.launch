@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="pathload" type="splinepathNew" name="spline_node" output="screen"/>
-</launch>

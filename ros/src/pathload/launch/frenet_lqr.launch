@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="pathload" type="frenetlqr" name="frenetlqr_node" output="screen"/>
-</launch>

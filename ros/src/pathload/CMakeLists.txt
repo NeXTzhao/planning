@@ -205,14 +205,5 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(pathloadNew src/pathloadOld.cpp)
 target_link_libraries(pathloadNew ${catkin_LIBRARIES})
 
-add_executable(splinepathNew src/splinepath.cpp)
-target_link_libraries(splinepathNew ${catkin_LIBRARIES})
-
-add_executable(purepursuit src/purepursuit.cpp)
-target_link_libraries(purepursuit ${catkin_LIBRARIES})
-
 add_executable(quinticpath src/quinticpath.cpp)
 target_link_libraries(quinticpath ${catkin_LIBRARIES})
-
-add_executable(frenetlqr src/frenetlqr.cpp)
-target_link_libraries(frenetlqr ${catkin_LIBRARIES})
