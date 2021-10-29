@@ -67,7 +67,7 @@ sudo apt-get install -y ros-kinetic-gazebo-ros-control
   catkin_make
 ```
 
-### 2.2.3 Pure_pursuit算法：
+### 2.2.3 Pure_pursuit算法
 
 **实现思路：**
 
@@ -88,7 +88,7 @@ rviz 中add /splinepoints /rvizpath  /smart（在rviz显示中，红色为小车
 ![pure_pursuit](https://user-images.githubusercontent.com/68492981/138196938-870ce64e-2e64-4948-b9ae-9c8617924550.png)
 
 
-### 2.2.4 LQR横向控制算法：
+### 2.2.4 LQR横向控制算法
 
 **实现思路：**
 
