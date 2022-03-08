@@ -21,7 +21,7 @@ velodyne激光雷达 & slam建图 & NDT定位 & pcl库
     3.保存二維柵格地圖：（節點是/projected_map）（這個地圖格式可以使用到gampping）
     rosrun map_server map_saver  map:=/projected_map -f ~/map
 
-3. Ａ_LOAM建圖同時構建柵格地圖：
+3. Ａ_LOAM建立栅格地图：
     1.建立launch启动文件，需要单独建立一个包
         创建launch文件
         src目录下 
@@ -48,7 +48,7 @@ VSCODE
 
 1. 插件
     代码格式化:Clang-Format
-        需要在终端sudo apt-get install clang-format
+        需要在终端sudo apt install -y clang-format
 
 
 
