@@ -181,8 +181,7 @@ void pointCallback(const nav_msgs::Path &msg) {
     r_x_.push_back(msg.poses[i].pose.position.x);
     r_y_.push_back(msg.poses[i].pose.position.y);
   }
-}
-
+} 
 int main(int argc, char **argv) {
   //创建节点
   ros::init(argc, argv, "pure_pursuit");
