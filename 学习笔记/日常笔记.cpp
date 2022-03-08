@@ -114,6 +114,12 @@ ROS
     终端gedit ~/.bashrc
     查看是否还有“source /opt/ros/kinetic/setup.bash”这一行，如果有，那就在终端在source ~/.bashrc
 
+5. 出现Python module empy missing问题
+    解决: pip3 unistall en
+         pip3 install empy
+6. 出现catkin_make:No module named 'catkin_pkg'
+    解决：sudo apt install python-catkin-pkg
+         pip3 install catkin_pkg
 /*==================================================================================================================*/
 
 Eigen库
