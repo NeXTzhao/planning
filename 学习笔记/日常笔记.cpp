@@ -347,8 +347,12 @@ Git & GitHub
         点击 Terminal: Select Default Shell
         单击zsh或bash  /usr/bin/zsh，我选择了zsh，也可以使用其他终端选项。
 
+6. vscode 无法切入搜狗输入法
+    卸载在Ubuntu官方商店下载的vscode,去去官网下载重新安装
 
-        
+7. 如何解决vscode中 导入头文件 #include<iostream> 提醒path错误
+    打开控制面板ctrl+shift+p，选择c/c++配置json,添加
+    "intelliSenseMode": "linux-gcc-x64"
 /*==================================================================================================================*/
 
 Shell
