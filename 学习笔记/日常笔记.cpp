@@ -154,6 +154,36 @@ vscode
                 */
 
 
+9. c_cpp_proprtties.json配置
+    /*
+    {
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include",
+                "/usr/lib/gcc/x86_64-linux-gnu/9/include",
+                "/usr/local/include",
+                "/usr/include/x86_64-linux-gnu",
+                "/usr/include/c++/9",
+                "/usr/include/x86_64-linux-gnu/c++/9",
+                "/usr/include/c++/9/backward",
+                "/usr/local/include",
+                "/usr/include/x86_64-linux-gnu",
+                "/opt/ros/noetic/include/"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "gnu17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+    }
+    */
 /*==================================================================================================================*/
 
 ROS
