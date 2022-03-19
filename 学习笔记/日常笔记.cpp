@@ -44,14 +44,114 @@ velodyne激光雷达 & slam建图 & NDT定位 & pcl库
 
 /*==================================================================================================================*/
 
-VSCODE
+vscode
 
 1. 插件
     代码格式化:Clang-Format
-        需要在终端sudo apt install -y clang-format
+        需要在终端sudo apt-get install clang-format
 
+2.  设置字体
+    在setting.json中添加
+    "editor.fontFamily": "'Consolas', 'Consolas', monospace, 'Consolas'",
+    "editor.fontLigatures": true,//这个控制是否启用字体连字，true启用，false不启用，这里选择启用
+    "editor.fontSize": 16,//设置字体大小
+    "editor.fontWeight": "normal",
+    "terminal.integrated.fontFamily": "monospace", //这个设置字体粗细，可选normal,bold,"100"~"900"等，选择合适的就行
 
+3. vscode终端无法启动 报路径不存在问题（例如安装或卸载zsh之后出现 /bin/zsh 不存在）
+    解决：修改vscode的默认shell 解决这个问题：
+        在 VSCode 中打开设置搜索 Cntr + Shift + p
+        搜索 default
+        点击 Terminal: Select Default Shell
+        单击zsh或bash  /usr/bin/zsh，我选择了zsh，也可以使用其他终端选项。
 
+4. vscode 无法切入搜狗输入法
+    卸载在Ubuntu官方商店下载的vscode,去去官网下载重新安装
+
+5. 如何解决vscode中 导入头文件 #include<iostream> 提醒path错误
+    打开控制面板ctrl+shift+p，选择c/c++配置json,添加
+    "intelliSenseMode": "linux-gcc-x64"
+
+6. 如何解决，vscode安装的Python扩展报错"Python is not installed. Please download and install python before using the extension."
+    问题的原因：默认情况下 vs 代码会查找 /usr/bin/python 但是在某些情况下，在 linux 和 mac 上，路径是 /usr/bin/python3 或 2 ，所以你可以通过声明 python3 来修复它作为默认版本。
+    输入：sudo apt install python-is-python3
+    检查：python --version 应该为3.xx
+    链接：https://stackoverflow.com/questions/62220904/vs-code-python-installation-and-python-interpreter-not-recognized
+
+7.  vscode 快捷键
+    Ctrl + shift + p        打开控制面板
+    Ctrl + ~                打开命令窗口
+    ctrl+i                  触发建议  
+    ctrl + shift + 空格      触发器参数提示 Trigger parameter hints 
+    ctrl + alt + f          函数注释
+
+8. vscode中debug
+        1.　在CMakeLists.txt中设置debug模式　set(CMAKE_BUILD_TYPE DEBUG)
+        2.　lanuch.json 文件中"program": "${workspaceFolder}/build/*****", *****为CMakeLists.txt中设置的可执行文件名称
+             /*   如果出现glibc的问题，先安装解压glibc
+                    sudo apt install glibc-source
+                    cd /usr/src/glibc/
+                    sudo tar -xvf glibc-[VERSION].tar.xz
+                然后在lanuch.json中添加
+                "sourceFileMap":{
+                    "/build/glibc-S7Ft5T": "usr/src/glibc"
+                }
+            为了不每次都要在终端build，可以新建一个任务，取名为build
+                "preLaunchTask": "build",
+                "miDebuggerPath": "/usr/bin/gdb",
+
+            lanuch.json完整如下：
+            {
+                "version": "0.2.0",
+                "configurations": [
+                    {
+                        "name": "(gdb) Launch", // 配置名称，将会在启动配置的下拉菜单中显示
+                        "type": "cppdbg", // 配置类型，这里只能为cppdbg
+                        "request": "launch", //请求配置类型，可以为launch（启动）或attach（附加）
+                        "program": "${workspaceFolder}/build/test01", ////修改为自己编译的程序位置和名称
+                        "args": [], //程序调试时传递给程序的命令行参数，一般设为空即可
+                        "stopAtEntry": false, //设为true时程序将暂停在程序入口处，我一般设置为true
+                        "cwd": "${fileDirname}", //调试程序时的工作目录
+                        "environment": [],
+                        "externalConsole": true, // 调试时是否显示控制台窗口，一般设置为true显示控制台
+                        "MIMode": "gdb", //指定连接的调试器，可以为gdb或lldb  
+                        "setupCommands": [
+                            {
+                                "description": "为 gdb 启用整齐打印",
+                                "text": "-enable-pretty-printing",
+                                "ignoreFailures": true
+                            }
+                        ],
+                        "preLaunchTask": "build", //调试会话开始前执行的任务，一般为编译程序。与tasks.json的label相对应
+                        "miDebuggerPath": "/usr/bin/gdb", //调试器路径，Windows下后缀不能省略，Linux下则去掉
+                        
+                        "sourceFileMap":{
+                            "/build/glibc-S7Ft5T": "usr/src/glibc"  //设置第三方库的路径
+                        }
+                    }
+                ]
+            }
+            
+        3. 给在launch文件中的build设置操作流程task 
+                打开命令窗　新建tasks.json
+                设置标签："label":"build"
+                设置操作流程："command": "cd ${workspaceFolder}/build ;cmake .. ; make",（注意 ；不能用＆替代）
+            tasks.json完整如下：
+                {
+                    "version": "2.0.0",
+                    "tasks": [
+                        {
+                            "type": "shell",
+                            "label":"build",
+                            "command": "cd ${workspaceFolder}/build ;cmake .. ; make",
+                            "args": [],
+                            "options": {
+                                "cwd": "/usr/bin"
+                            }
+                        }
+                    ]
+                }
+                */
 
 
 /*==================================================================================================================*/
@@ -71,18 +171,7 @@ ROS
     
 3. roslaunch gazebo_ros empty_world.launch 
 
-4. rosmsg show geometry_msgs/Twist
-    geometry_msgs/Vector3 linear
-    float64 x
-    float64 y
-    float64 z
-    geometry_msgs/Vector3 angular
-    float64 x
-    float64 y
-    float64 z
 
-
-    sudo apt-get remove gazebo-*
 相关报错处理
 1. ros中自定义的msg需要修改的文件:
     CMakelist.txt 里面要添加
@@ -117,6 +206,7 @@ ROS
 5. 出现Python module empy missing问题
     解决: pip3 unistall en
          pip3 install empy
+
 6. 出现catkin_make:No module named 'catkin_pkg'
     解决：sudo apt install python-catkin-pkg
          pip3 install catkin_pkg
@@ -193,6 +283,27 @@ C/C++
     # 生成可执行文件 AStart可执行文件名称(项目名)  AStart.cpp是源文件名称,还有其他的可以在后面添加
     add_executable(AStar AStar.cpp main.cpp)
 
+    /*******************************************************************/
+    cmake_minimum_required( VERSION 2.8 )//版本要求
+
+    project( imageBasics )//工程名
+
+    set( CMAKE_CXX_FLAGS "-std=c++11" )//添加c++ 11标准支持
+
+    find_package( OpenCV 3 REQUIRED )//寻找OpenCV.CMakeLists,以此找到包,并赋值各库相关变量
+
+    include_directories( ${OpenCV_INCLUDE_DIRS} )//OpenCV_INCLUDE_DIRS是关于find_package的变量,
+                                            //包含了一个路径，这样可以在代码中的#include做根目录
+    include_directories(/usr/local/include)//同上，找根目录
+
+    add_executable( imageBasics test_transform2.cpp )//添加对主函数的可执行文件
+
+    target_link_libraries( imageBasics ${OpenCV_LIBS} )//链接OpenCV库,OpenCV_LIBS为代表库可执行文件的变量
+                                                //$为取出变量中的值
+
+    /*******************************************************************/
+
+
 3.  c++语法
     匿名函数：
         C++中的匿名函数通常为[capture](parameters)->return-type{body}，
@@ -241,9 +352,115 @@ C/C++
 
 2. 编译报错ERROR: cannot launch node of type [robot_vision/motion_detector.py]: can not locate node [motion_detector.py] in package [robot_vision]
     解决：报错是因为权限不够！需要把xxx.py改成可执行文件权限
-
 /*==================================================================================================================*/
 
+c++ 数学库的安装
+
+首先检查cmake版本，要大于3.12.0 不然会出现cmake运行这一行
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+会出现FindPython3.cmake 的错误
+另外python要求是2.7 千万不是死3.*的
+
+更新cmake 下载源码 https://github.com/Kitware/CMake/releases?page=2
+  ./bootstrap
+  make
+  make install
+
+1.  Eigen库
+    方法一：sudo apt-get install libeigen3-dev
+
+    方法二：
+    1.首先下载源码
+        git clone https://gitlab.com/libeigen/eigen.git
+    2.解压之后建立
+        cd eigen-git-mirror
+        mkdir build
+        cd build
+        cmake ..
+        sudo make install
+        安装后 文件会在 /usr/include/eigen3  可以进入这个文件夹下 执行
+        sudo cp -r Eigen /usr/local/include
+
+        cpp使用就只需要包含头文件 include<Eigen>
+
+2.  osqp库
+    头文件使用格式 #include "osqp/osqp.h"
+    1.下载源码
+        git clone --recursive https://github.com/osqp/osqp
+    2.解压之后
+        cd osqp
+        mkdir build
+        cd build
+    3.创建Makefile
+        cmake -G "Unix Makefiles" ..
+    4.编译并安装
+        sudo cmake --build . --target install
+
+3.  Osqp-Eigen库
+    1.下载源码
+        git clone https://github.com/robotology/osqp-eigen.git
+    2.解压之后
+        cd osqp-eigen
+        mkdir build
+        cd build
+        // cmake -DCMAKE_INSTALL_PREFIX:PATH=<custom-folder> ../ 官方提供的方法。。。 不太好用直接cmake .. 
+        cmake ..
+        make
+        sudo make install  
+        （默认被安装在/usr/local/include/OsqpEigen/      /usr/local/lib/cmake/OsqpEigen/OsqpEigenConfigVersion.cmake      /usr/local/lib/libOsqpEigen.so）
+    3.操作完之后添加环境
+        sudo gedit ~/.bashrc
+        OsqpEigen_DIR=/usr/include/OsqpEigen/
+    
+    如何使用：
+        案例：
+            #include "matplotlibcpp.h"
+            namespace plt = matplotlibcpp;
+            int main() {
+                plt::plot({1,3,2,4});
+                plt::show();
+            }
+
+        CMakeLists.txt 写法：
+            cmake_minimum_required(VERSION 3.10)
+
+            set (CMAKE_CXX_STANDARD 11)
+            set (CMAKE_BUILD_TYPE DEBUG)
+            project(OsqpEigen)
+
+            # 通过find_package 找到安装的第三方库
+            find_package(OsqpEigen)
+            find_package(Eigen3)
+            find_package(PythonLibs 2.7)
+
+            include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
+            ##matplotlibcpp  下面路径需要根据自己路径做调整
+
+            add_executable(osqp_kron src/osqp_kron.cpp)
+            target_link_libraries(osqp_kron OsqpEigen::OsqpEigen)
+            // 找到头文件的位置
+            find_path(MATPLOTLIB_CPP_INCLUDE_DIRS "matplotlibcpp.h")
+            add_executable(matplot src/matplot.cpp)
+            
+            // 链接到Python的链接库
+            target_include_directories(matplot PRIVATE ${PYTHON_INCLUDE_DIRS})
+            target_link_libraries(matplot ${PYTHON_LIBRARIES})
+
+    4. ipopt安装:
+        参照这个博客：https://blog.csdn.net/qq_24649627/article/details/103084849?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163722220616780274187902%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=163722220616780274187902&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-103084849.first_rank_v2_pc_rank_v29&utm_term=ipopt%E5%AE%89%E8%A3%85&spm=1018.2226.3001.4187
+        不要sudo 
+
+    5.  gflags安装参考:https://blog.csdn.net/Amazingren/article/details/81873514?ops_request_misc=&request_id=&biz_id=102&utm_term=gflags%20%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93%20so&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-81873514.first_rank_v2_pc_rank_v29&spm=1018.2226.3001.4187
+            git clone https://github.com/gflags/gflags
+            cd gflags
+            mkdir build
+            cd build
+            cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_SHARED_LIBS=ON -DGFLAGS_NAMESPACE=google -G"Unix Makefiles" ..
+            make -j8
+            sudo make install
+            sudo ldconfig
+/*==================================================================================================================*/
+  
 Git & GitHub
 
 1. 基础命令的含义；
@@ -277,41 +494,6 @@ Git & GitHub
         git branch -M main
         git remote add origin git@github.com:NeXTzhao/grq.git（origin 为远程链接的别名）
         git push -u origin main
-        
-3. vscode + CMake 调试
-        launch.json注释
-        /*
-        
-        {
-            "version": "0.2.0",
-            "configurations": [
-                {
-                    "name": "(gdb) Launch", // 配置名称，将会在启动配置的下拉菜单中显示
-                    "type": "cppdbg", // 配置类型，这里只能为cppdbg
-                    "request": "launch", // 请求配置类型，可以为launch（启动）或attach（附加）
-                    "program": "${fileDirname}/${fileBasenameNoExtension}.exe", // 将要进行调试的程序的路径
-                    "args": [], // 程序调试时传递给程序的命令行参数，一般设为空即可
-                    "stopAtEntry": false, // 设为true时程序将暂停在程序入口处，我一般设置为true
-                    "cwd": "${workspaceFolder}", // 调试程序时的工作目录
-                    "environment": [], // （环境变量？）
-                    "externalConsole": true, // 调试时是否显示控制台窗口，一般设置为true显示控制台
-                    "internalConsoleOptions": "neverOpen", // 如果不设为neverOpen，调试时会跳到“调试控制台”选项卡，你应该不需要对gdb手动输命令吧？
-                    "MIMode": "gdb", // 指定连接的调试器，可以为gdb或lldb。但目前lldb在windows下没有预编译好的版本。
-                    "miDebuggerPath": "gdb", // 调试器路径，Windows下后缀不能省略，Linux下则去掉
-                    "setupCommands": [ // 用处未知，模板如此
-                        {
-                            "description": "Enable pretty-printing for gdb",
-                            "text": "-enable-pretty-printing",
-                            "ignoreFailures": false
-                        }
-                    ],
-                    "preLaunchTask": "Compile" // 调试会话开始前执行的任务，一般为编译程序。与tasks.json的label相对应
-                }
-            ]
-        }
-
-        */
-
 
 相关报错处理：
 1. vscode 上传代码报错：Failed to connect to github.com port 443:connection timed out
@@ -340,26 +522,64 @@ Git & GitHub
         git commit -m 'update .gitignore'
         然后再次推送
         
-5. vscode终端无法启动 报路径不存在问题（例如安装或卸载zsh之后出现 /bin/zsh 不存在）
-    解决：修改vscode的默认shell 解决这个问题：
-        在 VSCode 中打开设置搜索 Cntr + Shift + p
-        搜索 default
-        点击 Terminal: Select Default Shell
-        单击zsh或bash  /usr/bin/zsh，我选择了zsh，也可以使用其他终端选项。
 
-6. vscode 无法切入搜狗输入法
-    卸载在Ubuntu官方商店下载的vscode,去去官网下载重新安装
+/*==================================================================================================================*/
+Anaconda　用conda安装库非常方便
 
-7. 如何解决vscode中 导入头文件 #include<iostream> 提醒path错误
-    打开控制面板ctrl+shift+p，选择c/c++配置json,添加
-    "intelliSenseMode": "linux-gcc-x64"
-
-8.如何解决，vscode安装的Python扩展报错"Python is not installed. Please download and install python before using the extension."
-    问题的原因：默认情况下 vs 代码会查找 /usr/bin/python 但是在某些情况下，在 linux 和 mac 上，路径是 /usr/bin/python3 或 2 ，所以你可以通过声明 python3 来修复它作为默认版本。
-    输入：sudo apt install python-is-python3
-    检查：python --version 应该为3.xx
-    链接：https://stackoverflow.com/questions/62220904/vs-code-python-installation-and-python-interpreter-not-recognized
+1.  进入 conda base 环境
+        conda activate base
     
+    退出 conda base 环境
+        conda deactivate
+    
+    编辑 conda 环境变量
+        gedit ~/.bashrc
+
+2. conda使用以下命令访问库
+        conda install -c conda-forge osqp-eigen
+
+
+  
+Anaconda
+
+创建虚拟环境：
+使用 conda create -n your_env_name python=X.X（2.7、3.6等），anaconda 命令创建python版本为X.X、名字为your_env_name的虚拟环境。your_env_name文件可以在Anaconda安装目录envs文件下找到。 指定python版本为2.7，注意至少需要指定python版本或者要安装的包， 在不指定python版本时，自动安装最新python版本。
+
+conda create -n env_name python=2.7
+
+# 同时安装必要的包
+
+conda create -n env_name numpy matplotlib python=2.7
+
+激活虚拟环境：
+使用如下命令即可激活创建的虚拟环境
+
+Linux:  conda activate your_env_name(虚拟环境名称)
+
+此时使用python --version可以检查当前python版本是否为想要的（即虚拟环境的python版本）。
+
+退出虚拟环境：
+使用如下命令即可退出创建的虚拟环境
+
+Linux:  conda deactivate your_env_name(虚拟环境名称)
+
+删除虚拟环境：
+删除环境：
+使用命令conda remove -n your_env_name(虚拟环境名称) --all， 即可删除。
+
+删除虚拟环境中的包：
+使用命令conda remove --name yourenvnameyourenvnamepackage_name（包名） 即可。
+
+conda常用命令
+conda list：查看安装了哪些包。
+conda update --all 创建前最好将包都进行升级
+conda install package_name(包名)：安装包
+conda env list 或 conda info -e：查看当前存在哪些虚拟环境
+conda update conda：检查更新当前conda
+
+
+通常ubuntu很多默认的工具都是使用Python2.*，创建anaconda后先conda init ，# export PATH="/home/next/anaconda3/bin:$PATH"  这个可以不用加
+
 /*==================================================================================================================*/
 
 Shell
