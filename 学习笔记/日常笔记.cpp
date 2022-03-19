@@ -353,6 +353,13 @@ Git & GitHub
 7. 如何解决vscode中 导入头文件 #include<iostream> 提醒path错误
     打开控制面板ctrl+shift+p，选择c/c++配置json,添加
     "intelliSenseMode": "linux-gcc-x64"
+
+8.如何解决，vscode安装的Python扩展报错"Python is not installed. Please download and install python before using the extension."
+    问题的原因：默认情况下 vs 代码会查找 /usr/bin/python 但是在某些情况下，在 linux 和 mac 上，路径是 /usr/bin/python3 或 2 ，所以你可以通过声明 python3 来修复它作为默认版本。
+    输入：sudo apt install python-is-python3
+    检查：python --version 应该为3.xx
+    链接：https://stackoverflow.com/questions/62220904/vs-code-python-installation-and-python-interpreter-not-recognized
+    
 /*==================================================================================================================*/
 
 Shell
