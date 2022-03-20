@@ -84,6 +84,8 @@ vscode
     ctrl+i                  触发建议  
     ctrl + shift + 空格      触发器参数提示 Trigger parameter hints 
     ctrl + alt + f          函数注释
+    shift + alt + x         运行编译好的可执行文件(自定义的快捷键)
+    shift + alt + z         编译cpp文件(自定义的快捷键)
 
 8. vscode中debug
         1.　在CMakeLists.txt中设置debug模式　set(CMAKE_BUILD_TYPE DEBUG)
