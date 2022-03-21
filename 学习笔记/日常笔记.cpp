@@ -86,7 +86,14 @@ vscode
     ctrl + alt + f          函数注释
     shift + alt + x         运行编译好的可执行文件(自定义的快捷键)
     shift + alt + z         编译cpp文件(自定义的快捷键)
+    ctrl + shift + f        是搜狗简体繁/体切换的快捷键
+    ctrl + b                打开/关闭侧边栏
+    ctrl + p                按名称搜索文件
 
+    重构代码快捷键：
+    1.  shift + F12          找到所有引用    
+    2.  ctrl + F12          同时修改本文件中所有的匹配
+    3.  F2                  重命名(例如修改一个方法名，输入新的名称之后所有文件都会修改)
 8. vscode中debug
         1.　在CMakeLists.txt中设置debug模式　set(CMAKE_BUILD_TYPE DEBUG)
         2.　lanuch.json 文件中"program": "${workspaceFolder}/build/*****", *****为CMakeLists.txt中设置的可执行文件名称
@@ -527,6 +534,28 @@ Git & GitHub
         git remote add origin git@github.com:NeXTzhao/grq.git（origin 为远程链接的别名）
         git push -u origin main
 
+3. .gitignore语法规则
+        空行或是以#开头的行即注释行将被忽略。
+        可以在前面添加正斜杠/来避免递归,下面的例子中可以很明白的看出来与下一条的区别。
+        可以在后面添加正斜杠/来忽略文件夹，例如build/即忽略build文件夹。
+        可以使用!来否定忽略，即比如在前面用了*.apk，然后使用!a.apk，则这个a.apk不会被忽略。
+        *用来匹配零个或多个字符，如*.[oa]忽略所有以".o"或".a"结尾，*~忽略所有以~结尾的文件（这种文件通常被许多编辑器标记为临时文件）;
+            []用来匹配括号内的任一字符，如[abc]，也可以在括号内加连接符，如[0-9]匹配0至9的数；?用来匹配单个字符。
+
+        例子：
+        # 忽略 .a 文件
+        *.a
+        # 但否定忽略 lib.a, 尽管已经在前面忽略了 .a 文件
+        !lib.a
+        # 仅在当前目录下忽略 TODO 文件， 但不包括子目录下的 subdir/TODO
+        /TODO
+        # 忽略 build/ 文件夹下的所有文件
+        build/
+        # 忽略 doc/notes.txt, 不包括 doc/server/arch.txt
+        doc/*.txt
+        # 忽略所有的 .pdf 文件 在 doc/ directory 下的
+        doc/**/*.pdf
+
 相关报错处理：
 1. vscode 上传代码报错：Failed to connect to github.com port 443:connection timed out
     (知识：端口 443，基于TLS/SSL的http协议，此端口用于安全的 Web 浏览器通信。通过此类连接传输的数据具有很强的抗窃听和拦截能力。
@@ -744,4 +773,13 @@ Linux & Ubuntu
 1. sudo apt-get update报错 E: 部分索引文件下载失败。如果忽略它们，那将转而使用旧的索引文件。
      解决：进入到 cd /etc/apt/sources.list.d/ 再ls查看索引, 然后删除对应的报错索引
 
+2. ubuntu 经常突然卡死
+    首先查看磁盘：df -h
+    如果发现 snap盘占用率达到100%
+    清理这些磁盘：sudo apt autoremove --purge snapd
+3.  无法调节亮度问题
+    解决办法:
+    sudo add-apt-repository ppa:apandada1/brightness-controller
+    sudo apt-get update
+    sudo apt-get install brightness-controller-simple
 /*==================================================================================================================*/
