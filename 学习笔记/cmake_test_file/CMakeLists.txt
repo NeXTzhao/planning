@@ -4,12 +4,12 @@ project(CMAKE_TEST VERSION 0.1.0)
 
 
 # 设置CMAKE编译选项 c++14标准、o2优化、显示warning
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -o2 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
 # 设置c++版本
 # set(CMAKE_CXX_STANDARD 14)
 
 # 设置编译版本 bebug / relese
-SET(CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_BUILD_TYPE Debug)
 # SET(CMAKE_BUILD_TYPE "Release")
 
 

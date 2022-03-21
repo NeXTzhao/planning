@@ -18,7 +18,8 @@ void test() {
 }
 
 int main() {
+  std::cout<<"first"<<std::endl;
   test();
-  std::cout << sum(100)<<std::endl;
+  // std::cout << sum(100)<<std::endl;
   return 0;
 }
