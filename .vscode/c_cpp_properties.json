@@ -11,7 +11,8 @@
             "compilerPath": "/usr/bin/g++-9",
             "intelliSenseMode": "linux-clang-x64",
             "cStandard": "c17",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/学习笔记/cmake_test_file/build/compile_commands.json"
         }
     ],
     "version": 4
