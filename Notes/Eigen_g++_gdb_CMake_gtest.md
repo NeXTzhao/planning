@@ -133,7 +133,9 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
     
 4	-I    指定头文件搜索目录
     # -I 
-    # /usr/include目录一般不用指定，gcc知道去那里找，但是如果头文件不在/usr/icnclude里我们就要用-I参数指定了，比如头文件放在/myinclude目录里，那编译命令行就要加上-I/myinclude 参数了，如果不加你会得到一个”xxxx.h: No such file or directory”的错误。-I参数可以用相对路径，比如头文件在当前 目录，可以用-I.来指定。上面我们提到的–cflags参数就是用来生成-I参数的。
+    # /usr/include目录一般不用指定，gcc知道去那里找，但是如果头文件不在/usr/icnclude里我们就要用-I参数指定了，
+    # 比如头文件放在/myinclude目录里，那编译命令行就要加上-I/myinclude 参数了，如果不加你会得到一个”xxxx.h: No such file or directory”的错误。
+    #-I参数可以用相对路径，比如头文件在当前 目录，可以用-I.来指定。上面我们提到的–cflags参数就是用来生成-I参数的。
 
     g++ -I/myinclude test.cpp	
     
@@ -540,6 +542,7 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
   # ${GTK_LIBRARY_DIRS}
   # )
   ```
+<<<<<<< HEAD:Notes/Eigen_g++_gdb_CMake_gtest.md
 
 # GoogleTest
 
@@ -648,3 +651,5 @@ int main(){
 - demo2较复杂直接见代码routing_planning/Notes/GoogleTest/demo2
 - [http://google.github.io/googletest/primer.html](http://google.github.io/googletest/primer.html)中还提供了测试夹具(对多个测试使用相同的数据配置)、调用测试等案例.
 
+=======
+>>>>>>> 86aa5f74afc85461c03d6bc86f446ee0cb82c4ad:学习笔记/G++_GDB_CMAKE.md
