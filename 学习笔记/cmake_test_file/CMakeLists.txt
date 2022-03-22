@@ -27,6 +27,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 # 设置动态链接库输出路径
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 
+#设置是否生成compile_commands.json文件来记录编译过程
+#默认不开启，开启后，生成的compile_commands.json包含所有编译单元所执行的指令。可查看编译的具体文件。
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) 
 
 # 添加math子目录，注意子文件要放在总CMakeLists.txt的上面，不然链接不到
 add_subdirectory(math)
