@@ -12,7 +12,7 @@
 #include "solider.hpp"
 
 #ifdef USE_MATH
-#include "myMath.hpp"
+  #include "myMath.hpp"
 #endif
 
 void test() {
@@ -27,12 +27,10 @@ int main(int argc, char* argv[]) {
     // report version
     std::cout << argv[0] << " Version " << CMAKE_TEST_VERSION_MAJOR << " . "
               << CMAKE_TEST_VERSION_MINOR << std::endl;
-    ;
-    return 1;
   }
 
   test();
-
+  
   #ifdef USE_MATH
     std::cout << sum(100) << std::endl;
   #else

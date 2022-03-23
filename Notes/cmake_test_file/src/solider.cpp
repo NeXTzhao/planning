@@ -13,6 +13,6 @@ void solider::addBulletToGun(int num) { this->_ptr_gun->addBullet(num); }
 void solider::addGun(Gun* ptr_gun) { this->_ptr_gun = ptr_gun; }
 
 bool solider::fire() {
-  std::cout << "fire is ok" << std::endl;
+  // std::cout << "fire is ok" << std::endl;
   return this->_ptr_gun->isShoot();
 }
