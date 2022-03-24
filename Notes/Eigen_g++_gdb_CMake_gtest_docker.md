@@ -71,9 +71,9 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 
   
 
-# GCC编译器/GDB调试器
+# GCC编译器
 
-## 1	编译过程
+## 1	cpp文件编译过程
 
 ```bash
 1 预处理-Pre-Processing           		//.i文件
@@ -181,7 +181,11 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 
 
 
-## 3	GDB调试器
+------
+
+# GDB调试器
+
+## 1	使用
 
 ```bash
 ## 以下命令后括号内为命令的简化使用，比如run（r），直接输入命令 r 就代表命令run
@@ -244,6 +248,10 @@ $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子�
 > ​	1.编译程序时需要加上-g，之后才能用gdb进行调试：gcc -g main.c -o main
 >
 > ​	2.回车键：重复上一命令
+
+
+
+------
 
 # CMake
 
@@ -542,7 +550,9 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
   # ${GTK_LIBRARY_DIRS}
   # )
   ```
-<<<<<<< HEAD:Notes/Eigen_g++_gdb_CMake_gtest.md
+
+
+------
 
 # GoogleTest
 
@@ -651,5 +661,8 @@ int main(){
 - demo2较复杂直接见代码routing_planning/Notes/GoogleTest/demo2
 - [http://google.github.io/googletest/primer.html](http://google.github.io/googletest/primer.html)中还提供了测试夹具(对多个测试使用相同的数据配置)、调用测试等案例.
 
-=======
->>>>>>> 86aa5f74afc85461c03d6bc86f446ee0cb82c4ad:学习笔记/G++_GDB_CMAKE.md
+
+
+------
+
+# Docker

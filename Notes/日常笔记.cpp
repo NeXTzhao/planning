@@ -11,8 +11,6 @@ velodyne激光雷达 & slam建图 & NDT定位 & pcl库
     6.rosrun rqt_tf_tree rqt_tf_tree
     7.rosrun map_server map_saver  map:=/projected_map -f ~/map
 
-    camera_init
-
 2. A_LOAM建图操作步骤：
     1.运行vlp
     roslaunch velodyne_pointcloud VLP16_points.launch
@@ -249,46 +247,6 @@ ROS
 6. 出现catkin_make:No module named 'catkin_pkg'
     解决：sudo apt install python-catkin-pkg
          pip3 install catkin_pkg
-/*==================================================================================================================*/
-
-Eigen库
-
-1. eigen安装见csdn，安装完成之后要使用，需添加头文件#include <Eigen/Eigen>
-
-2. 
-    Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matrix,如下所示：
-    Eigen::Matrix3d matrix_33 = Eigen::Matrix3d::Zero():     //初始化为0       //Matrix3d实质上是Eigen::Matrix<double, 3, 3> 
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix_dynamic;     //如果不确定矩阵大小，可以使用动态大小的矩阵
-    Eigen::MatrixXd matrix_xd;                                                //与上类似，表示任意大小的元素类型为double的矩阵变量
-    Eigen::MatrixXf matrix_xf;                                                //表示任意大小的元素类型为float的矩阵变量
-    Eigen::Vector3d v_3d;                                                     //Vector3d实质上是Eigen::Matrix<double, 3, 1>   三行一列
-
-3. 
-    3.1 加减乘除跟数字操作一样
-    3.2 赋值操作:
-        matrix_33<<1,2,3,4,5,6,7,8,9;
-        或 matrix_33(0,0)=1;
-    3.3
-    cout << matrix_33.transpose() << endl;    //转置
-	cout << matrix_33.sum() << endl;          //各元素和
-	cout << matrix_33.trace() << endl;        //迹
-	cout << matrix_33 * 10 << endl;           //数乘
-	cout << matrix_33.inverse() << endl;      //逆
-	cout << matrix_33.determinant() << endl;  //行列式
-    cout << matrix_33.adjoint() << endl;      //伴随
-    cout << matrix_33.cwiseAbs() << endl;     //绝对值
-    cout << matrix_33.maxCoeff() << endl;     //求最大系数
-
-    3.4
-    Eigen::Vector2d C = A.colPivHouseholderQr().solve(b); // 求解Ax=b ; Vector2d => Matrix<double,2, 1>
-    cwiseAbs()求绝对值、maxcoff()求最大系数
-
-    3.5 设置单位矩阵
-        Eigen::MatrixXd::Identity(4, 4)  
-        或
-        Eigen::Matrix<double ,4,4> A;
-        A.setIdentity(4, 4);
-
 
 /*==================================================================================================================*/
 
@@ -602,7 +560,6 @@ Anaconda　用conda安装库非常方便
 
   
 Anaconda
-
 创建虚拟环境：
 使用 conda create -n your_env_name python=X.X（2.7、3.6等），anaconda 命令创建python版本为X.X、名字为your_env_name的虚拟环境。your_env_name文件可以在Anaconda安装目录envs文件下找到。 指定python版本为2.7，注意至少需要指定python版本或者要安装的包， 在不指定python版本时，自动安装最新python版本。
 
@@ -640,31 +597,6 @@ conda update conda：检查更新当前conda
 
 
 通常ubuntu很多默认的工具都是使用Python2.*，创建anaconda后先conda init ，# export PATH="/home/next/anaconda3/bin:$PATH"  这个可以不用加
-
-/*==================================================================================================================*/
-
-Shell
-
-1.  shell脚本配置Ubuntu开发环境 & 软件安装
-        Ubuntu开发环境
-            #!/bin/bash
-                echo -e "\033[45;37m=========TSARI 开发环境配置==========\033[0m"
-                echo -e "\033[45;37m---------更新资源---------\033[0m"
-                sudo apt-get -y update
-                sudo apt-get -y upgrade
-
-                ...
-                (未完待续...)
-
-        软件安装 (优化写法)：
-            install_software() {
-                #install git
-                if (echo "${install_software_list[@]}" | grep -wq "git");then
-                    apt-get -y install git && echo -e "${BLUE_COLOR}git install completed.${END_COLOR}" 
-                fi
-            }
-  
-
 
 /*==================================================================================================================*/
 
@@ -740,7 +672,7 @@ Linux & Ubuntu
         （27）文件类型查看命令 file
             进入共享文件夹目录：cd /mnt/hgfs/共享文件夹名
 
-3. 终端实现翻墙：
+3. 终端实现翻墙
     终端默认不动，手动配置,前提是要修改后NetWork中的配置
     修改 sudo gedit ~/.bashrc
         export https_proxy=http://127.0.0.1:{http port};
@@ -777,6 +709,7 @@ Linux & Ubuntu
     首先查看磁盘：df -h
     如果发现 snap盘占用率达到100%
     清理这些磁盘：sudo apt autoremove --purge snapd
+    
 3.  无法调节亮度问题
     解决办法:
     sudo add-apt-repository ppa:apandada1/brightness-controller
