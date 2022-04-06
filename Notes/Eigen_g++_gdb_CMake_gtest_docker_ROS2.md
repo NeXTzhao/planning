@@ -836,7 +836,7 @@ ros2 pkg create --build-type ament_cmake <package_name>
 ros2 pkg create --build-type ament_cmake --node-name my_node my_package --dependencies rclcpp std_msgs (这一步顺便完成了cpp文件的创建)
 
 
- #--dependencies 参数会将后边的依赖自动添加到package.xml和CMakeLists.txt中
+ --dependencies 参数会将后边的依赖自动添加到package.xml和CMakeLists.txt中
  
 将会产生如下文件：
 my_package/
@@ -874,12 +874,12 @@ colcon build --packages-select my_package
 ros2 run my_package my_node
 ```
 
-#### 修改package.xml和CMakeLists.txt
+#### 自定义cpp文件需要修改package.xml和CMakeLists.txt
 
 ```bash
 /*****************************************************/
 package.xml
-#如何添加依赖包
+#后序如果要设置依赖项
 需要添加依赖项，放到ament_cmake下边：
 <depend>rclcpp</depend>
 <depend>std_msgs</depend>
@@ -903,159 +903,11 @@ install(TARGETS
   lib/${PROJECT_NAME})
 ```
 
-### 3	自定义msg和srv文件
-
-1. 创建功能包，并在此功能包中新建msg和srv文件夹
-
-   ```bash
-   ros2 pkg create --build-type ament_cmake tutorial_interfaces
-   mkdir msg srv
-   ```
-
-2. 在对应的msg和srv文件夹中创建`.msg`文件和`.srv`文件
-
-   ```bash
-   #tutorial_interfaces/msg/Num.msg
-   int64 num
-   
-   #tutorial_interfaces/srv/AddThreeInts.srv
-   int64 a
-   int64 b
-   int64 c
-   ---
-   int64 sum
-   ```
-
-3. CMakeLists.txt
-
-   自定义的接口会装换成对应的语言代码，以供调用
-
-   ```c++
-   #在CMakeLists.txt中添加
-   find_package(rosidl_default_generators REQUIRED)
-   
-   rosidl_generate_interfaces(${PROJECT_NAME}
-     "msg/Num.msg"
-     "srv/AddThreeInts.srv"
-   )
-   ```
-
-4. package.xml
-   因为接口依赖于rosidl_default_generators生成特定于语言的代码，所以需要在xml中声明对它的依赖。
-
-   ```c++
-   #在package.xml中添加
-   <build_depend>rosidl_default_generators</build_depend>
-   <exec_depend>rosidl_default_runtime</exec_depend>
-   <member_of_group>rosidl_interface_packages</member_of_group>
-   ```
-
-5. 编译
-
-   ```c++
-   colcon build --packages-select tutorial_interfaces
-       
-   #编译后会产生Num.hpp和AddThreeInts.hpp文件 会在ros工作空间根目录下的install文件夹中
-   ```
-
-6. 如何确认已建好的msg和srv
-
-   ```bash
-   1.在工作区的根目录下
-   . install/setup.bash
-   
-   2.检查msg
-   ros2 interface show tutorial_interfaces/msg/Num
-   
-   3.检查srv
-   ros2 interface show tutorial_interfaces/srv/AddThreeInts
-   ```
-
-7. 测试`msg`和`srv`
-
-   ```bash
-   参考：https://docs.ros.org/en/foxy/Tutorials/Custom-ROS2-Interfaces.html
-   源码在：routing_planning/Notes/ROS2_WORKSPACE/src 下的myint和my_package两个功能包中
-   
-   如何在一个功能包使用自定义msg,参考routing_planning/Notes/ROS2_WORKSPACE/src/more_interface文件
-   ```
-
-### 4	添加依赖项
-
-有两种方法可以将你的包链接到一个新的依赖项。
-
-- 第一种也是推荐的方法是使用 ament 宏`ament_target_dependencies`。例如，假设我们要链接`my_target`线性代数库 Eigen3。
-
-```c++
-find_package(Eigen3 REQUIRED)
-ament_target_dependencies(my_target Eigen3)
-```
-
-它包括项目正确找到的必要头文件和库及其依赖项。它还将确保在使用覆盖工作空间时所有依赖项的包含目录都正确排序。
 
 
-
-- 第二种方法是使用`target_link_libraries`.
-
-现代 CMake 中推荐的方法是只使用目标，导出和链接它们。CMake 目标是命名空间中的成员，类似于 C++。例如，`Eigen3`定义目标`Eigen3::Eigen`。
-
-```c++
-find_package(Eigen3 REQUIRED)
-target_link_libraries(my_target Eigen3::Eigen)
-```
-
-> 这还将包括必要的标头、库及其依赖项，但与之相反，`ament_target_dependencies`在使用覆盖工作区时可能无法正确排序依赖项
->
-
-### 5 编写launch文件
-
-1. 在工作空间的根目录建立launch文件夹
-
-   ```bash
-   mkdir launch
-   ```
-
-2. 编写launch文件
-
-   ```python
-   #moremsgpub.py
-   from launch import LaunchDescription
-   from launch_ros.actions import Node
-   
-   def generate_launch_description():
-      return LaunchDescription([
-         Node(
-           package='more_interface', #功能包名称
-           executable='publish_address_book', #可执行文件名称
-           output='screen' #打印输出
-       ) 
-   ])
-   ```
-
-3. 运行launch
-
-   ```bash
-   cd launch
-   ros2 launch moremsgpub.py
-   
-   #或者
-   ros2 launch <package_name> <launch_file_name>
-   ```
-
-
-
-## 7	使用ROS 2的一些命名规则
-
-1. 包名必须全部小写
-2. 自定义的MSG，SRV和Action文件必须首字母大写且不能有下划线，例如`Num.msg`
-
-## 8	ROS_DOMAIN_ID
+## 7	ROS_DOMAIN_ID
 
 如果在局域网的多台电脑中使用ROS2，默认的通信机制会自动建立各机器分布式通信框架，也就是不同电脑之间已经可以通信了，如果你不希望多台电脑之间产生连接，可以设置不同的组网ID，相同ID的电脑之间可以通信，不同ID的电脑之间无法通信。  
-
-
-
-
 
 **临时端口**
 

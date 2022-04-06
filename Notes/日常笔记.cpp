@@ -349,6 +349,10 @@ C/C++
 
 2. 编译报错ERROR: cannot launch node of type [robot_vision/motion_detector.py]: can not locate node [motion_detector.py] in package [robot_vision]
     解决：报错是因为权限不够！需要把xxx.py改成可执行文件权限
+
+3. 编译时报错"xxx does not name a type"
+    通常是由于头文件重复包含，而右设置#pragma once, 导致冲突该有的文件没有包含这个文件
+
 /*==================================================================================================================*/
 
 c++ 数学库的安装

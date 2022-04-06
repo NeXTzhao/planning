@@ -6,6 +6,7 @@
     "dense": "cpp",
     "core": "cpp",
     "lu": "cpp",
-    "cholesky": "cpp"
+    "cholesky": "cpp",
+    "vector": "cpp"
   }
 }
