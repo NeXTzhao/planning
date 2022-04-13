@@ -47,14 +47,43 @@ const te1 &fun() {
     return te;
 }
 
-int main() {
-//    test t;
-//    std::cout << t.te << std::endl;
-//    te1 t2;
-//    std::cout << t2.a << std::endl;
+namespace myOperator {
 
-    auto b = fun().a;
-    std::cout << b << std::endl;
+    class Rational {
+    public:
+        Rational(int numerator = 0, int denominator = 1) {};
+
+//    const Rational operator*(const Rational &rhs) const {}
+
+        int numerator() const {
+            return num1;
+        }
+
+        int denominator() const {
+            return num2;
+        }
+
+    private:
+        int num1;
+        int num2;
+    };
+
+    const Rational operator*(const Rational &lhs, const Rational &rhs) {
+        return Rational(lhs.numerator() * rhs.numerator(), lhs.denominator() * rhs.denominator());
+    }
+}
+
+using namespace myOperator;
+int main() {
+    Rational one(2, 3);
+    Rational two(4, 5);
+    Rational result = one * two;
+    Rational result1 = 2 * one;
+    Rational result2 = one * 2;
+
+    auto a = one.numerator();
+    std::cout << a << std::endl;
+
 
     return 0;
 }

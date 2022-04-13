@@ -22,6 +22,7 @@ configure_file(config.h.in config.h)
 
 # 如果启用自定义外部库
 if(USE_MATH)
+  #add_subdirectory(子文件夹名) 
   add_subdirectory(math)
   # 把外部链接库添加到变量EXTRA_LIBS变量中
   list(APPEND EXTRA_LIBS math) #math指子目录中生成的链接库名称

@@ -119,7 +119,7 @@ int main() {
   ////Matrix3d实质上是Eigen::Matrix<double, 3, 3>
   matrix_33 << 1, 2, 3, 4, 5, -6, 7, 8, 9;
 
-  //   cout << matrix_33.transpose() << endl;    //转置
+  // cout << matrix_33.transpose() << endl;    //转置
   // cout << matrix_33.sum() << endl;          //各元素和
   // cout << matrix_33.trace() << endl;         //迹
   // cout << matrix_33 * 10 << endl;            //数乘

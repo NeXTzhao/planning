@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        # "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/foxy/include/**",
+        "/home/next/routing_planning/ros/src/lattice_planning/include/**",
+        "/home/next/routing_planning/ros/src/lqr_steering/include/**",
+        "/home/next/routing_planning/ros/src/pathload/include/**",
+        "/home/next/routing_planning/ros/src/purepursuit/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

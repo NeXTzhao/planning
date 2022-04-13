@@ -42,10 +42,10 @@ class moreMsgPub : public rclcpp::Node {
   rclcpp::TimerBase::SharedPtr timer_;
 };
 
-int main(int argc ,char* argv[]){
-    rclcpp::init(argc,argv);
-    rclcpp::spin(std::make_shared<moreMsgPub>());
-    rclcpp::shutdown();
-    
-    return 0;
+int main(int argc, char* argv[]) {
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<moreMsgPub>());
+  rclcpp::shutdown();
+
+  return 0;
 }

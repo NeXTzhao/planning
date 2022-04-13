@@ -557,6 +557,8 @@ Anaconda　用conda安装库非常方便
     
     编辑 conda 环境变量
         gedit ~/.bashrc
+        写入
+        export PATH="~/anaconda3/bin:$PATH"
 
 2. conda使用以下命令访问库
         conda install -c conda-forge osqp-eigen

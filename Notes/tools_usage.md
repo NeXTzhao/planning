@@ -1,76 +1,3 @@
-# Eigen
-
-## 1	源码安装
-
-​	**见**[CSDN](https://blog.csdn.net/yuan0061/article/details/83002229?ops_request_misc=&request_id=&biz_id=102&utm_term=EIGEN%E5%AE%89%E8%A3%85&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-83002229.142^v3^pc_search_result_control_group,143^v4^register&spm=1018.2226.3001.4187),安装位置在`usr/local/include` 和 `/usr/include`,使用时添加头文件 `#include<Eigen/Eigen.h>` 
-
-## 2	内置类型
-
-```c++
-Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matrix,如下所示：
-    //初始化为0   //Matrix3d实质上是Eigen::Matrix<double, 3, 3> 
-    Eigen::Matrix3d matrix_33 = Eigen::Matrix3d::Zero(): 
-        
-    //如果不确定矩阵大小，可以使用动态大小的矩阵
-	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix_dynamic; 
-                                                 
-    //与上类似，表示任意大小的元素类型为double的矩阵变量
-	Eigen::MatrixXd matrix_xd;   
-                                                  
-    //表示任意大小的元素类型为float的矩阵变量
- 	Eigen::MatrixXf matrix_xf; 
-                                                         
-    //Vector3d实质上是Eigen::Matrix<double, 3, 1>   三行一列
-	Eigen::Vector3d v_3d;
-
-```
-
-## 3	使用
-
-- **加减乘除跟数字操作一样**
-
-- **赋值操作**
-
-  ```c++
-  matrix_33<<1,2,3,4,5,6,7,8,9;
-  或 matrix_33(0,0)=1;
-  ```
-
-- **矩阵操作**
-
-  ```c++
-  cout << matrix_33.transpose() << endl;    //转置
-  cout << matrix_33.sum() << endl;          //各元素和
-  cout << matrix_33.trace() << endl;        //迹
-  cout << matrix_33 * 10 << endl;           //数乘
-  cout << matrix_33.inverse() << endl;      //逆
-  cout << matrix_33.determinant() << endl;  //行列式
-  cout << matrix_33.adjoint() << endl;      //伴随
-  cout << matrix_33.cwiseAbs() << endl;     //绝对值
-  cout << matrix_33.maxCoeff() << endl;     //求最大系数
-  ```
-
-- **求解Ax=b**
-
-  ```c++
-  // 求解Ax=b ; Vector2d => Matrix<double,2, 1>
-  Eigen::Vector2d C = A.colPivHouseholderQr().solve(b); 
-  
-  cwiseAbs()求绝对值
-  maxcoff()求最大系数
-  ```
-
-- **单位矩阵**
-
-  ```c++
-  Eigen::MatrixXd::Identity(4, 4)  
-  or
-  Eigen::Matrix<double ,4,4> A;
-  A.setIdentity(4, 4);
-  ```
-
-  
-
 # GCC编译器
 
 ## 1	cpp文件编译过程
@@ -118,7 +45,7 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
     # 使用 -O2优化源代码，并输出可执行文件
     g++ -O2 test.cpp
     
-3	-l  和  -L     指定库文件  |  指定库文件路径
+3	-l  和  -L	指定库文件  |  指定库文件路径
     # -l参数(小写)就是用来指定程序要链接的库，-l参数紧接着就是库名
     # 在/lib和/usr/lib和/usr/local/lib里的库直接用-l参数就能链接
 
@@ -131,7 +58,7 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
     # 链接mytest库，libmytest.so在/home/bing/mytestlibfolder目录下
     g++ -L/home/bing/mytestlibfolder -lmytest test.cpp
     
-4	-I    指定头文件搜索目录
+4	-I	指定头文件搜索目录
     # -I 
     # /usr/include目录一般不用指定，gcc知道去那里找，但是如果头文件不在/usr/icnclude里我们就要用-I参数指定了，
     # 比如头文件放在/myinclude目录里，那编译命令行就要加上-I/myinclude 参数了，如果不加你会得到一个”xxxx.h: No such file or directory”的错误。
@@ -139,26 +66,26 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 
     g++ -I/myinclude test.cpp	
     
-5	-Wall    打印警告信息
+5	-Wall	打印警告信息
 	# 打印出gcc提供的警告信息(例如：变量定义了未使用，初始化列表的顺序跟定义的成员变量顺序不一致等等)
 	g++ -Wall test.cpp
 
-6	-w    关闭警告信息
+6	-w	关闭警告信息
 	# 关闭所有警告信息
 	g++ -w test.cpp
 
-7	-std=c++11    设置编译标准
+7	-std=c++11	设置编译标准
     # 使用 c++11 标准编译 test.cpp
     g++ -std=c++11 test.cpp
 
 
-8	-o     指定输出文件名
+8	-o	指定输出文件名
     # 指定即将产生的文件名
 
     # 指定输出可执行文件名为test
     g++ test.cpp -o test
     
-9	-D     定义宏
+9	-D	定义宏
     # 在使用gcc/g++编译的时候定义宏
 
     # 常用场景：
@@ -177,6 +104,22 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 
     // 1. 在编译的时候，使用gcc -DDEBUG main.cpp
     // 2. ifdef代码可以被执行
+ 
+10 	-fprofile-arcs  -ftest-coverage 代码覆盖率
+#gcc需要静态注入目标程序编译选项，在编译链接的时候加入2个选项(-ftest-coverage -fprofile-arcs )，编译结束之后会生成 .gcno 文件，而经过静态注入的目标程序在“正常结束”后，会在运行目录下产生.gcda数据文件，通过gcov工具就可产生覆盖率数据结果
+
+	g++ -fprofile-arcs -ftest-coverage hello.c -o hello
+	#将出现 hello 和 hello.gcno 两个文件
+	
+	./hello 
+	#将出现 hello.gcda 文件
+	
+	gcov hello.c
+	#将显示下面的结果
+	File 'hello.c'
+	Lines executed:57.14% of 7
+	Creating 'hello.c.gcov'
+	上述57.14%为覆盖率，指的是每一行被覆盖到的次数
 ```
 
 
@@ -240,7 +183,6 @@ $(gdb)x                            # 查看内存x/20xw 显示20个单元，16�
 $(gdb)run argv[1] argv[2]          # 调试时命令行传参
 
 $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子进程（fork()）
-
 ```
 
 > Tips:
@@ -667,6 +609,10 @@ int main(){
 
 # Docker
 
+
+
+
+
 # ROS 2
 
 ## 1	ROS 1的弊端
@@ -1067,7 +1013,313 @@ target_link_libraries(my_target Eigen3::Eigen)
 
 **Linux**
 
-```
+```bash
 export ROS_DOMAIN_ID=<your_domain_id>
 echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
 ```
+
+
+
+# Git & Github
+
+## 1	基础命令
+
+```bash
+    clone       克隆远程仓库
+    init        初始化仓库
+    remote      连接远程仓库
+    pull        从远程仓库下拉获取新数据
+    push        将本地仓库新增或修改文件上传到远程仓库
+    add         添加文件或者修改文件，commit以及push之前使用
+    log         当前仓库提交过的日志信息
+    status      当前仓库版本状态
+    commit      提交到当前仓库中
+    branch      分支命令，相关增删查操作
+    checkout    使用远程仓库最后一个版本完全覆盖当前仓库内容／选择分支branch
+    diff        对比版本内容
+    merge       合并版本内容
+```
+
+## 2	提交代码
+
+```bash
+向本地仓库提交代码(终端操作)
+	git init    初始化git仓库
+	git status  查看文件状态
+	git add     文件列表 追踪文件
+	git commit -m 提交信息 向仓库中提交代码（原则：每次提交只包含一个功能，不要在一次提交中包含多个功能或功能中还有bug，不利于后期恢复项目的状态）
+	git log     查看提交记录
+
+向github中提交代码(终端操作)
+	echo "# grq" >> README.md
+	git init
+	git add README.md
+	git commit -m "first commit"
+	git branch -M main
+	git remote add origin git@github.com:NeXTzhao/grq.git（origin 为远程链接的别名）
+	git push -u origin main
+        
+#通常在vscode中实现，不回去调用命令行
+```
+
+## 2	编写`.gitignore`文件
+
+```shell
+#               表示此为注释,将被Git忽略
+*.a             表示忽略所有 .a 结尾的文件
+!lib.a          表示但lib.a除外
+/TODO           表示仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
+build/          表示忽略 build/目录下的所有文件，过滤整个build文件夹；
+doc/*.txt       表示会忽略doc/notes.txt但不包括 doc/server/arch.txt
+ 
+bin/:           表示忽略当前路径下的bin文件夹，该文件夹下的所有内容都会被忽略，不忽略 bin 文件
+/bin:           表示忽略根目录下的bin文件
+/*.c:           表示忽略cat.c，不忽略 build/cat.c
+debug/*.obj:    表示忽略debug/io.obj，不忽略 debug/common/io.obj和tools/debug/io.obj
+**/foo:         表示忽略/foo,a/foo,a/b/foo等
+a/**/b:         表示忽略a/b, a/x/b,a/x/y/b等
+!/bin/run.sh    表示不忽略bin目录下的run.sh文件
+*.log:          表示忽略所有 .log 文件
+config.php:     表示忽略当前路径的 config.php 文件
+ 
+/mtk/           表示过滤整个文件夹
+*.zip           表示过滤所有.zip文件
+/mtk/do.c       表示过滤某个具体文件
+ 
+被过滤掉的文件就不会出现在git仓库中（gitlab或github）了，当然本地库中还有，只是push的时候不会上传。
+ 
+需要注意的是，gitignore还可以指定要将哪些文件添加到版本管理中，如下：
+!*.zip
+!/mtk/one.txt
+ 
+唯一的区别就是规则开头多了一个感叹号，Git会将满足这类规则的文件添加到版本管理中。为什么要有两种规则呢？
+想象一个场景：假如我们只需要管理/mtk/目录中的one.txt文件，这个目录中的其他文件都不需要管理，那么.gitignore规则应写为：：
+/mtk/*
+!/mtk/one.txt
+ 
+假设我们只有过滤规则，而没有添加规则，那么我们就需要把/mtk/目录下除了one.txt以外的所有文件都写出来！
+注意上面的/mtk/*不能写为/mtk/，否则父目录被前面的规则排除掉了，one.txt文件虽然加了!过滤规则，也不会生效！
+ 
+----------------------------------------------------------------------------------
+还有一些规则如下：
+fd1/*
+说明：忽略目录 fd1 下的全部内容；注意，不管是根目录下的 /fd1/ 目录，还是某个子目录 /child/fd1/ 目录，都会被忽略；
+ 
+/fd1/*
+说明：忽略根目录下的 /fd1/ 目录的全部内容；
+ 
+/*
+!.gitignore
+!/fw/ 
+/fw/*
+!/fw/bin/
+!/fw/sf/
+说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；注意要先对bin/的父目录使用!规则，使其不被排除。
+```
+
+# AnaConda
+
+## 1	安装
+
+进入[官网下载](https://www.anaconda.com/) sh文件，运行bash xx.sh即可
+
+## 2	环境
+
+```bash
+1.	创建虚拟环境
+	使用 conda create -n your_env_name python=X.X（2.7、3.6等）
+	#anaconda 命令创建python版本为X.X、名字为your_env_name的虚拟环境。your_env_name文件可以在Anaconda安装目录envs文件下找到。 指定python版本为2.7，注意至少需要指定python版本或者要安装的包， 在不指定python版本时，自动安装最新python版本。
+    例如：conda create -n env_name python=3.8 (创建anaconda环境后要conda init)
+
+	# 同时安装必要的包
+	conda create -n env_name numpy matplotlib
+	
+2.	进入虚拟环境
+	conda activate your_env_name(虚拟环境名称)
+	#此时使用python --version可以检查当前python版本是否为想要的（即虚拟环境的python版本）。
+
+3.	退出虚拟环境
+	conda deactivate your_env_name(虚拟环境名称)
+
+4.	删除虚拟环境：
+	conda remove -n your_env_name(虚拟环境名称) --all， 即可删除。
+
+	4.1 删除虚拟环境中的包：
+		conda remove --name yourenvname yourenvnamepackage_name（包名） 即可。
+		
+#通常ubuntu很多默认的工具都是使用Python2.*,但是Ubuntu20.04之后全部升级为python3,建议使用2004及以后的Ubuntu，可以避免很多麻烦
+#创建anaconda后先conda init ，# export PATH="/home/next/anaconda3/bin:$PATH"  这一步也可以也不用
+```
+
+## 3	安装库
+
+```bash
+conda使用conda install安装库
+	conda install -c conda-forge osqp-eigen
+	conda install numpy
+	conda install matplotlib
+```
+
+## 4	conda常用命令
+
+```bash
+conda list：查看安装了哪些包。
+conda update --all 创建前最好将包都进行升级
+conda install package_name(包名)：安装包
+conda env list 或 conda info -e：查看当前存在哪些虚拟环境
+conda update conda：检查更新当前conda
+```
+
+
+
+# matplotlib-cpp
+
+## 1	使用
+
+> 在conda创建的环境下使用，可以避免很多不必要的麻烦
+
+1. 首先将`matplotlibcpp.h`文件放入工程下的`include`文件夹中
+2. xx.cpp文件需要用到画图功能时，添加头文件 `#include "matplotlibcpp.h"`
+3. 在`CMakeLists.txt`文件中添加链接及依赖，如下(以后直接复制粘贴，修改src/**.cpp和可执行文件名称就可以)
+
+```cmake
+include(GNUInstallDirs)
+set(PACKAGE_NAME matplotlib_cpp)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/${PACKAGE_NAME}/cmake)
+
+# Library target
+add_library(matplotlib_cpp INTERFACE)
+target_include_directories(matplotlib_cpp
+  INTERFACE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/examples>
+    $<INSTALL_INTERFACE:include>
+)
+target_compile_features(matplotlib_cpp INTERFACE
+  cxx_std_20
+)
+# TODO: Use `Development.Embed` component when requiring cmake >= 3.18
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+target_link_libraries(matplotlib_cpp INTERFACE
+  Python3::Python
+  Python3::Module
+)
+find_package(Python3 COMPONENTS NumPy)
+if(Python3_NumPy_FOUND)
+  target_link_libraries(matplotlib_cpp INTERFACE
+    Python3::NumPy
+  )
+else()
+  target_compile_definitions(matplotlib_cpp INTERFACE WITHOUT_NUMPY)
+endif()
+install(
+  TARGETS matplotlib_cpp
+  EXPORT install_targets
+)
+
+# Examples
+add_executable(midpoints src/midpoints.cpp)
+target_link_libraries(midpoints PRIVATE matplotlib_cpp)
+set_target_properties(midpoints PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+```
+
+
+
+# Eigen
+
+> 从向量Vector的角度来看，矩阵都应该以列方式来存储，以列来理解和存储更符合实际需要.
+
+## 1	源码安装
+
+​	**见**[CSDN](https://blog.csdn.net/yuan0061/article/details/83002229?ops_request_misc=&request_id=&biz_id=102&utm_term=EIGEN%E5%AE%89%E8%A3%85&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-83002229.142^v3^pc_search_result_control_group,143^v4^register&spm=1018.2226.3001.4187),安装位置在`usr/local/include` 和 `/usr/include`,使用时添加头文件 `#include<Eigen/Eigen.h>` 
+
+## 2	内置类型
+
+```c++
+Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matrix,如下所示：
+    //初始化为0   //Matrix3d实质上是Eigen::Matrix<double, 3, 3> 
+    Eigen::Matrix3d matrix_33 = Eigen::Matrix3d::Zero(): 
+        
+    //如果不确定矩阵大小，可以使用动态大小的矩阵
+	Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> matrix_dynamic; 
+                                                 
+    //与上类似，表示任意大小的元素类型为double的矩阵变量
+	Eigen::MatrixXd matrix_xd;   
+                                                  
+    //表示任意大小的元素类型为float的矩阵变量
+ 	Eigen::MatrixXf matrix_xf; 
+                                                         
+    //Vector3d实质上是Eigen::Matrix<double, 3, 1>   三行一列
+	Eigen::Vector3d v_3d;
+
+```
+
+## 3	使用
+
+- **加减乘除跟数字操作一样**
+
+- **赋值操作**
+
+  ```c++
+  matrix_33<<1,2,3,4,5,6,7,8,9;
+  或 matrix_33(0,0)=1;
+  ```
+
+- **矩阵操作**
+
+  ```c++
+  cout << matrix_33.transpose() << endl;    //转置
+  cout << matrix_33.sum() << endl;          //各元素和
+  cout << matrix_33.trace() << endl;        //迹
+  cout << matrix_33 * 10 << endl;           //数乘
+  cout << matrix_33.inverse() << endl;      //逆
+  cout << matrix_33.determinant() << endl;  //行列式
+  cout << matrix_33.adjoint() << endl;      //伴随
+  cout << matrix_33.cwiseAbs() << endl;     //绝对值
+  cout << matrix_33.maxCoeff() << endl;     //求最大系数
+  ```
+
+- **求解Ax=b**
+
+  ```c++
+  // 求解Ax=b ; Vector2d => Matrix<double,2, 1>
+  Eigen::Vector2d C = A.colPivHouseholderQr().solve(b); 
+  
+  cwiseAbs()求绝对值
+  maxcoff()求最大系数
+  ```
+
+- **单位矩阵**
+
+  ```c++
+  Eigen::MatrixXd::Identity(4, 4)  
+  or
+  Eigen::Matrix<double ,4,4> A;
+  A.setIdentity(4, 4);
+  ```
+
+- **稀疏矩阵**
+
+```c++
+Values:			//存储非零的系数值。
+InnerIndices:	//存储非零的行（列）索引。
+OuterStarts:	//为每一列（相应的行）存储前两个数组中第一个非零的索引。
+InnerNNZs:		//存储每列（分别为行）的非零数。这个词inner指的是一个内部 向量，它是列主矩阵的列，或行主矩阵的行。这个词outer指的是另一个方向。
+```
+
+
+
+# 稀疏矩阵csc_matrix
+
+## 1	[稀疏矩阵数组的含义](https://www.bu.edu/pasi/files/2011/01/NathanBell1-10-1000.pdf)
+
+```c++
+indptr = [ ] 	//以累加的方式存储每一列包含有非零数字的个数，从0开始。
+indices = [ ] 	//存储非零数字所在的行索引值。
+data = [ ] 		//以列顺序存储所有非零的数字。
+```
+
+## 2	sample
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210706133100832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxOTU5Mjg4,size_16,color_FFFFFF,t_70)
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210706135142194.png)
