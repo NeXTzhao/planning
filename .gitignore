@@ -2,5 +2,7 @@ build/
 *.a
 *.so
 *.out
-Notes/ROS2_WORKSPACE/log
-Notes/ROS2_WORKSPACE/install
+log/
+install/
+cmake-build-debug/
+.idea/
