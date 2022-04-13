@@ -1117,6 +1117,18 @@ fd1/*
 说明：忽略全部内容，但是不忽略 .gitignore 文件、根目录下的 /fw/bin/ 和 /fw/sf/ 目录；注意要先对bin/的父目录使用!规则，使其不被排除。
 ```
 
+## 注意
+
+vscode 会生成这个文件.vscode/browse.vc.db通常会很大，提交的时候记得忽略
+
+```bash
+例如：在.gitignore添加这两项
+ros/.vscode/browse.vc.db
+ros/src/lqr_steering/.vscode/browse.vc.db
+```
+
+
+
 # AnaConda
 
 ## 1	安装
