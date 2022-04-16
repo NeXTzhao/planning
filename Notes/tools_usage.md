@@ -1159,27 +1159,51 @@ ros/src/lqr_steering/.vscode/browse.vc.db
 	4.1 删除虚拟环境中的包：
 		conda remove --name yourenvname yourenvnamepackage_name（包名） 即可。
 		
+5.	设置自动进入自定义环境
+	#先停用base
+	conda config --set auto_activate_base false
+	#在.bashrc后面添加
+	sudo gedit ~/.bashrc
+	conda activate 自定义环境名
+	#退出后source
+	source ~/.bashrc
+
+		
 #通常ubuntu很多默认的工具都是使用Python2.*,但是Ubuntu20.04之后全部升级为python3,建议使用2004及以后的Ubuntu，可以避免很多麻烦
 #创建anaconda后先conda init ，# export PATH="/home/next/anaconda3/bin:$PATH"  这一步也可以也不用
 ```
 
-## 3	安装库
+## 3	安装&卸载库
 
 ```bash
-conda使用conda install安装库
-	conda install -c conda-forge osqp-eigen
-	conda install numpy
-	conda install matplotlib
+conda install -c conda-forge osqp
+conda install -c conda-forge osqp-eigen
+
+
+conda install numpy
+conda install matplotlib
+
+conda uninstall xxx   //卸载xxx包
+
+如果conda里面没有想要的版本安装包，可以采用本地安装xxx.tar.bz2的方法：
+conda install --use-local 包名路径
+conda install --use-local /home/next/Downloads/osqp-0.4.1-py37h637b7d7_1001.tar.bz2
+安装成功会出现如下打印：
+Downloading and Extracting Packages
+######################################################################## | 100% 
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
 ```
 
 ## 4	conda常用命令
 
 ```bash
-conda list：查看安装了哪些包。
+conda list 查看安装了哪些包。
 conda update --all 创建前最好将包都进行升级
-conda install package_name(包名)：安装包
-conda env list 或 conda info -e：查看当前存在哪些虚拟环境
-conda update conda：检查更新当前conda
+conda install package_name(包名) 安装包
+conda env list 或 conda info -e查看当前存在哪些虚拟环境
+conda update conda 检查更新当前conda
 ```
 
 
@@ -1232,6 +1256,25 @@ install(
 add_executable(midpoints src/midpoints.cpp)
 target_link_libraries(midpoints PRIVATE matplotlib_cpp)
 set_target_properties(midpoints PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+```
+
+## 2	图形设置
+
+```c++
+颜色:
+	b: blue
+    g: green
+    r: red
+    c: cyan
+    m: magenta
+    y: yellow
+    k: black
+    w: white
+线性：
+	plt::named_plot("l_bound", l_bound,
+                  "r*");  //(取名，参数(vector数组)，红色离散点)
+  	plt::named_plot("u_bound", u_bound,
+                  "ro-");  //(取名，参数，红色直线连接)
 ```
 
 

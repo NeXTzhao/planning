@@ -397,6 +397,13 @@ find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
     4.编译并安装
         sudo cmake --build . --target install
 
+    注意：
+        1.如果不加--recursive 会出现“/home/next/osqp/lin_sys/direct/qdldl/qdldl_sources” 不存在的错误，
+    所以下载的时候要加上，如果已经下载好了可以用git submodule update --init --recursive修复
+        2.  0.4.1版本的osqp求p矩阵时不要求上三角
+
+
+
 3.  Osqp-Eigen库
     1.下载源码
         git clone https://github.com/robotology/osqp-eigen.git

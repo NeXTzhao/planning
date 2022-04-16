@@ -6,7 +6,7 @@
       "name": "(gdb) 启动",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/lineInterpoltion", #要调试文件的绝对路径
+      "program": "${workspaceFolder}/bin/pathoptim", #要调试文件的绝对路径
       "args": [],
       "stopAtEntry": false,
       # "cwd": "${fileDirname}",

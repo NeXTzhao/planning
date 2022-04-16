@@ -1,11 +1,8 @@
-# Authors: Giulio Romualdi
-# CopyPolicy: Released under the terms of the LGPLv2.1 or later
-
 cmake_minimum_required(VERSION 3.8)
 project(OsqpEigen-Example)
 
 # 设置c++版本
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
 
 # 设置编译版本 bebug / release
@@ -28,7 +25,7 @@ include_directories(
   
 )
 
-find_package(OsqpEigen)
+# find_package(OsqpEigen)
 find_package(Eigen3)
 
 # Find OSQP library and headers
@@ -44,7 +41,9 @@ include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 
 # # Link the OSQP static library
 # target_link_libraries(yourTarget PRIVATE osqp::osqpstatic)
-
+#MPCExample
+# add_executable(MPCExample src/MPCExample.cpp)
+# target_link_libraries(MPCExample OsqpEigen::OsqpEigen)
 
 #matplotlib-cpp
 include(GNUInstallDirs)
@@ -60,7 +59,7 @@ target_include_directories(matplotlib_cpp
     $<INSTALL_INTERFACE:include>
 )
 target_compile_features(matplotlib_cpp INTERFACE
-  cxx_std_20
+  cxx_std_17
 )
 # TODO: Use `Development.Embed` component when requiring cmake >= 3.18
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
@@ -95,18 +94,27 @@ target_link_libraries(splineInterpoltion PUBLIC matplotlib_cpp PUBLIC ${EXTRA_LI
 # set_target_properties(animation PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 
-#MPCExample
-add_executable(MPCExample src/MPCExample.cpp)
-target_link_libraries(MPCExample OsqpEigen::OsqpEigen)
-
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/osqp_interface)
 list(APPEND EXTRA_LIBS osqp_csc)
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/piecewise_jerk)
-list(APPEND EXTRA_LIBS path_optimize)
 
 add_executable(csc_conv src/csc_matrix_osqp.cpp)
 # 多个库文件链接顺序问题
 # 在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面，这样才能真正避免undefined reference的错误，完成编译链接
 target_link_libraries(csc_conv PUBLIC matplotlib_cpp PUBLIC ${EXTRA_LIBS} PUBLIC osqp::osqp )
+
+# add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/piecewise_jerk)
+# list(APPEND EXTRA_LIBS path_optimize)
+
+# add_executable(path_jerk src/piecewise_jerk_path_optimizer.cc)
+# 多个库文件链接顺序问题
+# 在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面，这样才能真正避免undefined reference的错误，完成编译链接
+# target_link_libraries(path_jerk PUBLIC matplotlib_cpp PUBLIC ${EXTRA_LIBS} PUBLIC osqp::osqp )
+
+
+# add_executable(pathoptim src/PathOptimize.cpp)
+add_executable(pathoptim src/pathDemo.cpp src/PathOptimize.cpp)
+# add_executable(pathoptim src/osqp_test.cpp)
+# 多个库文件链接顺序问题
+# 在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面，这样才能真正避免undefined reference的错误，完成编译链接
+target_link_libraries(pathoptim PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp  PRIVATE osqp::osqp )

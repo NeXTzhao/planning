@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-12 17:52:27
- * @LastEditTime: 2022-04-12 18:56:26
+ * @LastEditTime: 2022-04-15 21:48:38
  * @FilePath: /osqp_eigen/include/vehicleConfig.hpp
  * @Copyright:
  */
@@ -24,4 +24,12 @@ constexpr double FLAGS_lateral_jerk_bound = 4.0;
 constexpr double l_weight = 30.0;
 constexpr double dl_weight = 20.0;
 constexpr double ddl_weight = 1000.0;
-constexpr double dddl_weight = 50000.0;
+constexpr double dddl_weight = 5000.0;
+
+// constexpr double l_weight = 10.0;
+// constexpr double dl_weight = 0.0;
+// constexpr double ddl_weight = 0.0;
+// constexpr double dddl_weight = 0.0;
+
+// constexpr double kMaxVariableRange = 1.0e10;
+constexpr double kMaxVariableRange = 8;
