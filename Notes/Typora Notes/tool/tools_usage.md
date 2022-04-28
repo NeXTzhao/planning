@@ -1179,7 +1179,6 @@ ros/src/lqr_steering/.vscode/browse.vc.db
 conda install -c conda-forge osqp
 conda install -c conda-forge osqp-eigen
 
-
 conda install numpy
 conda install matplotlib
 

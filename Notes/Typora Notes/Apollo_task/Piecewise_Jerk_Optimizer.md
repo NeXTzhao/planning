@@ -25,8 +25,6 @@ class PiecewiseJerkPathProblem : public PiecewiseJerkProblem {
 };
 ```
 
-
-
 ```bash
 /modules/planning/tasks/optimizers/piecewise_jerk_path
 .
@@ -49,7 +47,7 @@ modules/planning/math/piecewise_jerk
 #path优化和speed优化的约束条件是一致的，都是在基类中实现的那个约束条件构造函数
 ```
 
-## 路径规划流程
+## 横向轨迹优化
 
 ### 1	整体流程
 
@@ -63,11 +61,17 @@ modules/planning/math/piecewise_jerk
 
 5. **FormulateProblem**( 用于构造二次优化问题的具体矩阵，也就是将规划问题的求解条件转化为OSQP可求解形式的接口)
 
+   1. **CalculateKernel()**
+   2. **CalculateAffineConstraint()**
+   3. **CalculateOffset()**
+
 6. **SolverDefaultSettings**(默认配置的参数接口)
 
 7. **osqp setup**(osqp库接口)
 
 8. **osqp solve**(osqp求解接口)
+
+9. **FreeData**(删除数据，释放内存)
 
    ```c++
    //osqp求解步骤
@@ -108,7 +112,9 @@ modules/planning/math/piecewise_jerk
                  CopyData(A_data), CopyData(A_indices), CopyData(A_indptr));
 ```
 
-## 二次规划
+## 如何构造一个最优化问题？
+
+以四个点(p1、p2、p3、p4)为例构造最优化问题
 
 ### **二次规划的一般形式**
 
@@ -117,13 +123,11 @@ minimize \frac{1}{2} \cdot x^T \cdot P \cdot x + 	Q \cdot x \\
 s.t. LB \leq A\cdot x \leq UB
 $$
 
-### 如何构造一个最优化问题？
+### CalculateKernel()构造目标函数矩阵
 
-以四个点(p1、p2、p3、p4)为例构造最优化问题
+#### 1.`x`矩阵
 
-#### CalculateKernel()构造目标函数矩阵
-
-##### 1.`x`矩阵，记为
+- x矩阵即为需要优化的变量
 
 $$
 x^T =\begin{vmatrix}
@@ -131,15 +135,33 @@ x^T =\begin{vmatrix}
 \end{vmatrix}
 $$
 
-##### 2.`p、q`矩阵
+#### 2.`p、q`矩阵
 
-##### 平滑项的`cost`
+通过构造函数来构造`p、q`矩阵，其中代价函数分为三部分
+
+1. 曲线平滑`l,l',l'',l'''`
+2. 与参考线的偏差`(l - lref)`
+3. 终点位置的软约束
+
+##### 总体代价函数公式
+
+$$
+cost\ \ function= 
+w_l\cdot \sum_{i=0}^{n-1} l_i^2 + w_{{l}'}\cdot \sum_{i=0}^{n-1} {l_i}'^2 + w_{{l}''}\cdot \sum_{i=0}^{n-1} {l_i}''^2 + w_{{l}'''}\cdot \sum_{i=0}^{n-2}(\frac{{l_{i+1}}'' - {l_i}''}{\Delta s})^2 +\\ 
+w_{end_l}\cdot (l_{n-1} - l_{endref})^2 + w_{end_{dl}}\cdot ({l}'_{n-1}-{l_{endref}}')^2 + w_{end_{ddl}}\cdot ({l}''_{n-1} - {l_{endref}}'')^2+\\
+w_{ref}\cdot \sum_{i=0}^{n-1}(l_i-l_{ref})^2 +\\
+w_{end_l}\cdot (l_{n-1} - l_{endref})^2 + w_{end_{dl}}\cdot ({l}'_{n-1}-{l_{endref}}')^2 + w_{end_{ddl}}\cdot ({l}''_{n-1} - {l_{endref}}'')^2
+$$
+
+
+##### ①曲线平滑的`cost`
 
 $$
 w_l\cdot \sum_{i=0}^{n-1} l_i^2 + w_{{l}'}\cdot \sum_{i=0}^{n-1} {l_i}'^2 + w_{{l}''}\cdot \sum_{i=0}^{n-1} {l_i}''^2 + w_{{l}'''}\cdot \sum_{i=0}^{n-2}(\frac{{l_{i+1}}'' - {l_i}''}{\Delta s})^2 \\
 $$
 
-​	转化为p矩阵(12*12)，记为`p1`
+- 转化为p矩阵(12*12)，记为`p1`
+
 $$
 p1=\begin{vmatrix}
 w_l&0&0&0&0&0&0&0&0&0&0&0\\
@@ -156,13 +178,14 @@ w_l&0&0&0&0&0&0&0&0&0&0&0\\
 0&0&0&0&0&0&0&0&0&0&-2\frac{w_{{l}'''}}{\Delta s^2}&w_{{l}''}+\frac{w_{{l}'''}}{\Delta s^2}\\
 \end{vmatrix}
 $$
-##### 与参考线偏差项的`cost`
+##### ②与参考线偏差
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210312221759419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0lIVFlfTlVJ,size_16,color_FFFFFF,t_70#pic_center)
 $$
 w_{ref}\cdot \sum_{i=0}^{n-1}(l_i-l_{ref})^2 \\
 $$
-​	二次项转化为p矩阵(4*12)，记为`p2`
+- 二次项转化为p矩阵(4*12)，记为`p2`
+
 $$
 p2=\begin{vmatrix}
 w_{ref_1}&0&0&0&0&0&0&0&0&0&0&0\\
@@ -171,7 +194,8 @@ w_{ref_1}&0&0&0&0&0&0&0&0&0&0&0\\
 0&0&0&w_{ref_4}&0&0&0&0&0&0&0&0\\
 \end{vmatrix}
 $$
-​	一次项转化为q矩阵(4*1)，记为`q1`
+- 一次项转化为q矩阵(4*1)，记为`q1`
+
 
 ​		**注：去掉上述约束方程的常量项**
 $$
@@ -183,13 +207,14 @@ q1=\begin{vmatrix}
 \end{vmatrix}
 $$
 
-##### 终点项的`cost`
+##### ③终点
 
 $$
-w_{end_l}\cdot (l_{n-1} - l_{endref})^2 + w_{end_{dl}}\cdot ({l}'_{n-1}-{l_{endref}}')^2 + w_{end_{ddl}}\cdot ({l}''_{n-1} - {l_{endref}}'')^2
+w_{end_l}\cdot (l_{n-1} - l_{endref})^2 + w_{end_{dl}}\cdot ({l}'_{n-1}-{l'_{endref}})^2 + w_{end_{ddl}}\cdot ({l}''_{n-1} - {l''_{endref}})^2
 $$
 
-​	二次项转化为p矩阵(12*12)，记为`p3`
+- ​	二次项转化为p矩阵(12*12)，记为`p3`
+
 $$
 p3=\begin{vmatrix}
 0&0&0&0&0&0&0&0&0&0&0&0\\
@@ -206,7 +231,8 @@ p3=\begin{vmatrix}
 0&0&0&0&0&0&0&0&0&0&0&w_{end_{ddl}}
 \end{vmatrix}
 $$
-​	一次项转化为q矩阵(12*1)，记为`q2`
+- ​	一次项转化为q矩阵(12*1)，记为`q2`
+
 $$
 q2=\begin{vmatrix}
 0\\
@@ -224,7 +250,7 @@ q2=\begin{vmatrix}
 \end{vmatrix}
 $$
 
-##### 3.构造优化目标函数
+#### 3.构造优化目标函数
 
 综合`x，p，q`可得到`cost function`:
 $$
@@ -283,7 +309,7 @@ Q_{(12*1)}=\begin{equation}
 \end{equation}
 $$
 
-##### 扩展到n个点？
+#### 扩展到n个点？
 
 假设约束维度任然是二阶(l、l'、l'')，那么上述的P矩阵为(3n* 3n)，Q矩阵为(3n* * 1)
 $$
@@ -351,9 +377,9 @@ $$
 
 
 
-#### CalculateAffineConstraint()构造约束矩阵
+### CalculateAffineConstraint()构造约束矩阵
 
-##### 1.对I的约束
+#### 1.对I的约束
 
 车辆行驶位置，即对道路边界的约束![img](https://www.asam.net/index.php?eID=dumpFile&t=p&p=48183&token=13641da5e3ca621e2a28b920f5e33596adcd4a9e)
 
@@ -389,7 +415,7 @@ ub_{s4}
  \end{bmatrix}
 $$
 
-##### 2.对l‘的约束
+#### 2.对l‘的约束
 
 轨迹的一阶导为heading，可以近似理解为横向运动的“速度”，希望不要横向走的太快
 
@@ -423,7 +449,7 @@ $$
  \end{bmatrix}
 $$
 
-##### 3.对l‘‘的约束
+#### 3.对l‘‘的约束
 
 轨迹的二阶导可以近似理解为横向运动的“加速度”，希望方向盘不要打得太猛
 
@@ -442,7 +468,7 @@ $$
 
 
 
-###### 问题(bug)
+##### 问题(bug)
 
 代码中的意思是直接把`l''`等价为当前轨迹的曲率k，而实际的k值计算如下文所示
 
@@ -550,7 +576,7 @@ tan(δ_{max})×k_{r}×l − tan(δ_{max})+k_{r}×L≤0
 $$
 
 
-##### 4.对I‘‘’的约束
+#### 4.对I‘‘’的约束
 
 由差分求导可得到轨迹的三阶导数，可以理解为人打方向盘的加速度，此时是对`jerk`的约束，`delta_s_ = 1.0;`
 $$
@@ -591,7 +617,7 @@ jerk_3 * \Delta s
  \end{bmatrix}
 $$
 
-##### 5.对起点p1的约束
+#### 5.对起点p1的约束
 
 起点必须在初始点的位置
 $$
@@ -615,13 +641,12 @@ ego_{ddl} \\
  \end{bmatrix}
 $$
 
-##### 6.路径连续性约束
+#### 6.路径连续性约束
 
 ```c++
   // x(i+1)' - x(i)' - 0.5 * delta_s * x(i)'' - 0.5 * delta_s * x(i+1)'' = 0
   for (int i = 0; i + 1 < n; ++i) {
 		...
-            
     lower_bounds->at(constraint_index) = 0.0;
     upper_bounds->at(constraint_index) = 0.0;
     ++constraint_index;
@@ -695,7 +720,7 @@ $$
  \end{bmatrix}
 $$
 
-##### 7.构造约束条件
+#### 7.构造约束条件
 
 $$
 x^T=\begin{vmatrix}
@@ -767,7 +792,7 @@ ego_{ddl} \\
 Lbsi_{(4*1)} \\ 
 Heading1_{(4*1)} \\ 
 Kappa1_{(4*1)}\\
-Jerk1_{(4*1)} \\
+Jerk1_{(3*1)} \\
 Ego1_{(3*1)}\\
 Continuous1_{(6*1)}
  \end{bmatrix}\       ;    \
@@ -803,7 +828,7 @@ ego_{ddl} \\
 Ubsi_{(4*1)} \\ 
 Heading2_{(4*1)} \\ 
 Kappa2_{(4*1)}\\
-Jerk2_{(4*1)} \\
+Jerk2_{(3*1)} \\
 Ego2_{(3*1)}\\
 Continuous2_{(6*1)}
  \end{bmatrix}
@@ -816,9 +841,7 @@ $$
 
 
 
-
-
-##### 扩展到n个点？
+#### 扩展到n个点？
 
 $$
 A=
@@ -885,7 +908,7 @@ Continuous2_{((2n-2)*1)}
  \end{bmatrix}_{6n \times 1}
 $$
 
-#### 总结
+### 总结
 
 假设有n个点，优化维度为三维(l、l'、l'')，通过构造`P,Q,A,LB,UB`矩阵方程，将此问题转化为二次规划问题
 $$
@@ -908,9 +931,63 @@ $$
 
 
 
-## 思考
 
-### 1	为什么需要正定矩阵？
+
+# Picewise Jerk Speed Optimizer
+
+## 纵向速度轨迹优化
+
+SL规划保证车辆的横向偏移足够平滑，ST规划保证车辆的前进方向速度变化足够平滑.
+
+### 1.`x`矩阵
+
+x矩阵即为需要优化的变量
+$$
+x^T =\begin{vmatrix}
+ s_1\ \dots  s_{n}\ s_1'\ \dots  s'_{n}\ s_1''\dots  s_{n}''
+\end{vmatrix}
+$$
+
+### 2.`p、q`矩阵
+
+跟path optimizer区别在于p矩阵，speed多了对参考线偏差的一阶偏差约束
+
+#### ①曲线平滑
+
+$$
+w_{s}\cdot \sum_{i=0}^{n-1} s_{i}^2 + 
+w_{ds}\cdot \sum_{i=0}^{n-1} (s'_{i})^2 +w_{dds}\cdot \sum_{i=0}^{n-2} (\frac {s''_{i+1}-s''_{i}}{\Delta s^2} )^2\\
+$$
+
+#### ②与参考线偏差
+
+$$
+w_{xref}\cdot \sum_{i=0}^{n-1}(s_{i}-s_{ref})^2 + 
+w_{dxref}\cdot \sum_{i=0}^{n-1}(s'_{i}-s'_{ref})^2\\
+$$
+
+#### ③终点
+
+$$
+w_{end_l}\cdot (s_{n-1} - s_{endref})^2 + w_{end_{dl}}\cdot ({s}'_{n-1}-{s'_{endref}})^2 + w_{end_{ddl}}\cdot ({s}''_{n-1} - {s''_{endref}})^2
+$$
+
+### 3.**约束条件**
+
+约束分为六个部分(6n*1)
+$$
+对变量的约束(3n)：LowerBounds < s,s',s'',s'''<upperBounds\\
+对Jerk的约束(n-1)：LowerBounds < s'''<upperBounds
+对起点的约束(3)：ego_{1} \leq s_{1},s'_{1},s''_{1} \leq ego_{1}\\
+连续性约束(2n-2)：
+s_{i+1} - s_i - \Delta s \cdot s_i' - \frac{1}{3} \Delta s ^2 \cdot s_i'' - \frac{1}{6} \Delta s^2 \cdot s_{i+1}'' = 0\\
+s_{i+1}' - s_i' -\frac{1}{2}\Delta s *s_i'' - \frac{1}{2}\Delta s *s_{i+1}'' = 0\\
+$$
+
+
+# 思考
+
+## 1	为什么需要正定矩阵？
 
 - 如果P是半正定矩阵，那么f(x)是一个[凸函数](https://zh.wikipedia.org/wiki/凸函数)。相应的二次规划为凸二次规划问题；此时若约束条件定义的可行域不为空，且目标函数在此可行域有下界，则该问题有全局最小值。
 - 如果P是正定矩阵，则该问题有唯一的全局最小值。
@@ -934,6 +1011,13 @@ $$
 不定
 $$
 
-### 2.压缩矩阵有哪几种方法？
+## 2.压缩矩阵有哪几种方法？
 
 参考[英伟达](https://www.bu.edu/pasi/files/2011/01/NathanBell1-10-1000.pdf)的介绍
+
+
+
+------
+
+
+

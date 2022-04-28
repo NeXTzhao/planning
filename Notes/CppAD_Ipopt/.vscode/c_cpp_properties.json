@@ -4,9 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/eigen3",
-                "/opt/ros/noetic/include",
-                "${workspaceFolder}/common/math/piecewise_jerk/include"
+                "/usr/include/"
             ],
             "defines": [],
             "intelliSenseMode": "linux-gcc-x64",

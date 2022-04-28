@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-13 11:44:55
- * @LastEditTime: 2022-04-16 12:18:29
+ * @LastEditTime: 2022-04-22 15:37:52
  * @FilePath: /osqp_eigen/src/PathOptimize.cpp
  * @Copyright:
  */
@@ -15,7 +15,7 @@ void PathOptimize::CalculateKernel(std::vector<c_float>* P_data,
   const int num_of_variables = 3 * n;
   std::cout << "num_of_variables:" << num_of_variables << '\n';
 
-  const int num_of_nonzeros = num_of_variables + (n - 1);
+  // const int num_of_nonzeros = num_of_variables + (n - 1);
   std::vector<std::vector<std::pair<c_int, c_float>>> columns(num_of_variables);
   int value_index = 0;
 

@@ -3,7 +3,7 @@ project(OsqpEigen-Example)
 
 # 设置c++版本
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # 设置编译版本 bebug / release
 SET(CMAKE_BUILD_TYPE Debug)
@@ -19,9 +19,9 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/common/math
   ${PROJECT_SOURCE_DIR}/common/util
-  ${PROJECT_SOURCE_DIR}/common/math/interpolation/include/
-  ${PROJECT_SOURCE_DIR}/common/math/osqp_interface/include/
-  ${PROJECT_SOURCE_DIR}/common/math/piecewise_jerk/include/
+  ${PROJECT_SOURCE_DIR}/common/math/interpolation/include
+  ${PROJECT_SOURCE_DIR}/common/math/osqp_interface/include
+  ${PROJECT_SOURCE_DIR}/common/math/piecewise_jerk/include
   
 )
 
@@ -59,7 +59,7 @@ target_include_directories(matplotlib_cpp
     $<INSTALL_INTERFACE:include>
 )
 target_compile_features(matplotlib_cpp INTERFACE
-  cxx_std_17
+  cxx_std_20
 )
 # TODO: Use `Development.Embed` component when requiring cmake >= 3.18
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)

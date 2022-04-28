@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-14 01:10:20
- * @LastEditTime: 2022-04-15 21:18:14
+ * @LastEditTime: 2022-04-16 16:13:05
  * @FilePath: /osqp_eigen/src/pathDemo.cpp
  * @Copyright:
  */
@@ -37,8 +37,7 @@ int main() {
   std::array<double, 4> xWeight = {l_weight, dl_weight, ddl_weight,
                                    dddl_weight};
 
-
-  PathOptimize qp(108);
+  PathOptimize qp(100);
   std::vector<double> new_values_;
   spinle(new_values_);
 

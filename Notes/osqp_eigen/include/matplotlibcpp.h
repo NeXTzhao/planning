@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-08 09:59:50
- * @LastEditTime: 2022-04-08 09:59:50
+ * @LastEditTime: 2022-04-16 15:19:58
  * @FilePath: /osqp_eigen/include/matplotlibcpp.h
  * @Copyright:  
  */
@@ -9,7 +9,15 @@
 
 // Python headers must be included before any system headers, since
 // they define _POSIX_C_SOURCE
+
+#ifdef _DEBUG
+#undef _DEBUG
 #include <Python.h>
+
+#define _DEBUG
+#else
+#include <Python.h>
+#endif
 
 #include <vector>
 #include <map>

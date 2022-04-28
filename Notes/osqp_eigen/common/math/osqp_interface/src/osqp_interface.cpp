@@ -179,7 +179,8 @@ int64_t OSQPInterface::initializeProblem(const Eigen::MatrixXd& P,
   m_data->u = u_dyn;
 
   // Setup workspace
-  OSQPWorkspace* m_work = osqp_setup(m_data.get(), m_settings.get());
+  // OSQPWorkspace* m_work;
+  m_work = osqp_setup(m_data.get(), m_settings.get());
   // m_exitflag = osqp_setup(&m_work, m_data.get(), m_settings.get());
 
 

@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-07 21:40:50
- * @LastEditTime: 2022-04-08 20:06:10
+ * @LastEditTime: 2022-04-21 22:55:46
  * @FilePath: /osqp_eigen/src/lineInterpoltion.cpp
  * @Copyright:
  */
@@ -46,13 +46,14 @@ int main() {
                   "r*");  //（取名，参数，参数，直线连接）
 
   plt::named_plot("x_y_value", base_keys, base_values,
-                  "b*");  //(取名，参数，参数，离散点)
+                  "b");  //(取名，参数，参数，离散点)
 
   // std::map<std::string, std::string> keywords;
   // keywords.insert(std::pair<std::string, std::string>("label", "lerp
   // value"));
   plt::legend();
-  plt::pause(0.1);
+  // plt::pause(0.1);
+  plt::show();
 
   const char* filename = "../result_picture/lineInterpolation.png";
   std::cout << "Saving result to " << filename << std::endl;

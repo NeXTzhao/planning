@@ -1,4 +1,4 @@
-# c++ 指针函数 & 函数指针 & 回调函数 & lambda表达式 & std::function() & std::bind()
+# c++
 
 ## 函数指针
 

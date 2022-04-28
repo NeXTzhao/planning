@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-08 17:45:37
- * @LastEditTime: 2022-04-15 00:01:03
+ * @LastEditTime: 2022-04-21 22:57:18
  * @FilePath: /osqp_eigen/src/splineInterpoltion.cpp
  * @Copyright:
  */
@@ -45,10 +45,10 @@ int main() {
   //                   "ro-");  //（取名，参数，参数，直线连接）
   plt::named_plot("query_value", query_keys, query_values,
                   "r*");  //（取名，参数，参数，直线连接）
-  plt::named_plot("x_y_value", base_keys, base_values,
-                  "b*");  //(取名，参数，参数，离散点)
-  plt::named_plot("new_key_values", new_keys, new_values
-                  );  //(取名，参数，参数，离散点)
+  // plt::named_plot("x_y_value", base_keys, base_values,
+  //                 "b*");  //(取名，参数，参数，离散点)
+  plt::named_plot("new_key_values", new_keys, new_values,
+                  "b");  //(取名，参数，参数，离散点)
 
   plt::legend();
   plt::pause(0.1);

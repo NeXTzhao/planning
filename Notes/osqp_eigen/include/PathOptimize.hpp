@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-10 21:27:05
- * @LastEditTime: 2022-04-15 21:46:50
+ * @LastEditTime: 2022-04-16 15:39:17
  * @FilePath: /osqp_eigen/include/PathOptimize.hpp
  * @Copyright:
  */
@@ -83,9 +83,14 @@ class PathOptimize {
 
   void set_x_ref(const double weight_x_ref, std::vector<double> x_ref);
 
+  void set_end_state_ref(const std::array<double, 3>& weight_end_state,
+                         const std::array<double, 3>& end_state_ref);
+
   void set_bound(size_t numPoints, const std::array<double, 4>& w,
                  const std::vector<double>& new_values);
   void matplot();
+
+  ~PathOptimize() {}
 
  protected:
   std::vector<double> x_;
@@ -93,14 +98,14 @@ class PathOptimize {
   std::vector<double> ddx_;
   size_t num_of_knots_;
 
-  std::array<double, 3> x_init_ = {1.0, 0.0, 0.0};
+  std::array<double, 3> x_init_ = {1.0, -0.15, 0.0};
   std::vector<std::pair<double, double>> x_bounds_;
   std::vector<std::pair<double, double>> dx_bounds_;
   std::vector<std::pair<double, double>> ddx_bounds_;
   std::pair<double, double> dddx_bound_;
   std::vector<double> x_ref_;
   std::array<double, 3> weight_end_state_ = {{0.0, 0.0, 0.0}};
-  std::array<double, 3> end_state_ref_;
+  std::array<double, 3> end_state_ref_ = {1.5, 0.0, 0.0};
 
   std::array<double, 3> scale_factor_ = {{1.0, 10.0, 100.0}};
 
