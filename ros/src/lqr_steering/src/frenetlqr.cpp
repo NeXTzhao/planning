@@ -9,6 +9,7 @@
  *
  */
 
+
 #include <stdio.h>
 #include <Eigen/Eigen>
 #include <array>
@@ -166,7 +167,7 @@ void calc_frenet_paths() {
 /**************************************************************************/
 
 /**
- * @brief 寻找匹配点及距离最短的点
+ * @brief 寻找匹配点即距离最短的点
  *
  * @param current_post_x
  * @param current_post_y

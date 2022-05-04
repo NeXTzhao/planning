@@ -1,7 +1,7 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-13 11:44:55
- * @LastEditTime: 2022-04-22 15:37:52
+ * @LastEditTime: 2022-04-30 11:44:52
  * @FilePath: /osqp_eigen/src/PathOptimize.cpp
  * @Copyright:
  */
@@ -293,7 +293,7 @@ void PathOptimize::Optimize() {
 
   osqp_solve(osqp_work);
 
-  auto status = osqp_work->info->status_val;
+  // auto status = osqp_work->info->status_val;
 
   // extract primal results
   x_.resize(num_of_knots_);
@@ -364,13 +364,13 @@ void PathOptimize::set_x_bounds(const double x_lower_bound,
           std::make_pair(0.0, 2.5));  //{1,8,5,8,9}
 
   std::vector<std::pair<double, double>> cr;
-  for (int i = 0; i < inCircleY.size(); ++i) {
+  for (size_t i = 0; i < inCircleY.size(); ++i) {
     cr.push_back(std::make_pair(inCircleY.at(i), outCircleY.at(i)));
     std::cout << "cr:" << cr[i].second << "," << cr[i].first << '\n';
   }
 
   int cit = 0;
-  for (int it = 100; it < 100 + inCircleY.size(); ++it) {
+  for (size_t it = 100; it < 100 + inCircleY.size(); ++it) {
     x_bounds_[it].first = cr[cit].second;
     x_bounds_[it].second = cr[cit].first;
     std::cout << "x_bounds_[it]:" << x_bounds_[it].first << ","
@@ -424,7 +424,7 @@ void PathOptimize::set_bound(size_t numPoints, const std::array<double, 4>& w,
 
   ddx_bounds_.resize(num_of_knots_,
                      std::make_pair(-kMaxVariableRange, kMaxVariableRange));
-  const double veh_param = 10.0;
+  // const double veh_param = 10.0;
   const double lat_acc_bound =
       std::tan(max_steer_angle / steer_ratio) / wheel_base;
 
@@ -460,7 +460,7 @@ void PathOptimize::set_bound(size_t numPoints, const std::array<double, 4>& w,
   //                               10, 15, 30, 50, 60, 30,  10,  15, 0,  2,
   //                               3,  1,  5,  9,  -1, -10, -25, 30, -35};
   std::vector<double> xpoint;
-  for (int i = 0; i < x_bounds_.size(); ++i) {
+  for (size_t i = 0; i < x_bounds_.size(); ++i) {
     auto item = (x_bounds_[i].first + x_bounds_[i].second) * 0.5;
     xpoint.push_back(item);
   }
@@ -494,11 +494,11 @@ void PathOptimize::matplot() {
                   "r*");  //(取名，参数，参数，离散点)
 
   // plt::named_plot("u_bound", inCircleY, "b*");  //(取名，参数，参数，离散点)
-  // // plt::named_plot("u_bound", inCircleY1, "b*");
-  // //(取名，参数，参数，离散点) plt::named_plot("u_bound", outCircleY, "r*");
-  // //(取名，参数，参数，离散点)
-  // // plt::named_plot("u_bound", outCircleY1, "r*");
-  // //(取名，参数，参数，离散点)
+  // plt::named_plot("u_bound", inCircleY1, "b*");
+  //(取名，参数，参数，离散点) plt::named_plot("u_bound", outCircleY, "r*");
+  //(取名，参数，参数，离散点)
+  // plt::named_plot("u_bound", outCircleY1, "r*");
+  //(取名，参数，参数，离散点)
 
   plt::legend();
   plt::pause(0.1);

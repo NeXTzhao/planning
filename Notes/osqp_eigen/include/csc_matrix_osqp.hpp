@@ -1,17 +1,11 @@
 /*
  * @Author: wangdezhao
  * @Date: 2022-04-09 00:48:07
- * @LastEditTime: 2022-04-09 14:00:38
+ * @LastEditTime: 2022-04-29 22:23:59
  * @FilePath: /osqp_eigen/include/csc_matrix_osqp.hpp
  * @Copyright:
  */
-/*
- * @Author: wangdezhao
- * @Date: 2022-04-09 00:16:20
- * @LastEditTime: 2022-04-09 00:42:37
- * @FilePath: /osqp_eigen/src/csc_matrix.cpp
- * @Copyright:
- */
+
 #pragma once
 #include <iostream>
 

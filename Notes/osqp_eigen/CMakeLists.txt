@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.8)
 project(OsqpEigen-Example)
 
 # 设置c++版本
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_STANDARD 17)
 
 # 设置编译版本 bebug / release
 SET(CMAKE_BUILD_TYPE Debug)
@@ -22,15 +22,22 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/common/math/interpolation/include
   ${PROJECT_SOURCE_DIR}/common/math/osqp_interface/include
   ${PROJECT_SOURCE_DIR}/common/math/piecewise_jerk/include
-  
+  # ${PROJECT_SOURCE_DIR}/common/math/qp_spline_2d/include
+  ${PROJECT_SOURCE_DIR}/common/math/cartesian_frenet_conversion/include
 )
 
 # find_package(OsqpEigen)
-find_package(Eigen3)
+find_package(Eigen3 REQUIRED)
 
 # Find OSQP library and headers
 find_package(osqp REQUIRED)
 # get_target_property(OSQP_INCLUDE_DIR osqp::osqp INTERFACE_INCLUDE_DIRECTORIES)
+
+# Find gflags library and headers
+# find_package(gflags REQUIRED)
+
+# find_package(absl REQUIRED)
+
 
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
 # include_directories(SYSTEM ${OSQP_INCLUDE_DIR})
@@ -112,9 +119,27 @@ target_link_libraries(csc_conv PUBLIC matplotlib_cpp PUBLIC ${EXTRA_LIBS} PUBLIC
 # target_link_libraries(path_jerk PUBLIC matplotlib_cpp PUBLIC ${EXTRA_LIBS} PUBLIC osqp::osqp )
 
 
-# add_executable(pathoptim src/PathOptimize.cpp)
+
 add_executable(pathoptim src/pathDemo.cpp src/PathOptimize.cpp)
-# add_executable(pathoptim src/osqp_test.cpp)
 # 多个库文件链接顺序问题
 # 在链接命令中给出所依赖的库时，需要注意库之间的依赖顺序，依赖其他库的库一定要放到被依赖库的前面，这样才能真正避免undefined reference的错误，完成编译链接
 target_link_libraries(pathoptim PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp  PRIVATE osqp::osqp )
+
+# add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/qp_spline_2d)
+# list(APPEND EXTRA_LIBS spline_2d)
+# # LINK_LIBRARIES(${PROJECT_SOURCE_DIR}/lib)
+
+# add_executable(qp_spline src/mySpline_2d.cpp)
+# target_link_libraries(qp_spline PUBLIC ${EXTRA_LIBS} PUBLIC osqp::osqp  PUBLIC matplotlib_cpp)
+
+
+# add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/cartesian_frenet_conversion)
+# list(APPEND EXTRA_LIBS cartesian_frenet)
+# add_executable(carte_frenet src/cartesianFrenet.cpp)
+# target_link_libraries(carte_frenet PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp)
+
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/cartesian_frenet_conversion)
+add_executable(quintixPloy src/quinticPolynomial.cpp src/cartesianFrenet.cpp)
+list(APPEND EXTRA_LIBS cartesian_frenet)
+target_link_libraries(quintixPloy PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp)

@@ -47,6 +47,45 @@ vscode
 1. 插件
     代码格式化:Clang-Format
         需要在终端sudo apt-get install clang-format
+    注释插件：Doxygen Documentation Generator
+        // Doxygen documentation generator set
+        // 文件注释：版权信息模板
+        "doxdocgen.file.copyrightTag": [
+            "@copyright Copyright (c) {year} "
+        ],
+
+        // 文件注释的组成及其排序
+        "doxdocgen.file.fileOrder": [
+            "file",		// @file
+            "brief",	// @brief 简介
+            "author",	// 作者
+            "version",	// 版本
+            "date",		// 日期
+            "empty",	// 空行
+            "copyright",// 版权
+        ],
+        // 下面时设置上面标签tag的具体信息
+        "doxdocgen.file.fileTemplate": "@file {name}",
+        "doxdocgen.file.versionTag": "@version 1.0",
+        "doxdocgen.generic.authorEmail": "1282507109@qq.com",
+        "doxdocgen.generic.authorName": "Wang Dezhao",
+        "doxdocgen.generic.authorTag": "@author {author} ({email})",
+        // 日期格式与模板
+        "doxdocgen.generic.dateFormat": "yyyy-MM-DD HH:mm:ss",
+        "doxdocgen.generic.dateTemplate": "@date {date}",
+
+
+        // 根据自动生成的注释模板（目前主要体现在函数注释上）
+        "doxdocgen.generic.order": [
+            "brief",
+            "tparam",
+            "param",
+            "return"
+        ],
+        "doxdocgen.generic.paramTemplate": "@param{indent:8}{param}{indent:25}",
+        "doxdocgen.generic.returnTemplate": "@return {type} ",
+        "doxdocgen.generic.splitCasingSmartText": true,
+   
 
 2.  设置字体
     在setting.json中添加

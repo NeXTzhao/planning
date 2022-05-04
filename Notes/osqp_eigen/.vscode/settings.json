@@ -74,6 +74,8 @@
     "hash_map": "cpp",
     "hash_set": "cpp",
     "shared_mutex": "cpp",
-    "iterativelinearsolvers": "cpp"
+    "iterativelinearsolvers": "cpp",
+    "valarray": "cpp",
+    "*.ipp": "cpp"
   }
 }

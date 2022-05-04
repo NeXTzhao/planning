@@ -1,10 +1,11 @@
-/*
- * @Author: your name
- * @Date: 2021-10-13 10:43:57
- * @LastEditTime: 2021-10-13 17:33:19
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /quintic_lqr/include/frenet_path.h
+/**
+ * @file frenet_path_double.h
+ * @brief 
+ * @author Wang Dezhao (1282507109@qq.com)
+ * @version 1.0
+ * @date 2022-05-02 10:16:55
+ * 
+ * @copyright Copyright (c) 2022 
  */
 #ifndef _FRENET_PATH_H
 #define _FRENET_PATH_H

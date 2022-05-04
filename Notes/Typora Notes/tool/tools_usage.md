@@ -557,6 +557,14 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
 | `ASSERT_STRCASEEQ(`*str1*`,`*str2*`);` | `EXPECT_STRCASEEQ(`*str1*`,`*str2*`);` | the two C strings have the same content, ignoring case(忽略大小写) |
 | `ASSERT_STRCASENE(`*str1*`,`*str2*`);` | `EXPECT_STRCASENE(`*str1*`,`*str2*`);` | the two C strings have different content, ignoring case(忽略大小写) |
 
+- **浮点数比较**
+
+| Fatal assertion                    | Nonfatal assertion                 | Verifies                                                     |
+| ---------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| `EXPECT_FLOAT_EQ(val1,val2`)       | `EXPECT_FLOAT_EQ(val1, val2)`      | 验证这两个`float`值*`val1`*和*`val2`*是否近似相等，彼此相差 4 个 ULP |
+| `EXPECT_DOUBLE_EQ(val1,val2`)      | `EXPECT_DOUBLE_EQ(val1, val2)`     | 验证这两个`double`值*`val1`*和*`val2`*是否近似相等，彼此相差 4 个 ULP |
+| `ASSERT_NEAR(val1,val2,abs_error)` | `EXPECT_NEAR(val1,val2,abs_error)` | *`val1`*验证和之间的差*`val2`*不超过绝对误差界限*`abs_error`* |
+
 ## 3 sample
 
 - demo1见routing_planning/Notes/GoogleTest/demo1
@@ -1272,7 +1280,7 @@ set_target_properties(midpoints PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BIN
 线性：
 	plt::named_plot("l_bound", l_bound,
                   "r*");  //(取名，参数(vector数组)，红色离散点)
-  	plt::named_plot("u_bound", u_bound,
+  plt::named_plot("u_bound", u_bound,
                   "ro-");  //(取名，参数，红色直线连接)
 ```
 
@@ -1354,7 +1362,7 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 - **稀疏矩阵**
 
 ```c++
-Values:			//存储非零的系数值。
+Values:				//存储非零的系数值。
 InnerIndices:	//存储非零的行（列）索引。
 OuterStarts:	//为每一列（相应的行）存储前两个数组中第一个非零的索引。
 InnerNNZs:		//存储每列（分别为行）的非零数。这个词inner指的是一个内部 向量，它是列主矩阵的列，或行主矩阵的行。这个词outer指的是另一个方向。

@@ -1,10 +1,11 @@
-/*
- * @Author: your name
- * @Date: 2021-09-20 17:03:11
- * @LastEditTime: 2021-09-20 19:59:44
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /littice/include/cpprobotics_types.h
+/**
+ * @file cpprobotics_types_double.h
+ * @brief 
+ * @author Wang Dezhao (1282507109@qq.com)
+ * @version 1.0
+ * @date 2022-05-02 11:41:53
+ * 
+ * @copyright Copyright (c) 2022 
  */
 
 #ifndef _CPPROBOTICS_TYPES_H
