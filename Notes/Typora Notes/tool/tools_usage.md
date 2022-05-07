@@ -1068,6 +1068,9 @@ echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
 	git push -u origin main
         
 #通常在vscode中实现，不回去调用命令行
+
+如何下载指定版本
+git clone -b 1.x --depth 1 https://github.com/mehrpadin/Superfish-for-Drupal.git
 ```
 
 ## 2	编写`.gitignore`文件

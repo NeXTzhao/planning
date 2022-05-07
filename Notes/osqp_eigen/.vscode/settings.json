@@ -77,5 +77,6 @@
     "iterativelinearsolvers": "cpp",
     "valarray": "cpp",
     "*.ipp": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
 }
