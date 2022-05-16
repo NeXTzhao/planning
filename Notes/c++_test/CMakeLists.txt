@@ -31,3 +31,4 @@ add_executable(test5 test5.cpp)
 add_executable(tree tree.cpp)
 
 add_executable(A A.cpp main.cpp test2/Data.cpp test2/Data.h test2/test2.cpp test2/test2.h)
+add_executable(test6 test6.cpp)

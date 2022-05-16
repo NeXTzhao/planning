@@ -1,4 +1,4 @@
-# 二次规划（ `QP`）样条路径优化
+# 二次规划（ QP）样条路径优化
 
 ## 1 目标函数
 
@@ -544,14 +544,14 @@ b_{i0} \\ b_{i1} \\ b_{i2} \\ b_{i3} \\ b_{i4} \\ b_{i5} \\
 $$
 式中：
 $$
- 
- \begin{bmatrix} 
+\begin{bmatrix} 
 longi_coef\\
 -longi_coef\\
 longitudinal_coef\\
 -longitudinal_coef
 \end{bmatrix}_{4 * tcoord \times totalparam}=
- \begin{bmatrix} 
+
+\begin{bmatrix} 
 -sin\theta & -s_i\cdot sin\theta & -s_i^2\cdot sin\theta & -s_i^3\cdot sin\theta & -s_i^4\cdot sin\theta&-s_i^5\cdot sin \theta &cos\theta & s_i\cdot  cos\theta & s_i^2\cdot  cos\theta & s_i^3\cdot  cos\theta & s_i^4\cdot  cos\theta&s_i^5\cdot  cos\theta & \cdots\\
 sin\theta & s_i\cdot sin\theta & s_i^2\cdot sin\theta & s_i^3\cdot sin\theta & s_i^4\cdot sin\theta&s_i^5\cdot sin \theta &-cos\theta & -s_i\cdot cos\theta & -s_i^2\cdot cos\theta & -s_i^3\cdot cos\theta & -s_i^4\cdot  cos\theta&-s_i^5\cdot cos\theta  &\cdots\\
 cos\theta & s_i\cdot  cos\theta & s_i^2\cdot  cos\theta & s_i^3\cdot  cos\theta & s_i^4\cdot  cos\theta&s_i^5\cdot  cos\theta

@@ -12,7 +12,9 @@
 
 #include <Eigen/Eigen>
 #include <array>
+#include <chrono>
 #include <cmath>
+#include <ctime>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -48,10 +50,10 @@ class QuinticPolynomial {
    * @param  current_post_x
    * @param  current_post_y
    * @param  index
-   * @return int
+   * @return void
    */
-  int matchPoint(const FrenetPath fp, const double current_post_x,
-                 const double current_post_y, int& index);
+  void matchPoint(const FrenetPath fp, const double current_post_x,
+                  const double current_post_y, int pre_index, int& index);
 
  private:
   /**
@@ -120,8 +122,9 @@ class QuinticPolynomial {
   double calc_point_y_x_ddd(double x) {
     return 6 * b3 + 12 * 2 * b4 * x + 20 * 3 * b5 * std::pow(x, 2);
   };
-  /* y(t)_ddd = y'''(x) * xd^3 + y''(x) * 2* xd* xdd + y''(x) * xdd * xd +y'(x)
-   * * xdd */
+
+  // y(t)_ddd = y'''(x) * xd^3 + y''(x) * 2* xd* xdd + y''(x) * xdd * xd +y'(x)
+  // * xdd
   double calc_point_y_t_ddd(double y_x_ddd, double y_x_dd, double y_x_d,
                             double xddd, double xdd, double xd) {
     return y_x_ddd * std::pow(xd, 3) + y_x_dd * 2 * xd * xdd +
@@ -135,8 +138,8 @@ class QuinticPolynomial {
    * @param  x_d
    * @return double
    */
-  double calc_point_thetar(double y_x_t_d, double x_d) {
-    return atan2(y_x_t_d, x_d);
+  double calc_point_theta(double y_x_t, double x) {
+    return atan2(y_x_t, x);
     // return atan(y_x_t_d / x_d);
   };
 
@@ -151,10 +154,9 @@ class QuinticPolynomial {
   }
 
   /**
-   * @brief 计算曲率k 的导数
+   * @brief 计算曲率 k 的导数
    * Compute the curvature change rate w.r.t. curve length (dkappa) given
-   * curve X = (x(t), y(t))
-   *        which t is an arbitrary parameter.
+   * curve X = (x(t), y(t)) which t is an arbitrary parameter.
    * @param dx dx / dt
    * @param d2x d(dx) / dt
    * @param dy dy / dt
@@ -202,8 +204,7 @@ class QuinticPolynomial {
   //行驶完轨迹所需要的总时间
   double TotalTimes_;
   // 多项式系数coff
-  double a0, a1, a2;
-  double b0, b1, b2;
+  double a0, a1, a2, b0, b1, b2;
   double a3, a4, a5, b3, b4, b5;
 };
 };  // namespace cpprobotics

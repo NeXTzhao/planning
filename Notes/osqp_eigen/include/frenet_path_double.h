@@ -7,8 +7,8 @@
  * 
  * @copyright Copyright (c) 2022 
  */
-#ifndef _FRENET_PATH_H
-#define _FRENET_PATH_H
+
+#pragma once
 
 #include <array>
 #include <iostream>
@@ -20,36 +20,21 @@ namespace cpprobotics {
 
 class FrenetPath {
  public:
-  // float cd = 0.0;
-  // float cv = 0.0;
-  // float cf = 0.0;
-
   Vec_f t;
   Vec_f x;
   Vec_f x_d;
   Vec_f x_dd;
-  // Vec_f d_ddd;
+
   Vec_f y;
   Vec_f y_d;
   Vec_f y_dd;
-  // Vec_f s_ddd;
-
-  // Vec_f x;
-  // Vec_f y;
-  // Vec_f yaw;
-  // Vec_f ds;
-  // Vec_f c;
 
   Vec_f kappa;  // curvature
   Vec_f theta;
   Vec_f s;
 
   Vec_f dkappa;
-  // float max_speed;
-  // float max_accel;
-  // float max_curvature;
 };
 
 using Vec_Path = std::vector<FrenetPath>;
 }
-#endif

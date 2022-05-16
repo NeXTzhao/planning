@@ -1,11 +1,11 @@
 /**
  * @file cartesianFrenet.cpp
- * @brief
+ * @brief 
  * @author Wang Dezhao (1282507109@qq.com)
  * @version 1.0
- * @date 2022-05-02 10:11:53
- *
- * @copyright Copyright (c) 2022
+ * @date 2022-05-14 17:37:37
+ * 
+ * @copyright Copyright (c) 2022 
  */
 
 #include "cartesianFrenet.hpp"
@@ -35,7 +35,7 @@ int main() {
   PointState cary_end{-10.0, 0.0, 0.0};
 
   namespace plt = matplotlibcpp;
-  // plt::named_plot("sloveXY", fp.x, fp.y);
+  plt::named_plot("sloveXY", fp.x, fp.y);
   // std::array<double, 3> s_conditions;
   // std::array<double, 3> d_conditions;
   std::vector<double> s;
@@ -62,7 +62,7 @@ int main() {
       int index = 0;
       car_quinticPloy.matchPoint(fp, car_fp.x.at(i), car_fp.y.at(i), index);
       CartesianFrenetConverter::cartesian_to_frenet(
-          fp.x.at(i), fp.x.at(i), fp.y.at(i), fp.theta.at(i),
+          fp.s.at(i), fp.x.at(i), fp.y.at(i), fp.theta.at(i),
           car_fp.x.at(i), car_fp.y.at(i), &ptr_s, &ptr_d);
       s.push_back(ptr_s);
       d.push_back(ptr_d);

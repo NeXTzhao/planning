@@ -55,7 +55,7 @@ namespace base{
 总结：
 
 1. 子类继承父类，相当于把子类嵌入到父类当中
-2. 如果子类作用域中没有找到相关的函数或变量，便会到外围作用域中查找，如果一直没有找到，最后回到global中查找
+2. 如果子类作用域中没有找到相关的函数或变量，便会到外围作用域中查找，如果一直没有找到，最后回到`global`中查找
 
 ### 2 使用using声明式或转交函数
 
@@ -101,6 +101,8 @@ public：
 	}	
 };
 ```
+
+
 
 ## item 34：区分接口继承和实现继承
 
@@ -188,4 +190,173 @@ race->objectID();
 ```
 
 
+
+## item 35：考虑virtual函数以外的其他选择
+
+### 1 由Non-Virtual Interface 手法实现 *Template Method* 模式
+
+### 2 由Function Pointers实现 *Strategy* 模式
+
+### 3 由`tr1::function` 完成 *Strategy* 模式
+
+### 4 古典 *Strategy* 模式
+
+## item 36：绝不重新定义继承而来的non-virtual函数
+
+- `non-virtual` 函数在继承体系中例如 `A::fun` 和 `B:fun` 都是静态绑定，子类重新定义父类中的`non-virtual` 函数，子类中会自动屏蔽掉父类中的同名函数
+- `virtual` 属于动态绑定，在运行期决定自身所绑定的对象
+
+```c++
+class A{
+public:
+     void fun(){
+        std::cout << "this is A fun"<<'\n';
+    }
+    virtual void fun1(){
+        std::cout << "this is A fun1"<<'\n';
+    }
+};
+
+class B: public A{
+public:
+    void fun(){
+        std::cout << "this is B fun"<< '\n';
+    }
+    void fun1(){
+        std::cout << "this is B fun1"<<'\n';
+    }
+};
+
+using namespace std;
+int main() {
+    B b;
+    A* pa = &b;
+    pa->fun(); //this is A fun
+    pa->fun1(); //this is B fun1
+
+    B* pb = &b;
+    pb->fun(); //this is B fun
+    pb->fun1();//this is B fun1
+}
+
+//输出
+this is A fun
+this is B fun1
+this is B fun
+this is B fun1
+```
+
+
+
+## item 38：绝不重新定义继承而来的缺省参数值
+
+**`virtual` 函数为动态绑定，而缺省参数值为静态绑定**
+
+### 1 何为动态绑定？
+
+运行时所指定的对象，例如`A* a = new B;` 运行过程中确定a的类型为B
+
+### 2 何为静态绑定
+
+声明时确定的类型，例如`A* a = new B;` 声明中a的静态类型为A
+
+### 3 如果重新定义了继承而来的缺省参数值，会出现什么问题？
+
+父类为 `Shape`,子类为 `Rectangle`和 `Circle`
+
+尽管子类中重写了父类中的基函数，但是子类中的缺省参数不管如何定义，它任然是父类中定义好的缺省参数，也就缺省参数为静态绑定的性质
+
+```c++
+class Shape {
+public:
+    enum ShapeColor {
+        Red, Green, Blue
+    };
+    virtual void draw(ShapeColor color = Blue) const {
+        std::cout << "shape:" << color << '\n';
+    }
+};
+
+class Rectangle : public Shape {
+public:
+    virtual void draw(ShapeColor color = Green) const {
+        std::cout << "Rectangle:"<< color << '\n';
+    }
+};
+
+class Circle : public Shape {
+public:
+    virtual void draw(ShapeColor color) const {
+        std::cout << "Circle:" << color << '\n';
+    }
+};
+
+int main() {
+    Shape *ps;
+    Shape *pc = new Circle;
+    Shape *pr = new Rectangle;
+
+    ps = pc;
+    ps->draw();
+    ps = pr;
+    ps->draw();
+}
+//输出
+Circle:2 
+Rectangle:2
+```
+
+### 4 如何解决上述问题？
+
+1. 借鉴item 35中的`virtual` 函数替代方案：令父类中的普通函数去调用私有的虚函数，而父类的私有虚函数在子类中重新定义.
+2. 一个成员函数被定义为private属性，标志着其只能被当前类的其他成员函数(或友元函数)所访问。而virtual修饰符则强调父类的成员函数可以在子类中被重写，因为重写之时并没有与父类发生任何的调用关系，故而重写是被允许的。
+
+> 1. 编译器不检查虚函数的各类属性。被virtual修饰的成员函数，不论他们是private、protect或是public的，都会被统一的放置到虚函数表中。对父类进行派生时，子类会继承到拥有相同偏移地址的虚函数表（相同偏移地址指，各虚函数相对于VPTR指针的偏移），则子类就会被允许对这些虚函数进行重载。且重载时可以给重载函数定义新的属性，例如public，其只标志着该重载函数在该子类中的访问属性为public，和父类的private属性没有任何关系！
+> 2. 缺省参数是声明或定义函数时为函数的参数指定一个默认值。在调用该函数时，如果没有指定实参则采用该默认值，否则使用指定的实参
+
+```c++
+class Shape {
+public:
+    enum ShapeColor {
+        Red, Green, Blue
+    };
+
+    void doDraw(ShapeColor color = Blue) const{
+        draw(color);
+    }
+private:
+    virtual void draw(ShapeColor color) const = 0;
+};
+
+class Rectangle : public Shape {
+private:
+    virtual void draw(ShapeColor color) const {
+        std::cout << "Rectangle:"<< color << '\n';
+    }
+};
+
+class Circle : public Shape {
+private:
+    virtual void draw(ShapeColor color) const {
+        std::cout << "Circle:" << color << '\n';
+    }
+
+};
+
+using namespace std;
+
+int main() {
+    Shape *ps;
+    Shape *pc = new Circle;
+    Shape *pr = new Rectangle;
+
+    ps = pc;
+    ps->doDraw(Shape::Red);
+    ps = pr;
+    ps->doDraw(Shape::Green);
+}
+//输出
+Circle:0
+Rectangle:1
+```
 

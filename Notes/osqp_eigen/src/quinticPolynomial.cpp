@@ -37,6 +37,7 @@ void QuinticPolynomial::cal_longiPoly_coff() {
   a4 = c_eigen[1];
   a5 = c_eigen[2];
 }
+
 void QuinticPolynomial::cal_latPoly_coff() {
   double ye = y_end_.xy;
   double vye = y_end_.v;
@@ -65,7 +66,7 @@ void QuinticPolynomial::cal_latPoly_coff() {
 void QuinticPolynomial::getPloyPath(FrenetPath& fp, const double DT) {
   cal_longiPoly_coff();
   cal_latPoly_coff();
-  for (double t = 0; t < TotalTimes_; t += 1) {
+  for (double t = 0; t < TotalTimes_; t += DT) {
     double x = calc_point_x(t);
     // std::cout << ":x:" << x << '\n';
 
@@ -91,11 +92,12 @@ void QuinticPolynomial::getPloyPath(FrenetPath& fp, const double DT) {
     double y_x_ddd = calc_point_y_x_ddd(x);
     double y_x_t_ddd =
         calc_point_y_t_ddd(y_x_ddd, y_x_dd, y_x_d, xddd, xdd, xd);
-    if (t > 0) {
-      fp.y.push_back(y_x_t);
-    } else {
-      fp.y.push_back(x);
-    }
+    fp.y.push_back(y_x_t);
+    // if (t > 0) {
+    //   fp.y.push_back(y_x_t);
+    // } else {
+    //   fp.y.push_back(x);
+    // }
     fp.y_d.push_back(y_x_t_d);
     fp.y_dd.push_back(y_x_t_dd);
     fp.kappa.push_back(calc_point_k(y_x_dd, y_x_d));
@@ -104,10 +106,10 @@ void QuinticPolynomial::getPloyPath(FrenetPath& fp, const double DT) {
   }
 
   double delta_s = 0;
-  for (size_t i = 0; i < fp.t.size() - 1; i++) {
+  for (size_t i = 0; i < fp.t.size() - 1; ++i) {
     double dy = fp.y[i + 1] - fp.y[i];
     double dx = fp.x[i + 1] - fp.x[i];
-    fp.theta.push_back(calc_point_thetar(dy, dx));
+    fp.theta.push_back(calc_point_theta(dy, dx));
 
     double delta_y_t = fp.y.at(i + 1) - fp.y.at(i);
     double delta_x_t = fp.x.at(i + 1) - fp.x.at(i);
@@ -116,21 +118,59 @@ void QuinticPolynomial::getPloyPath(FrenetPath& fp, const double DT) {
   }
 }
 
-int QuinticPolynomial::matchPoint(const FrenetPath fp,
-                                  const double current_post_x,
-                                  const double current_post_y, int& index) {
-  int numPoints = fp.x.size();
-  // double dis_min = std::pow(fp.x[0] - current_post_x, 2) +
-  //                  std::pow(fp.y[0] - current_post_y, 2);
-  double dis_min = std::numeric_limits<double>::max();
+void QuinticPolynomial::matchPoint(const FrenetPath fp,
+                                   const double current_post_x,
+                                   const double current_post_y, int pre_index,
+                                   int& index) {
+  //计算上一个的匹配点的位矢
+  std::array<double, 2> pre_cur_error{current_post_x - fp.x.at(pre_index),
+                                      current_post_y - fp.y.at(pre_index)};
+  double heading = fp.theta.at(pre_index);
+  std::array<double, 2> pre_heading{cos(heading), sin(heading)};
 
-  for (int i = index; i < numPoints; i++) {
+  double innerProd = pre_cur_error.at(0) * pre_heading.at(0) +
+                     pre_cur_error.at(1) * pre_heading.at(1);
+  // TODO: 车往前或者往后开
+  // if (innerProd > 0) {}
+
+  double epsilon = 1e-3;
+
+  size_t numPoints = fp.x.size();
+  int increase_count = 0;
+  double dis_min = std::numeric_limits<double>::max();
+  //改进方案
+  for (size_t i = pre_index; i < numPoints; ++i) {
+    if (std::abs(innerProd) < epsilon) {
+      index = pre_index;
+      break;
+    }
+
     double temp_dis = std::pow(fp.x[i] - current_post_x, 2) +
                       std::pow(fp.y[i] - current_post_y, 2);
     if (temp_dis < dis_min) {
       dis_min = temp_dis;
       index = i;
+      //如果后面出现更小的距离，则计数归零
+      increase_count = 0;
+    } else {
+      ++increase_count;
+    }
+
+    //当最小的距离在后面10次求解过程中任然是最小值，那就认为这就是最佳匹配点
+    if (increase_count > 10) {
+      break;
     }
   }
+
+  // 原始方案
+  // for (size_t i = 0; i < numPoints; ++i) {
+  //   double temp_dis = std::pow(fp.x[i] - current_post_x, 2) +
+  //                     std::pow(fp.y[i] - current_post_y, 2);
+
+  //   if (temp_dis < dis_min) {
+  //     dis_min = temp_dis;
+  //     index = i;
+  //   }
+  // }
 }
 }  // namespace cpprobotics

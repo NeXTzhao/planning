@@ -1,6 +1,6 @@
 # GCC编译器
 
-## 1	cpp文件编译过程
+## 1 cpp文件编译过程
 
 ```bash
 1 预处理-Pre-Processing           		//.i文件
@@ -22,7 +22,7 @@
     g++  test.o  -o  test
 ```
 
-## 2	g++重要编译参数
+## 2 g++重要编译参数
 
 ```bash
 1	-g	编译带调试信息的可执行文件
@@ -128,7 +128,7 @@
 
 # GDB调试器
 
-## 1	使用
+## 1 使用
 
 ```bash
 ## 以下命令后括号内为命令的简化使用，比如run（r），直接输入命令 r 就代表命令run
@@ -197,7 +197,7 @@ $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子�
 
 # CMake
 
-## 1	语法特性
+## 1 语法特性
 
 - **基本语法格式**
 
@@ -213,9 +213,9 @@ $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子�
 
 - **变量使用${}方式取值，但是在 IF 控制语句中是直接使用变量名**
 
-## 2	重要指令和CMake常用变量
+## 2 重要指令和CMake常用变量
 
-### 2.1	重要指令
+### 2.1 重要指令
 
 - **cmake_minimum_required** **- 指定CMake的最小版本要求**
 
@@ -319,7 +319,7 @@ $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子�
 
 - - 语法：**aux_source_directory(dir VARIABLE)**
 
-### 2.2	CMake重用变量
+### 2.2 CMake重用变量
 
 - **CMAKE_C_FLAGS  gcc编译选项**
 
@@ -384,7 +384,7 @@ $(gdb)set follow-fork-mode child   # Makefile项目管理：选择跟踪父子�
 >
 > 上述两个参数已经被CMAKE_RUNTIME_OUTPUT_DIRECTORY`和`CMAKE_LIBRARY_OUTPUT_DIRECTORY替代
 
-## 3	CMake编译工程
+## 3 CMake编译工程
 
 CMake目录结构：项目主目录存在一个CMakeLists.txt文件
 
@@ -393,7 +393,7 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
 1. 包含源文件的子文件夹包含CMakeLists.txt文件，主目录的CMakeLists.txt通过add_subdirectory添加子目录即可；
 2. 包含源文件的子文件夹未包含CMakeLists.txt文件，子目录编译规则体现在主目录的CMakeLists.txt中；
 
-## 4	sample
+## 4 sample
 
 源码在routing_planning/学习笔记/cmake_test_file下
 
@@ -498,7 +498,7 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
 
 # GoogleTest
 
-## 1	源码编译安装
+## 1 源码编译安装
 
 ```bash
 1.下载源码
@@ -512,7 +512,7 @@ CMake目录结构：项目主目录存在一个CMakeLists.txt文件
 #GTest库文件安装在/usr/local/lib/目录，头文件安装在/usr/local/include/目录
 ```
 
-## 2	使用
+## 2 使用
 
 - **断言含义**
 
@@ -617,13 +617,21 @@ int main(){
 
 # Docker
 
+## 1 基本操作
 
+```bash
+查看正在运行的docker进程信息
+docker ps -a
+
+关掉某个docker进程
+docker stop (ID) 
+```
 
 
 
 # ROS 2
 
-## 1	ROS 1的弊端
+## 1 ROS 1的弊端
 
 - **多机器人系统**：没有构建多机器人系统的标准
   - 因为ros1不支持多master的概念
@@ -637,7 +645,7 @@ int main(){
 - **项目管理**：无法胜任完整生命周期下项目管理
   - 缺乏一些自动化测试等工具
 
-## 2	ROS 2的设计思想
+## 2 ROS 2的设计思想
 
 - **架构的颠覆**
   - ros1的架构下，所有节点需要使用Master进行管理
@@ -657,7 +665,7 @@ int main(){
   - 支持实时控制(DDS的使用 )
   - 跨系统平台支持
 
-## 3	ROS 1 和 ROS 2 的区别
+## 3 ROS 1 和 ROS 2 的区别
 
 ![img](https://img-blog.csdnimg.cn/20191202220328111.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3R1emlhYWE=,size_16,color_FFFFFF,t_70)
 
@@ -671,13 +679,13 @@ int main(){
 - rclc的添加主要是ros2要适用于MCU的开发
 - ros2中多了一个ros2的Middleware API是为了适配不同的操作系统以及不同的DDS提供商
 
-## 4	DDS(data distribution service数据分发服务)
+## 4 DDS(data distribution service数据分发服务)
 
 ​    DDS信息发布中间件是一种轻便的、能够提供实时信息传送的中间件技术。DDS中间件是一个软件层，从操作系统、网络传输和底层数据格式的细节中抽象出应用。相同的概念和api提供给不同的编成语言，使得应用在不同的操作系统、编成语言和处理体系架构之间交换信息。底层细节包括数据传输格式、发现、连接、可靠性和、协议、Qos策略等由中间件来管理。
 
   DDS采用发布/订阅体系架构，以数据为中心，提供丰富的Qos服务质量策略。
 
-## 5	ROS 2安装
+## 5 ROS 2安装
 
 ```bash
 1. 设置编码
@@ -735,9 +743,9 @@ sudo apt remove ros-foxy-*
 >
 > ​	加入这一行：199.232.28.133 raw.githubusercontent.com
 
-## 6	ROS 2使用
+## 6 ROS 2使用
 
-### 1	ros1、ros2命令对比
+### 1 ros1、ros2命令对比
 
 - terminal 命令
 
@@ -775,7 +783,7 @@ sudo apt remove ros-foxy-*
 
 
 
-### 2	功能包创建 & 编译 & 运行
+### 2 功能包创建 & 编译 & 运行
 
 #### 创建功能包 
 
@@ -857,7 +865,7 @@ install(TARGETS
   lib/${PROJECT_NAME})
 ```
 
-### 3	自定义msg和srv文件
+### 3 自定义msg和srv文件
 
 1. 创建功能包，并在此功能包中新建msg和srv文件夹
 
@@ -934,7 +942,7 @@ install(TARGETS
    如何在一个功能包使用自定义msg,参考routing_planning/Notes/ROS2_WORKSPACE/src/more_interface文件
    ```
 
-### 4	添加依赖项
+### 4 添加依赖项
 
 有两种方法可以将你的包链接到一个新的依赖项。
 
@@ -998,18 +1006,14 @@ target_link_libraries(my_target Eigen3::Eigen)
 
 
 
-## 7	使用ROS 2的一些命名规则
+## 7 使用ROS 2的一些命名规则
 
 1. 包名必须全部小写
 2. 自定义的MSG，SRV和Action文件必须首字母大写且不能有下划线，例如`Num.msg`
 
-## 8	ROS_DOMAIN_ID
+## 8 ROS_DOMAIN_ID
 
 如果在局域网的多台电脑中使用ROS2，默认的通信机制会自动建立各机器分布式通信框架，也就是不同电脑之间已经可以通信了，如果你不希望多台电脑之间产生连接，可以设置不同的组网ID，相同ID的电脑之间可以通信，不同ID的电脑之间无法通信。  
-
-
-
-
 
 **临时端口**
 
@@ -1030,7 +1034,7 @@ echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
 
 # Git & Github
 
-## 1	基础命令
+## 1 基础命令
 
 ```bash
     clone       克隆远程仓库
@@ -1048,7 +1052,7 @@ echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
     merge       合并版本内容
 ```
 
-## 2	提交代码
+## 2 提交代码
 
 ```bash
 向本地仓库提交代码(终端操作)
@@ -1073,7 +1077,7 @@ echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
 git clone -b 1.x --depth 1 https://github.com/mehrpadin/Superfish-for-Drupal.git
 ```
 
-## 2	编写`.gitignore`文件
+## 3 编写`.gitignore`文件
 
 ```shell
 #               表示此为注释,将被Git忽略
@@ -1142,11 +1146,11 @@ ros/src/lqr_steering/.vscode/browse.vc.db
 
 # AnaConda
 
-## 1	安装
+## 1 安装
 
 进入[官网下载](https://www.anaconda.com/) sh文件，运行bash xx.sh即可
 
-## 2	环境
+## 2 环境
 
 ```bash
 1.	创建虚拟环境
@@ -1184,7 +1188,7 @@ ros/src/lqr_steering/.vscode/browse.vc.db
 #创建anaconda后先conda init ，# export PATH="/home/next/anaconda3/bin:$PATH"  这一步也可以也不用
 ```
 
-## 3	安装&卸载库
+## 3 安装&卸载库
 
 ```bash
 conda install -c conda-forge osqp
@@ -1206,7 +1210,7 @@ Verifying transaction: done
 Executing transaction: done
 ```
 
-## 4	conda常用命令
+## 4 conda常用命令
 
 ```bash
 conda list 查看安装了哪些包。
@@ -1220,7 +1224,7 @@ conda update conda 检查更新当前conda
 
 # matplotlib-cpp
 
-## 1	使用
+## 1 使用
 
 > 在conda创建的环境下使用，可以避免很多不必要的麻烦
 
@@ -1268,7 +1272,7 @@ target_link_libraries(midpoints PRIVATE matplotlib_cpp)
 set_target_properties(midpoints PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 ```
 
-## 2	图形设置
+## 2 图形设置
 
 ```c++
 颜色:
@@ -1293,11 +1297,11 @@ set_target_properties(midpoints PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BIN
 
 > 从向量Vector的角度来看，矩阵都应该以列方式来存储，以列来理解和存储更符合实际需要.
 
-## 1	源码安装
+## 1 源码安装
 
 ​	**见**[CSDN](https://blog.csdn.net/yuan0061/article/details/83002229?ops_request_misc=&request_id=&biz_id=102&utm_term=EIGEN%E5%AE%89%E8%A3%85&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-83002229.142^v3^pc_search_result_control_group,143^v4^register&spm=1018.2226.3001.4187),安装位置在`usr/local/include` 和 `/usr/include`,使用时添加头文件 `#include<Eigen/Eigen.h>` 
 
-## 2	内置类型
+## 2 内置类型
 
 ```c++
 Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matrix,如下所示：
@@ -1318,7 +1322,7 @@ Eigen通过tyepdef定义了许多内置类型，不过底层仍然是Eigen::Matr
 
 ```
 
-## 3	使用
+## 3 使用
 
 - **加减乘除跟数字操作一样**
 
@@ -1375,7 +1379,7 @@ InnerNNZs:		//存储每列（分别为行）的非零数。这个词inner指的�
 
 # 稀疏矩阵csc_matrix
 
-## 1	[稀疏矩阵数组的含义](https://www.bu.edu/pasi/files/2011/01/NathanBell1-10-1000.pdf)
+## 1 [稀疏矩阵数组的含义](https://www.bu.edu/pasi/files/2011/01/NathanBell1-10-1000.pdf)
 
 ```c++
 indptr = [ ] 	//以累加的方式存储每一列包含有非零数字的个数，从0开始。
@@ -1383,8 +1387,42 @@ indices = [ ] 	//存储非零数字所在的行索引值。
 data = [ ] 		//以列顺序存储所有非零的数字。
 ```
 
-## 2	sample
+## 2 sample
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210706133100832.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxOTU5Mjg4,size_16,color_FFFFFF,t_70)
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210706135142194.png)
+
+# 性能优化
+
+## [Inter VTune Profiler](https://www.intel.com/content/www/us/en/develop/documentation/vtune-cookbook/top/configuration-recipes/flame-graph-cpp.html)
+
+### [下载安装](https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler-download.html?operatingsystem=linux&distributions=webdownload&options=offline)
+
+```c++
+wget https://registrationcenter-download.intel.com/akdlm/irc_nas/18447/l_oneapi_vtune_p_2022.1.0.98_offline.sh
+
+sudo sh ./l_oneapi_vtune_p_2022.1.0.98_offline.sh
+默认安装在 /opt/intel/oneapi/
+```
+
+### 运行
+
+```bash
+在安装路径下
+ source setvars.sh 
+再运行
+ vtune-gui
+ 
+记得要选择collect stack,才会有FlameGraph
+```
+
+### 需要修改的系统文件
+
+```bash
+sudo sysctl kernel.kptr_restrict = 0
+sudo sysctl kernel.perf_event_paranoid=1
+  
+可能会出现一些库文件的安装，根据提示sudo apt install 安装就可以
+```
+
