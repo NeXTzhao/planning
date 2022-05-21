@@ -6,7 +6,8 @@
       "name": "(gdb) 启动",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/quintixPloy", #要调试文件的绝对路径
+      # "program": "${workspaceFolder}/bin/quintixPloy", #要调试文件的绝对路径
+      "program": "${workspaceFolder}/src/kd_tree", #要调试文件的绝对路径
       "args": [],
       "stopAtEntry": false,
       # "cwd": "${fileDirname}",

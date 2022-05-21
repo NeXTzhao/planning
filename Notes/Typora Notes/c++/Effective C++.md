@@ -248,7 +248,7 @@ this is B fun1
 
 
 
-## item 38：绝不重新定义继承而来的缺省参数值
+## item 37：绝不重新定义继承而来的缺省参数值
 
 **`virtual` 函数为动态绑定，而缺省参数值为静态绑定**
 
@@ -360,3 +360,126 @@ Circle:0
 Rectangle:1
 ```
 
+
+
+## item 38：通过复合塑膜出has-a或“根据某物实现出”
+
+### 1 复合是什么？
+
+复合(composition)是类型之间的一种关系，当某种类型的对象内部含有其他类型的对象，便是复合关系，例如
+
+```c++
+class Address {...};
+
+class person{
+public:
+  ...
+private:
+  string name;
+  Address add;	//一个对象中含有其他类型的对象，是一种复合关系
+}
+```
+
+> 注意：复合跟public继承有本质区别，public变现为“is-a”的关系，而复合的其中一个变现为“has-a”，你可以说一个人有一个家庭住址，但不能说一个人是一个家庭住址
+
+### 2 复合的表现？
+
+- 应用领域
+
+  表现为"has-a"的关系，类似于我是个人，我有一个家庭住址
+
+- 实现领域
+
+  表现为“is-implemented-in-terms-of”（**根据某物实现出**），例如
+
+  ```c++
+  想实现一个Set接口，但我不必去自己造轮子，可以用STL中的list去帮我实现我所需要的功能
+  
+  template<class T>
+  class Set{
+    public:
+    	...
+    private:
+    	std::list<T> rep; 		//用来表述Set的数据
+  };
+  ```
+
+
+
+## item 39：明智而谨慎的使用private继承
+
+```
+，应为复合关系中二者并没有实际的逻辑关联
+```
+
+### 1 案例
+
+```c++
+class person{...};
+class student: private person{..};
+
+void eat(const person& p);
+
+int main(){
+  person p;
+  student s;
+  
+  eat(p);		//yes
+  eat(s);		//no,为什么出错，见下文分析
+}
+```
+
+### 2 private继承的特性
+
+1. 如果class之间的继承关系是private的，那么编译器将不会自动生成一个子类对象，也就是说不会出现像public继承那样，将派生类自动转换为基类，所以eat(s)会报错
+2. 由private继承而来的所有成员，在derived class中都会变成private属性，即使他们在原来的base class中是protected或public
+
+### 3 private继承的用意
+
+当我们只想从别的类中使用到他的某些特性，就将其声明为private，他只是一种实现技术，这就是为什么private继承过来的成员在自身的class内都是private的
+
+### 4 复合 vs private继承
+
+上一篇提到，复合的其中之一表现是"根据某物实现出"，即调用其他的对象来完成自身的功能，那么和private的继承便有些类似，问题在于如何在这两种方法之间做取舍呢？
+
+答案：**尽可能使用复合，必要时才使用private继承**(什么时候是必要？几乎没有什么时候是必要。。。)
+
+### 5 用复合来实现private继承
+
+private继承：
+
+```c++
+class Timer{
+public:
+	explicit Timer(int tickFrequency);
+	virtual void onTick() const;
+};
+
+class widget : private Timer{
+private:
+	virtual void onTick() const;
+	...
+};
+
+这样有一个坏处在于：
+  如果widget有一个子类，那他的子类并不能使用 onTick()函数(因为pri)
+```
+
+用复合实现private继承：
+
+```c++
+class widget{
+private:
+	class widgetTimer:public Timer{
+	public:
+		virtual void onTick()const;
+		...
+	};
+	WidgetTimer timer;
+	...
+};
+```
+
+### 6 private继承可以造成empty base最优化(优点)
+
+没太懂

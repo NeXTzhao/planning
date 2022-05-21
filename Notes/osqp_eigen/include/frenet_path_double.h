@@ -1,11 +1,11 @@
 /**
  * @file frenet_path_double.h
- * @brief 
+ * @brief
  * @author Wang Dezhao (1282507109@qq.com)
  * @version 1.0
  * @date 2022-05-02 10:16:55
- * 
- * @copyright Copyright (c) 2022 
+ *
+ * @copyright Copyright (c) 2022
  */
 
 #pragma once
@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 #include "cpprobotics_types_double.h"
 
 namespace cpprobotics {
@@ -34,7 +35,8 @@ class FrenetPath {
   Vec_f s;
 
   Vec_f dkappa;
+
 };
 
 using Vec_Path = std::vector<FrenetPath>;
-}
+}  // namespace cpprobotics

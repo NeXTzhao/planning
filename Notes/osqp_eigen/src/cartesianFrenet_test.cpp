@@ -11,6 +11,7 @@
 #include "cartesianFrenet.hpp"
 
 #include "angle.h"
+#include "kd_tree.hpp"
 #include "matplotlibcpp.h"
 #include "quinticPolynomial.hpp"
 
@@ -18,6 +19,9 @@ using namespace apollo;
 using namespace common;
 using namespace math;
 using namespace cpprobotics;
+using Poi_d = std::array<double, 2>;
+using point2d = point<double, 2>;
+using tree2d = kdtree<double, 2>;
 namespace plt = matplotlibcpp;
 
 int main() {
@@ -30,6 +34,12 @@ int main() {
   FrenetPath refrencelineInfo;
   QuinticPolynomial refrenceline(x_start, x_end, y_start, y_end, TotalTimes);
   refrenceline.getPloyPath(refrencelineInfo, 1.0);
+
+  std::vector<point2d> pointList;
+  kd_tree::makeKdTree(pointList,refrencelineInfo.x,refrencelineInfo.y);
+  tree2d kdtree(std::begin(pointList), std::end(pointList));
+  
+  // tree2d tree = kd_tree::makeKdTree(refrencelineInfo.x, refrencelineInfo.y);
 
   PointState carx_start{0.0, 0.0, 0.0};
   PointState carx_end{80.0, 0.0, 0.0};
@@ -57,6 +67,7 @@ int main() {
                                       cary_end, times);
     car_quinticPloy.getPloyPath(car_tracj, 1);
     int pre_index = 0;
+
     for (size_t i = 0; i < car_tracj.t.size(); ++i) {
       auto time1 = std::chrono::system_clock::now();
       int cur_index = 0;
@@ -66,9 +77,9 @@ int main() {
         cur_index = car_tracj.t.size() - 1;
       }
       pre_index = cur_index;
+      std::cout << "cur_index:" << cur_index << '\n';
       auto time2 = std::chrono::system_clock::now();
       std::chrono::duration<double> diff = time2 - time1;
-      std::cout << "cur_index:" << cur_index << '\n';
       std::cout << "Time for matching Point = " << diff.count() * 1000
                 << " msec.\n";
 
@@ -86,19 +97,19 @@ int main() {
       y_result.emplace_back(y_out);
       // std::cout << "x_result:" << x_out << "，y_result:" << y_out << '\n';
     }
-    // plt::named_plot("slove_xy", x_result, y_result);
+    plt::named_plot("slove_xy", x_result, y_result);
     x_result.clear();
     y_result.clear();
   }
 
   /*****************************************************************************************************/
-  // plt::named_plot("ref_line_XY", refrencelineInfo.x, refrencelineInfo.y);
-  // plt::legend();
-  // plt::axis("equal");
-  // plt::legend();
-  // plt::axis("equal");
-  // plt::legend();
-  // plt::show();
+  plt::named_plot("ref_line_XY", refrencelineInfo.x, refrencelineInfo.y);
+  plt::legend();
+  plt::axis("equal");
+  plt::legend();
+  plt::axis("equal");
+  plt::legend();
+  plt::show();
   return 0;
 }
 

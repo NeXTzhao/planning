@@ -118,7 +118,7 @@ void QuinticPolynomial::getPloyPath(FrenetPath& fp, const double DT) {
   }
 }
 
-void QuinticPolynomial::matchPoint(const FrenetPath fp,
+void QuinticPolynomial::matchPoint(const FrenetPath& fp,
                                    const double current_post_x,
                                    const double current_post_y, int pre_index,
                                    int& index) {

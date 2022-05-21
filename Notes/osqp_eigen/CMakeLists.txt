@@ -140,6 +140,6 @@ target_link_libraries(pathoptim PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp  PRIV
 
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/cartesian_frenet_conversion)
-add_executable(quintixPloy src/quinticPolynomial.cpp src/cartesianFrenet_test.cpp)
+add_executable(quintixPloy src/quinticPolynomial.cpp src/cartesianFrenet_test1.cpp)
 list(APPEND EXTRA_LIBS cartesian_frenet)
 target_link_libraries(quintixPloy PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib_cpp)
