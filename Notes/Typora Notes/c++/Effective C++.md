@@ -483,3 +483,100 @@ private:
 ### 6 private继承可以造成empty base最优化(优点)
 
 没太懂
+
+
+
+## item 40：明智而谨慎的使用多重继承
+
+略过(基本不会用到多重继承)
+
+
+
+# 7 模板与泛型编程
+
+## item 41：了解隐式接口与编译期多态
+
+### class和面向对象编程
+
+- 显式接口(explicit interfaces)
+
+  在源码中可见，即接口在其对应的头文件中明确可见
+
+- 运行期多态(runtime polymorphism)
+
+  某些是virtual的成员函数，在运行中确定接口，可能是基类的，也可能是派生类的接口
+
+### Template和泛型编程
+
+- 隐式接口(implicit interfaces)
+  - 模板函数要想有效编译，必须支持一组隐式接口
+- 编译期多态(compile-time polymorphism)
+  - 以不同的template参数实例化函数模板从而调用不同的函数
+  - 多态通过template实例化和函数解析重载发生于编译期
+
+
+
+## item 42：了解typename的双重意义
+
+> 首先明确一点template声明中，class和typename没有区别
+
+思考一下如下情形
+
+```c++
+template<typename C>
+void print2nd(const C& container){
+		C::const_iterator* x;
+}
+```
+
+问：x是一个什么类型？
+
+​	local变量？or 指针？
+
+能得出上述结论的前提是，我们已经知道`C::const_iterator`是个类型，但如果他不是个类型，而恰巧有个static的成员变量声明为`const_iterator`或是其他global名称，上述的推论就是错的，所以引入下面的结论。
+
+### template中的嵌套从属名称不是类型
+
+`C::const_iterator* x;`的本意应该是声明一个x局部变量，他是一个指针，指向一个`C::const_iterator* x;`，想要达到此目的，只需要在前面加上`typename`即可，即
+
+```c++
+template<typename C>
+void print2nd(const C& container){
+		typename C::const_iterator* x;
+}
+```
+
+### typename在嵌套从属类型名称使用规则
+
+1. typename只被用来验明嵌套从属类名名称，其他名称不应该存在
+
+   ```c++
+   template<typename C>			//允许使用class或者typename
+   void print2nd(const C& container){ // 不允许使用typename
+   		typename C::const_iterator* x; //必须使用typename
+   }
+   ```
+
+2. typename不可以出现在`base classes list`内的嵌套从属类型之前，也不能出现在`member initialization list`(成员初始列)中作为base list修饰符
+
+   ```c++
+   template<typename C>			
+   class Derived : public base<C>::Nested{ //base classes list中不允许出现typename
+     public:
+     	explicit Derived(int x):Base<C>::Nested(x){ //成员初始列中不允许出现typename
+         typename Base<C>::Nested temp; //既不是base也不是member，则必须加上typename
+         ...
+       }
+   }
+   ```
+
+### typedef简化类型(仅仅是少打几行代码的作用)
+
+```c++
+template<typename IterT>
+void workWithIterator(IterT iter){
+	typedef typename std::iterator_traits<IterT>::value_type value_type;
+	value_type temp(*iter);
+}
+```
+

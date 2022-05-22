@@ -88,7 +88,7 @@ int main() {
       std::cout << "Time for matching Point = " << diff.count() * 1000
                 << " msec.\n";
 
-      if (cur_index >= static_cast<int>(car_tracj.t.size())) {
+      if (cur_index >= static_cast<int>(car_tracj.t.size())-1) {
         cur_index = car_tracj.t.size() - 1;
       }
       const auto angle = refrencelineInfo.theta.at(cur_index);
