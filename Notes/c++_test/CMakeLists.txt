@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(test)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 add_executable(test
         test.cpp)
@@ -13,7 +13,13 @@ add_executable(widget
 add_executable(test1
         test1.cpp
         )
-add_executable(lambda lambda.cpp)
+
+
+
+add_executable(lam lambda.cpp)
+
+
+
 add_executable(test2 test2.cpp)
 add_executable(test3 test3.cpp)
 add_executable(function function.cpp )
@@ -33,3 +39,7 @@ add_executable(tree tree.cpp)
 add_executable(A A.cpp main.cpp test2/Data.cpp test2/Data.h test2/test2.cpp test2/test2.h)
 add_executable(test6 test6.cpp)
 add_executable(kdtree kd-tree.cpp)
+add_executable(angle angle.cpp)
+add_executable(test7 test7.cpp)
+
+

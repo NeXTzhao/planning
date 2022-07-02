@@ -6,9 +6,15 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/src DIR_LIB_SRCS)
 # find_package(Eigen3 REQUIRED)
 # find_package(osqp REQUIRED)
 # get_target_property(OSQP_INCLUDE_DIR osqp::osqp INTERFACE_INCLUDE_DIRECTORIES)
-
+ 
 include_directories(
-  ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include
+    common/math/math_method
+)
+
+set(MATH_METHOD                   
+    ../math_method/math_utils.cc
+    ../math_method/vec2d.cc
 )
 # 生成链接库,默认生成的是静态库
 add_library(${PROJECT_NAME} SHARED ${DIR_LIB_SRCS})

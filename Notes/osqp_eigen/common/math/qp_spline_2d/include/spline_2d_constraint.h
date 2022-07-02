@@ -16,7 +16,7 @@
 #include "Eigen/Core"
 #include "affine_constraint.h"
 #include "spline_2d.h"
-#include "vec2d.h"
+#include "../../math_method/vec2d.h"
 
 namespace apollo {
 namespace planning {

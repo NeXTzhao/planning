@@ -1410,19 +1410,100 @@ sudo sh ./l_oneapi_vtune_p_2022.1.0.98_offline.sh
 
 ```bash
 在安装路径下
- source setvars.sh 
+  cd /opt/intel/oneapi/
+	source setvars.sh 
 再运行
- vtune-gui
- 
+	vtune-gui
+
 记得要选择collect stack,才会有FlameGraph
 ```
 
 ### 需要修改的系统文件
 
 ```bash
-sudo sysctl kernel.kptr_restrict = 0
+sudo sysctl kernel.kptr_restrict=0
 sudo sysctl kernel.perf_event_paranoid=1
   
 可能会出现一些库文件的安装，根据提示sudo apt install 安装就可以
+```
+
+
+
+# valgrind
+
+```bash
+valgrind --tool=memcheck --leak-check=full   ./ReferenceLine 
+```
+
+
+
+# Gflags
+
+## 安装
+
+```bash
+git clone https://github.com/gflags/gflags.git 
+
+mkdir build 
+
+cd build
+
+#这一步非常重要，这些选项就是动态库和静态库的选项，都要打开，不然编译glog会报错
+cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DINSTALL_HEADERS=ON -DINSTALL_SHARED_LIBS=ON -DINSTALL_STATIC_LIBS=ON ..
+
+make -j8
+
+sudo make install
+```
+
+## 使用
+
+```cmake
+cmake_minimum_required (VERSION 3.16)
+project (myproj VERSION 1.0)
+
+find_package (glog 0.6.0 REQUIRED)
+
+add_executable (myapp main.cpp)
+target_link_libraries (myapp glog::glog)
+```
+
+
+
+# Glog
+
+## 安装
+
+```bash
+git clone https://github.com/google/glog.git
+
+cd glog
+
+#这一步要注意gflags的链接库编译选项要打开
+mkdir build
+
+cmake ..
+
+make -j8
+
+sudo make install
+```
+
+## 使用
+
+# Cerse
+
+## 使用
+
+```cmake
+cmake_minimum_required(VERSION 3.5)
+
+project(helloworld)
+
+find_package(Ceres REQUIRED)
+
+# helloworld
+add_executable(helloworld helloworld.cc)
+target_link_libraries(helloworld Ceres::ceres)
 ```
 

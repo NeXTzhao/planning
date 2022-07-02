@@ -251,25 +251,75 @@ public:
 
     void fun2(double *t) const {
         *t += 1;
-        std::cout << *t <<std::endl;
+        std::cout << *t << std::endl;
     }
 
 public:
     Person<int, int> per;
 };
 
-
-class test2{
+class a {
 public:
-    void fun(){
-        std::cout << "test2"<<std::endl;
+    void fun() const {
+        std::cout << "this is class a" << std::endl;
     }
 };
 
-class test3{
-private:
+template<typename T>
+class collect {
+public:
+    void print() const {
+        std::cout << "print select" << std::endl;
+    }
 };
 
+template<typename T>
+class animal : public collect<T> {
+public:
+    void eat(const a &info) {
+        T t;
+        info.fun();
+        this->print();
+    }
+};
+
+class B {
+public:
+    void fun() {
+        std::cout << "fun" << std::endl;
+    }
+};
+
+class A {
+public:
+    void fun1() const {
+        b->fun();
+        static_cast<const std::shared_ptr<B> &>(this->b)->fun();
+        
+    }
+
+    void fun2() {
+        std::cout << "fun2" << std::endl;
+    }
+
+private:
+//    B b;
+    std::shared_ptr<B> b = std::make_shared<B>();
+};
+
+
 int main() {
-    auto
+    A a;
+    a.fun1();
+
+//    std::vector<int> aa{1,2,3,4,5,6,7,8,9};
+//    auto index = std::find(aa.begin(), aa.end(), 12);
+//    auto in = index - aa.begin();
+    std::vector<std::pair<int,int>> bb{{1,1},{2,2},{3,3}};
+    bb.push_back(std::pair<int,int>(4,4));
+    bb.push_back({5,5});
+    auto index1 = std::find(bb.begin(), bb.end(),std::pair<int,int>(4,4));
+    auto in = index1 - bb.begin();
+
+    std::cout << "index :" << in << std::endl;
 }

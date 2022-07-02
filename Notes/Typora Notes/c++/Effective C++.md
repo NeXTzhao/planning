@@ -580,3 +580,182 @@ void workWithIterator(IterT iter){
 }
 ```
 
+
+
+## item 43：学习处理模板化基类内的名称
+
+```c++
+class a{
+public:
+    void fun() const{
+        std::cout << "this is class a" << std::endl;
+    }
+};
+
+template<typename T>
+class collect {
+public:
+    void print() const {
+        std::cout << "print select" << std::endl;
+    }
+};
+
+template<typename T>
+class animal : public collect<T>{
+public:
+    void eat(const a & info) {
+        T t;
+        info.fun();
+        //t->print();
+        this->print();
+    }
+};
+
+
+int main() {
+    animal<a> an;
+    a A;
+    an.eat(A);
+}
+```
+
+### 解决c++“不进入 templatized base classes观察”的行为失效
+
+1. 在base class 函数调用前加上`this->`
+
+2. 使用using声明(扩大搜索范围)
+
+3. 明确指出被调用的函数位于base class
+
+   这种方法有一个明确的坏处，如果调用者是virtual函数，这种方法会关闭“virtual”的动态绑定行为
+
+
+
+## item 44：将与参数无关的代码抽离templates
+
+
+
+## item 45：运用成员函数模板接受所有兼容类型
+
+### 同一个template的不同实例化之间没有联系
+
+> 这里意指如果以带有base-derived关系的B，D两类型分别实例化某个template，产生出来的两个实例并不带有base-derived关系
+
+对于传统的classes，以下案例可以顺利通过编译：
+
+```c++
+class t1 {};
+class t2 : public t1 {};
+class t3 : public t2 {};
+
+int main(){
+    t1* a = new t2;
+    t1* b = new t3;  //t1 和 t2、t3满足“is-a”的关系
+    const auto c = a;
+}
+```
+
+而对于template却不一定行
+
+```c++
+class t1 {};
+class t2 : public t1 {};
+class t3 : public t2 {};
+
+template<typename T>
+class SmartPtr{
+public:
+    explicit SmartPtr(T* realPtr){}
+};
+
+int main(){
+    SmartPtr<t1> a1 = SmartPtr<t2>(new t2);  //编译不通过
+
+}
+```
+
+编译器会视`SmartPtr<t1> ` 和 `SmartPtr<t2>`为两个完全不同的classes
+
+### 成员函数模板(member function template)
+
+> 成员函数模板的作用就是为class生成函数
+
+#### 泛化copy构造函数
+
+在上述智能指针实例中，每一个语句都会创建一个智能指针对象，所以现在应该关注如何编写智能指针的构造函数，使其行为能够满足我们转型需要，简单来说就是**通过派生类自动构造一个基类**，这里就要用到**成员函数模板**，如下所示
+
+```c++
+template<typename T>
+class SmartPtr {
+public:
+    template<typename U>                  // member template,
+    SmartPtr(const SmartPtr<U>& other);   // 未来生成copy构造函数
+    ...
+};
+int main(){
+   SmartPtr<t1> a1 = SmartPtr<t2>(new t2); //这样的操作就是正确的 
+}
+```
+
+上述代码表现为：对任一类型的T和U，都可以根据`SmartPtr<U>`生成一个`SmartPtr<T>`，因为`SmartPtr<T>`有个构造函数接受一个`SmartPtr<U>`参数。这一类构造函数根据对象u创建对象t，而u和t的类型是同一个template的不同具现体，有时这种做法称之为**泛化copy构造函数**
+
+> 上面的泛化copy构造函数并未被声明为explicit。那是蓄意的，因为原始指针类型之间的转换（例如从derived class指针转为base class指针）是隐式转换，无需明白写出转型动作（cast），所以让智能指针效仿这种行径也属合理。在模板化构造函数中略去explicit就是为了这个目的。
+
+**问题来了**
+
+希望根据`SmartPtr<Bottom>`创建一个`SmartPtr<Top>`，却不希望根据一个`SmartPtr<Top>`创建一个`SmartPtr<Bottom>`，所以要对成员函数进行筛选
+
+**解决办法：**
+
+使用成员初值列来初始化`SmartPtr<T>`之内类型为T*的成员变量，并以类型为U*的指针（由`SmartPtr<U>`持有）作为初值。这个行为只有当“**存在某个隐式转换可将一个U指针转为一个T指针**”时才能通过编译，而那正是我们想要的。最终效果是`SmartPtr<T>`现在有了一个泛化copy构造函数，这个构造函数只在其所获得的实参隶属适当（兼容）类型时才通过编译。
+
+#### 成员函数模板的使用不局限于构造函数，还时常扮演赋值操作
+
+```c++
+template<class T>
+class shared_ptr {
+public:
+    template <class Y>                 
+     explicit shared_ptr(Y* p);                        // 构造，来自任何兼容的内置指针
+    template <class Y>
+     shared_ptr(shared_ptr<Y> const& r);               // 或shared_ptr
+    template <class Y>
+     explicit shared_ptr(weak_ptr<Y> const& r);        // 或weak_ptr
+    template <class Y>
+     explicit shared_ptr(auto_ptr<Y>& r);              // 或auto_ptr
+    template <class Y>                                 
+     shared_ptr& operator=(shared_ptr<Y> const& r);    // 赋值，来自任何兼容的shared_ptr
+    template <class Y>
+     shared_ptr& operator=(auto_ptr<Y>& r);            // 或auto_ptr 
+    ...
+};
+```
+
+​        **上述所有构造函数都是explicit，唯有“泛化copy构造函数”除外**。那意味从某个shared_ptr类型隐式转换至另一个shared_ptr类型是被允许的，但从某个内置指针或从其他智能指针类型进行隐式转换则不被认可（如果是显示转换和cast强制转型动作倒是可以）。另一个趣味点是传递给tr1::shared_ptr构造函数和assignment操作符的auto_ptrs并未被声明为const，与之形成对比的则是tr1::shared_ptrs和tr1::weak_ptrs都以const传递。
+
+#### 声明member templates用于“泛化copy构造”或“泛化assignment操作”你还是需要声明正常的copy构造函数和copy assignment操作符
+
+> member templates并不改变语音规则，而语言规则说，如果程序需要一个copy构造函数，你却没有声明它，编译器会为你暗自生成一个。在class内声明泛化copy构造函数并不会阻止编译器生成它们自己的copy构造函数，所以如果你想要控制copy构造函数的方方面面，你必须同时声明泛化copy构造函数和“正常的”copy构造函数。相同规则也适用于赋值操作。
+
+```c++
+template<class T>
+class shared_ptr {
+public:
+    shared_ptr(shared_ptr const& r);    // copy构造函数
+ 
+    template <class Y>
+     shared_ptr(shared_ptr<Y> const& r);               // 泛化copy构造函数
+                
+     shared_ptr& operator=(shared_ptr<Y> const& r);    // copy assignment
+    template <class Y>
+     shared_ptr& operator=(shared_ptr<Y> const& );     // 泛化copy assignment
+    ...
+};
+```
+
+
+
+
+
+
+

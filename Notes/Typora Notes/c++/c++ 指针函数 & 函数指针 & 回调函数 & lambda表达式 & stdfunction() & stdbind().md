@@ -252,7 +252,7 @@ int main()
 
 ### 1	定义
 
-仿函数（Functor）又称为函数对象（Function Object）是一个能行使函数功能的类。在 C++ 中，我们可以重载*operator ()*来实现函子，调用仿函数，实际上就是通过类对象调用重载后的 operator() 运算符。
+仿函数（Functor）又称为**函数对象（Function Object）**是一个能行使函数功能的类。在 C++ 中，可以重载operator ()来实现函子，调用仿函数，实际上就是通过类对象调用重载后的 operator() 运算符。
 
 ### 2	sample
 

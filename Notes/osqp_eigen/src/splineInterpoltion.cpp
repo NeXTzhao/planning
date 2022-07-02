@@ -5,6 +5,7 @@
  * @FilePath: /osqp_eigen/src/splineInterpoltion.cpp
  * @Copyright:
  */
+
 #include <cmath>
 #include <iostream>
 #include <utility>

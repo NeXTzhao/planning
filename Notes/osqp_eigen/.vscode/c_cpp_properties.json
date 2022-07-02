@@ -6,9 +6,6 @@
                 "${workspaceFolder}/**",
                 "/usr/include/eigen3",
                 "/opt/ros/noetic/include",
-                "${workspaceFolder}/common/math/piecewise_jerk/include",
-                "${workspaceFolder}/common/math/qp_spline_2d/include",
-                "./common/math/qp_spline_2d/include"
             ],
             "defines": [],
             "intelliSenseMode": "linux-gcc-x64",

@@ -88,6 +88,8 @@ vscode
    
 
 2.  设置字体
+    直接在设置里面设置：Consolas, ‘YaHei Consolas Hybrid’, monospace
+    或者
     在setting.json中添加
     "editor.fontFamily": "'Consolas', 'Consolas', monospace, 'Consolas'",
     "editor.fontLigatures": true,//这个控制是否启用字体连字，true启用，false不启用，这里选择启用

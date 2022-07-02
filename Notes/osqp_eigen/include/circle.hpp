@@ -26,16 +26,17 @@ class Circle {
     // }
     return y;
   }
+
   std::vector<double> getYvalue(double x, double s) {
     std::vector<double> y;
-    for (double i = x; i < x + radius; i += s) {
-      y.push_back(getYvalueLower(i));
-      ++numPoints;
-    }
     // for (double i = x; i < x + radius; i += s) {
-    //   y.push_back(getYvalueUpper(i));
+    //   y.push_back(getYvalueLower(i));
     //   ++numPoints;
     // }
+    for (double i = x; i < x + radius; i += s) {
+      y.push_back(getYvalueUpper(i));
+      ++numPoints;
+    }
     return y;
   }
 
@@ -51,6 +52,7 @@ class Circle {
   std::vector<double> getYvalue1(double x, double s) {
     std::vector<double> y;
     for (double j = x + radius; j > x; j -= s) {
+      x_.push_back(j);
       y.push_back(getYvalueUpper(j));
       ++numPoints;
     }
@@ -72,4 +74,6 @@ class Circle {
   double radius;
   double centerCircleX_;
   double centerCircleY_;
+public:
+  std::vector<double> x_;
 };

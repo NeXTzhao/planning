@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "Eigen/Core"
-#include "vec2d.h"
+#include "../../math_method/vec2d.h"
 #include "spline_2d.h"
 
 namespace apollo {

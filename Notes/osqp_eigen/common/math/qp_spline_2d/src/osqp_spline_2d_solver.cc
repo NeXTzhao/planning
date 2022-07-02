@@ -11,10 +11,7 @@
  **/
 
 #include "osqp_spline_2d_solver.h"
-
-// #include "cyber/common/log.h"
-
-#include "matrix_operations.h"
+#include "../../math_method/matrix_operations.h"
 // #include "qp_solver_gflags.h"
 // #include "modules/common/time/time.h"
 // #include "planning_gflags.h"
@@ -74,7 +71,7 @@ bool OsqpSpline2dSolver::Solve() {
       inequality_constraint_matrix.rows() + equality_constraint_matrix.rows(),
       inequality_constraint_matrix.cols());
   A << inequality_constraint_matrix, equality_constraint_matrix;
-  std::cout<< "A: " << A.rows() << ", " << A.cols();
+  // std::cout<< "A: " << A.rows() << ", " << A.cols();
   if (A.rows() == 0) {
     return false;
   }

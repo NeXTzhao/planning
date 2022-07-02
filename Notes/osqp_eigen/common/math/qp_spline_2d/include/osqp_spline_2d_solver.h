@@ -15,7 +15,7 @@
 
 #include <vector>
 
-#include "gtest/gtest_prod.h"
+// #include "gtest/gtest_prod.h"
 #include "osqp/osqp.h"
 #include "spline_2d.h"
 #include "spline_2d_solver.h"

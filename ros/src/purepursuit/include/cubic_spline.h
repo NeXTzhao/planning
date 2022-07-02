@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
 #include "cpprobotics_types.h"
 
 namespace cpprobotics {
@@ -225,5 +226,5 @@ class Spline2D {
     return out_s;
   };
 };
-}
+}  // namespace cpprobotics
 #endif

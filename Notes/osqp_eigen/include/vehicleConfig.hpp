@@ -33,3 +33,75 @@ constexpr double dddl_weight = 50000.0;
 
 // constexpr double kMaxVariableRange = 1.0e10;
 constexpr double kMaxVariableRange = 8;
+
+/**********************************************************************/
+// config_.mutable_spiral()->set_max_deviation(0.1);
+// config_.mutable_spiral()->set_max_iteration(300);
+// config_.mutable_spiral()->set_opt_tol(1.0e-6);
+// config_.mutable_spiral()->set_opt_acceptable_tol(1.0e-4);
+
+// config_.mutable_spiral()->set_weight_curve_length(1.0);
+// config_.mutable_spiral()->set_weight_kappa(1.0);
+// config_.mutable_spiral()->set_weight_dkappa(100.0);
+
+constexpr double spiral_max_deviation = 0.1;
+constexpr double spiral_max_iteration = 300;
+constexpr double spiral_opt_tol = 1.0e-6;
+constexpr double spiral_opt_acceptable_tol = 1.0e-4;
+constexpr double spiral_weight_curve_length = 1.0;
+constexpr double spiral_weight_kappa = 1.0;
+constexpr double spiral_weight_dkappa = 100.0;
+constexpr double spiral_opt_acceptable_iteration = 15;
+constexpr double spiral_piecewise_length = 10.0;
+constexpr double resolution = 0.02;
+
+// message SpiralSmootherConfig {
+//   // The max deviation of spiral reference line smoother.
+//   optional double max_deviation = 1 [default = 0.1];
+
+//   // The piecewise length of spiral smoother.
+//   optional double piecewise_length = 2 [default = 10.0];
+
+//   // The iteration num of spiral reference line smoother.");
+//   optional uint32 max_iteration = 3 [default = 1000];
+
+//   // The desired convergence tol for spiral opt;
+//   optional double opt_tol = 4 [default = 1.0e-8];
+
+//   // The acceptable convergence tol for spiral opt
+//   optional double opt_acceptable_tol = 5 [default = 1e-6];
+
+//   // The number of acceptable iters before termination for spiral opt;
+//   optional uint32 opt_acceptable_iteration = 6 [default = 15];
+
+//   // The weight of curve length term in objective function
+//   optional double weight_curve_length = 7 [default = 1.0];
+
+//   // The weight of kappa term in objective function
+//   optional double weight_kappa = 8 [default = 1.0];
+
+//   // The weight of dkappa term in objective function
+//   optional double weight_dkappa = 9 [default = 100.0];
+// }
+
+// message ReferenceLineSmootherConfig {
+//   // The output resolution for discrete point smoother reference line is
+//   // directly decided by max_constraint_interval
+//   optional double max_constraint_interval = 1 [default = 5];
+//   optional double longitudinal_boundary_bound = 2 [default = 1.0];
+//   optional double max_lateral_boundary_bound = 3 [default = 0.5];
+//   optional double min_lateral_boundary_bound = 4 [default = 0.2];
+//   // The output resolution for qp smoother reference line.
+//   optional uint32 num_of_total_points = 5 [default = 500];
+//   optional double curb_shift = 6 [default = 0.2];
+//   optional double lateral_buffer = 7 [default = 0.2];
+//   // The output resolution for spiral smoother reference line.
+//   optional double resolution = 8 [default = 0.02];
+//   oneof SmootherConfig {
+//     QpSplineSmootherConfig qp_spline = 20;
+//     SpiralSmootherConfig spiral = 21;
+//     DiscretePointsSmootherConfig discrete_points = 22;
+//   }
+// }
+
+/*********************************************************/

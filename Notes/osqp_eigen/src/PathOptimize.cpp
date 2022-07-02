@@ -343,10 +343,11 @@ void PathOptimize::set_x_bounds(const double x_lower_bound,
   // replace(x_bounds_.begin()+20, x_bounds_.begin() + 40,
   //         std::make_pair(-kMaxVariableRange, kMaxVariableRange),
   //         std::make_pair(x_lower_bound, x_upper_bound));
-  replace(x_bounds_.begin(), x_bounds_.begin() + 20,
-          std::make_pair(-kMaxVariableRange, kMaxVariableRange),
-          std::make_pair(0.0, 2.5));  //{1,8,5,8,9}
 
+  replace(x_bounds_.begin(), x_bounds_.begin() + 80,
+          std::make_pair(-kMaxVariableRange, kMaxVariableRange),
+          std::make_pair(0.0, 7.5));  //{1,8,5,8,9}
+  /*
   replace(x_bounds_.begin() + 25, x_bounds_.begin() + 40,
           std::make_pair(-kMaxVariableRange, kMaxVariableRange),
           std::make_pair(-2.5, 0.0));  //{1,8,5,8,9}
@@ -362,6 +363,7 @@ void PathOptimize::set_x_bounds(const double x_lower_bound,
   replace(x_bounds_.begin() + 80, x_bounds_.begin() + 100,
           std::make_pair(-kMaxVariableRange, kMaxVariableRange),
           std::make_pair(0.0, 2.5));  //{1,8,5,8,9}
+    */
 
   std::vector<std::pair<double, double>> cr;
   for (size_t i = 0; i < inCircleY.size(); ++i) {
@@ -475,7 +477,7 @@ void PathOptimize::matplot() {
   plt::ylabel("y");
   plt::title("PathOptimize");  //图片标题
   plt::named_plot("x_optermizer", x_,
-                  "bo-");  //(取名，参数，参数，离散点)
+                  "b-");  //(取名，参数，参数，离散点)
   plt::named_plot("x_optermizer", dx_,
                   "g-");  //(取名，参数，参数，离散点)
   std::vector<double> l_bound;
@@ -489,9 +491,9 @@ void PathOptimize::matplot() {
   }
 
   plt::named_plot("l_bound", l_bound,
-                  "r*");  //(取名，参数，参数，离散点)
+                  "r");  //(取名，参数，参数，离散点)
   plt::named_plot("u_bound", u_bound,
-                  "r*");  //(取名，参数，参数，离散点)
+                  "r");  //(取名，参数，参数，离散点)
 
   // plt::named_plot("u_bound", inCircleY, "b*");  //(取名，参数，参数，离散点)
   // plt::named_plot("u_bound", inCircleY1, "b*");
@@ -500,8 +502,8 @@ void PathOptimize::matplot() {
   // plt::named_plot("u_bound", outCircleY1, "r*");
   //(取名，参数，参数，离散点)
 
+  plt::axis("equal");
   plt::legend();
-  plt::pause(0.1);
   plt::show();
 
   const char* filename = "../result_picture/pathoptimizer.png";

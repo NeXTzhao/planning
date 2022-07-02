@@ -3,15 +3,28 @@
 //
 #include <iostream>
 #include "A.h"
+
 using namespace std;
-inline int A::max()
-{
+
+#include <vector>
+
+inline int A::max() {
     return a > b ? a : b;
 }
 
-int main()
-{
-    A a(3, 5);
-    cout << a.max() << endl;
+int main() {
+
+    vector<double> vec;
+    int index = 0;
+    for (int i = 0; i < 3; ++i) {
+        vec[index] = i;
+        index++;
+        vec[index] = i + 1;
+        index++;
+    }
+
+    for (auto item: vec) {
+        std::cout << "item:" << item << '\n';
+    }
     return 0;
 }

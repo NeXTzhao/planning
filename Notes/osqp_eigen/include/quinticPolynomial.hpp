@@ -53,7 +53,7 @@ class QuinticPolynomial {
    * @return void
    */
   void matchPoint(const FrenetPath& fp, const double current_post_x,
-                  const double current_post_y, int pre_index, int& index);
+                  double current_post_y, int pre_index, int& index);
 
  private:
   /**

@@ -76,7 +76,8 @@
     "shared_mutex": "cpp",
     "iterativelinearsolvers": "cpp",
     "valarray": "cpp",
-    "*.ipp": "cpp"
+    "*.ipp": "cpp",
+    "*.txx": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

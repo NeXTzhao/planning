@@ -7,8 +7,8 @@
 #include <algorithm>
 
 // #include "cyber/common/log.h"
-#include "angle.h"
-#include "math_utils.h"
+#include "../../math_method/angle.h"
+#include "../../math_method/math_utils.h"
 
 namespace apollo {
 namespace planning {
@@ -70,7 +70,7 @@ bool Spline2dConstraint::Add2dBoundary(
     const double rel_t = t_coord[i] - t_knots_[index];
     const uint32_t index_offset = 2 * index * (spline_order_ + 1);
     std::vector<double> longi_coef = AffineCoef(angle[i], rel_t);
-    std::cout << "longi_coef:"<<longi_coef.size()<<"total_param_"<<total_param_<<std::endl;
+    // std::cout << "longi_coef:"<<longi_coef.size()<<"total_param_"<<total_param_<<std::endl;
 
     std::vector<double> longitudinal_coef =
         AffineCoef(angle[i] - M_PI / 2, rel_t);
