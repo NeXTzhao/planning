@@ -6,18 +6,19 @@
 //// Created by next on 2022/4/6.
 ////
 //
-//#include <iostream>
-//#include <memory>
-//#include <utility>
+// #include <iostream>
+// #include <memory>
+// #include <utility>
 //
-//namespace Widget1 {
+// namespace Widget1 {
 //    template<typename T>
 //    class WidgetImpl {
 //    public:
 //        WidgetImpl(T a, T b, T c) : a_(a), b_(b), c_(c) {};
 //
 //        void print() {
-//            std::cout << "a,b,c:" << a_ << "," << b_ << "," << c_ << std::endl;
+//            std::cout << "a,b,c:" << a_ << "," << b_ << "," << c_ <<
+//            std::endl;
 //        }
 //
 //    private:
@@ -54,9 +55,9 @@
 //    }
 //}  // namespace Widget1
 //
-//using namespace Widget1;
+// using namespace Widget1;
 //
-//int main() {
+// int main() {
 //    Widget<int> w1(1, 2, 3);
 //    Widget<int> w2(3, 4, 5);
 //
@@ -73,25 +74,34 @@
 //    return 0;
 //}
 
-#include<iostream>
-#include<functional>
+#include "matplotlibcpp.h"
+#include <functional>
+#include <iostream>
+#include <vector>
 
 using namespace std;
+namespace plt = matplotlibcpp;
 
-class Plus {
-public:
-    int plus(int a, int b) {
-        return a + b;
-    }
-};
+std::vector<double> a{1, 2, 3, 4, 5, 6, 7, 8, 9};
+std::vector<double> b{1, 4, 6, 8, 10, 12, 14, 16, 18};
 
+
+void draw() {
+  plt::named_plot("ref_line_kappa", a, b);
+//  plt::named_plot("ref_line", b);
+
+  plt::legend();
+  plt::axis("equal");
+  // plt::legend() 指在图例中显示 “ref_line_XY”等表述信息
+  plt::legend();
+  //   plt::axis("equal");
+  // save figure
+
+  char const* filename = "./../picture/basic.png";
+  std::cout << "Saving result to " << filename << std::endl;
+  plt::save(filename);
+}
 int main() {
-    Plus p;
-    // 指针形式调用成员函数
-    function<int(int, int)> func1 = std::bind(&Plus::plus, &p, placeholders::_1, placeholders::_2);
-    // 对象形式调用成员函数
-    function<int(int, int)> func2 = std::bind(&Plus::plus, p, placeholders::_1, placeholders::_2);
-    cout << func1(1, 2) << endl; //3
-    cout << func2(1, 2) << endl; //3
-    return 0;
+  draw();
+  return 0;
 }

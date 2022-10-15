@@ -531,7 +531,7 @@ void print2nd(const C& container){
 
 问：x是一个什么类型？
 
-​	local变量？or 指针？
+​	local变量？or  指针？
 
 能得出上述结论的前提是，我们已经知道`C::const_iterator`是个类型，但如果他不是个类型，而恰巧有个static的成员变量声明为`const_iterator`或是其他global名称，上述的推论就是错的，所以引入下面的结论。
 
@@ -561,7 +561,7 @@ void print2nd(const C& container){
 
    ```c++
    template<typename C>			
-   class Derived : public base<C>::Nested{ //base classes list中不允许出现typename
+   class Derived : public Base<C>::Nested{ //base classes list中不允许出现typename
      public:
      	explicit Derived(int x):Base<C>::Nested(x){ //成员初始列中不允许出现typename
          typename Base<C>::Nested temp; //既不是base也不是member，则必须加上typename
@@ -610,7 +610,6 @@ public:
         this->print();
     }
 };
-
 
 int main() {
     animal<a> an;

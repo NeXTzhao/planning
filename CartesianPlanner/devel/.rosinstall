@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/next/routing_planning/CartesianPlanner/devel/setup.sh

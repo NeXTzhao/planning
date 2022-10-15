@@ -9,20 +9,19 @@
  *
  */
 
-
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Twist.h>
+#include <nav_msgs/Path.h>
 #include <stdio.h>
+#include <tf/tf.h>
+#include <tf/transform_broadcaster.h>
+
 #include <Eigen/Eigen>
 #include <array>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-
-#include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/Twist.h>
-#include <nav_msgs/Path.h>
-#include <tf/tf.h>
-#include <tf/transform_broadcaster.h>
 
 #include "cpprobotics_types_double.h"
 #include "frenet_path_double.h"
@@ -58,7 +57,7 @@ std::array<double, 3> y_end{yend, 0.0, 0.0};
 
 /**
  * 整车参数及状态
-*/
+ */
 
 // 纵向速度
 double vx = 0.01;
@@ -346,7 +345,7 @@ Eigen::Matrix<double, 1, 4> cal_k(std::array<double, 5> err_k) {
   B << 0, -cf / m, 0, -a * cf / Iz;
 
   // Eigen::Matrix4f Q;
-  // // 设置成单位矩阵
+  // 设置成单位矩阵
   Eigen::Matrix4d Q;
   // Q.setIdentity(4, 4);
   Q(0, 0) = 60;
@@ -510,8 +509,7 @@ int main(int argc, char **argv) {
 
   int Num = fp.x.size();
   for (int i = 0; i < Num; i++) {
-    printf("x,y,th,k,i=%.3f,%.3f,%.3f,%f,%d \n", fp.x[i], fp.y[i],
-    fp.threat[i],
+    printf("x,y,th,k,i=%.3f,%.3f,%.3f,%f,%d \n", fp.x[i], fp.y[i], fp.threat[i],
            fp.k[i], i);
   }
 

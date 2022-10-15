@@ -3,12 +3,10 @@
 #include "pugixml/pugixml.hpp"
 //#include "Thirdparty/pugixml/pugixml.hpp"
 
-namespace odr
-{
+namespace odr {
 
-struct XmlNode
-{
-    pugi::xml_node xml_node;
+struct XmlNode {
+  pugi::xml_node xml_node;
 };
 
-} // namespace odr
+}  // namespace odr

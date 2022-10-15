@@ -28,17 +28,16 @@
 
 // #include "glog/logging.h"
 
-namespace apollo {
-namespace common {
-namespace math {
+namespace apollo::common::math {
 
 double Sqr(const double x) { return x * x; }
 
+// 叉积
 double CrossProd(const Vec2d& start_point, const Vec2d& end_point_1,
                  const Vec2d& end_point_2) {
   return (end_point_1 - start_point).CrossProd(end_point_2 - start_point);
 }
-
+// 点积
 double InnerProd(const Vec2d& start_point, const Vec2d& end_point_1,
                  const Vec2d& end_point_2) {
   return (end_point_1 - start_point).InnerProd(end_point_2 - start_point);
@@ -99,12 +98,11 @@ Eigen::Vector2d RotateVector2d(const Eigen::Vector2d& v_in,
   return {x, y};
 }
 
+// 笛卡尔 转化为 极坐标
 std::pair<double, double> Cartesian2Polar(double x, double y) {
   double r = std::sqrt(x * x + y * y);
   double theta = std::atan2(y, x);
   return std::make_pair(r, theta);
 }
 
-}  // namespace math
-}  // namespace common
 }  // namespace apollo

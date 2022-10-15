@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
-#include <set>
-
 #include "Math.hpp"
 #include "RoadGeometry.h"
+#include <memory>
+#include <set>
 
 namespace odr {
 

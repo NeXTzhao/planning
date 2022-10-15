@@ -138,7 +138,7 @@ int main() {
   plt::named_plot("ref_line4_XY", refrencelineInfo4.x, refrencelineInfo4.y,
                   "g");
   plt::named_plot("car_tracj_XY", car_tracj.x, car_tracj.y, "r");
-
+  
   plt::legend();
   plt::axis("equal");
   plt::legend();

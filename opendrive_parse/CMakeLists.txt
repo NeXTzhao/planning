@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(odrSpiral)
 
+set(CMAKE_CXX_STANDARD 17)
 # find Eigen library and headers
 find_package(Eigen3 REQUIRED)
 include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
@@ -18,10 +19,12 @@ add_library(OpenDrive SHARED
         src/Geometries/Spiral/odrSpiral.cpp
         )
 
-# Output directory for static libraries
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
-# Output directory for shared libraries and executables
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+# 设置静态库文件目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+# 动态库文件目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+# 可执行文件目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 ############################################################################
 # matplotlib-cpp
@@ -65,6 +68,6 @@ install(
 ## Unix requires explicit static linking of math library "m" additionally
 #target_link_libraries (Spiral odrSpiral m matplotlib_cpp)
 
-add_executable(test src/main.cpp)
-target_link_libraries(test OpenDrive matplotlib_cpp)
+add_executable(clothoid main.cpp)
+target_link_libraries(clothoid OpenDrive matplotlib_cpp)
 

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/next/routing_planning/hybrid_a_star/devel/setup.sh

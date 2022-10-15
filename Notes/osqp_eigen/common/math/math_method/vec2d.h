@@ -20,11 +20,9 @@
  * @namespace apollo::common::math
  * @brief apollo::common::math
  */
-namespace apollo {
-namespace common {
-namespace math {
+namespace apollo::common::math {
 
-constexpr double kMathEpsilon1 = 1e-10;
+constexpr double kMathEpsilon = 1e-10;
 
 /**
  * @class Vec2d
@@ -40,7 +38,7 @@ class Vec2d {
   constexpr Vec2d() noexcept : Vec2d(0, 0) {}
 
   //! Creates a unit-vector with a given angle to the positive x semi-axis
-  static Vec2d CreateUnitVec2d(const double angle);
+  static Vec2d CreateUnitVec2d(double angle);
 
   //! Getter for x component
   double x() const { return x_; }
@@ -112,7 +110,7 @@ class Vec2d {
   bool operator==(const Vec2d &other) const;
 
   //! Returns a human-readable string representing this object
-  std::string DebugString() const;
+//  std::string DebugString() const;
 
  protected:
   double x_ = 0.0;
@@ -122,6 +120,4 @@ class Vec2d {
 //! Multiplies the given Vec2d by a given scalar
 Vec2d operator*(const double ratio, const Vec2d &vec);
 
-}  // namespace math
-}  // namespace common
 }  // namespace apollo

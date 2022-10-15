@@ -13,9 +13,7 @@
 // #include "absl/strings/str_cat.h"
 // #include "cyber/common/log.h"
 
-namespace apollo {
-namespace common {
-namespace math {
+namespace apollo::common::math {
 
 Vec2d Vec2d::CreateUnitVec2d(const double angle) {
   return Vec2d(cos(angle), sin(angle));
@@ -29,7 +27,7 @@ double Vec2d::Angle() const { return std::atan2(y_, x_); }
 
 void Vec2d::Normalize() {
   const double l = Length();
-  if (l > kMathEpsilon1) {
+  if (l > kMathEpsilon) {
     x_ /= l;
     y_ /= l;
   }
@@ -107,8 +105,8 @@ Vec2d &Vec2d::operator/=(const double ratio) {
 }
 
 bool Vec2d::operator==(const Vec2d &other) const {
-  return (std::abs(x_ - other.x()) < kMathEpsilon1 &&
-          std::abs(y_ - other.y()) < kMathEpsilon1);
+  return (std::abs(x_ - other.x()) < kMathEpsilon &&
+          std::abs(y_ - other.y()) < kMathEpsilon);
 }
 
 Vec2d operator*(const double ratio, const Vec2d &vec) { return vec * ratio; }
@@ -117,6 +115,4 @@ Vec2d operator*(const double ratio, const Vec2d &vec) { return vec * ratio; }
 //   return absl::StrCat("vec2d ( x = ", x_, "  y = ", y_, " )");
 // }
 
-}  // namespace math
-}  // namespace common
 }  // namespace apollo

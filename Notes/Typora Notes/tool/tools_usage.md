@@ -760,6 +760,13 @@ sudo apt remove ros-foxy-*
   rossrv 	--> ros2 srv
   rostopic --> ros2 topic
   rosaction --> ros2 action
+  
+  #启动rviz
+  ros2 run rviz2 rviz2
+  
+  #录包 & 回放
+  ros2 bag record <topic>
+  ros2 bag play <bag_file_name>
   ```
 
 - bashrc存入
@@ -780,8 +787,16 @@ sudo apt remove ros-foxy-*
   #ros2
   colcon build --packages-select  PACKAGE_NAME
   ```
+  
+- 安装基础包
 
-
+  ```bash
+  sudo apt-get install ros-foxy-pluginlib 
+  
+  ros1桥接
+  roslaunch rosbridge_server rosbridge_websocket.launch
+  ```
+  
 
 ### 2 功能包创建 & 编译 & 运行
 
@@ -795,8 +810,7 @@ cd ~/dev_src/src
 ros2 pkg create --build-type ament_cmake <package_name>
 
 #创建功能包
-ros2 pkg create --build-type ament_cmake --node-name my_node my_package --dependencies rclcpp std_msgs (这一步顺便完成了cpp文件的创建)
-
+ros2 pkg create --build-type ament_cmake --node-name my_node my_package --dependencies rclcpp std_msgs (这一步便完成了my_node.cpp文件和my_package功能包的创建)
 
  #--dependencies 参数会将后边的依赖自动添加到package.xml和CMakeLists.txt中
  
@@ -955,8 +969,6 @@ ament_target_dependencies(my_target Eigen3)
 
 它包括项目正确找到的必要头文件和库及其依赖项。它还将确保在使用覆盖工作空间时所有依赖项的包含目录都正确排序。
 
-
-
 - 第二种方法是使用`target_link_libraries`.
 
 现代 CMake 中推荐的方法是只使用目标，导出和链接它们。CMake 目标是命名空间中的成员，类似于 C++。例如，`Eigen3`定义目标`Eigen3::Eigen`。
@@ -1028,6 +1040,35 @@ target_link_libraries(my_target Eigen3::Eigen)
 ```bash
 export ROS_DOMAIN_ID=<your_domain_id>
 echo "export ROS_DOMAIN_ID=<your_domain_id>" >> ~/.bashrc
+```
+
+## 9 clion里写ros2代码
+
+```bash
+Build your ros2 project workspace with CMAKE_EXPORT_COMPILE_COMMANDS, e.g. 
+colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+
+This creates a compile_commands.json file in your build/ directory. You need to copy it to top-level directory of your workspace (where you have src/ and build/ directories. You can automate this step.
+
+Run your CLion, click File->Open, and select the compile_commands.json file, open it as a project.
+
+Things should work now. To check, hold Ctrl over an object of a class from another workspace package or from your ros2 distro package. You should be able to navigate to definitions with Ctrl-click.
+```
+
+## 10 foxglove连接
+
+```bash
+# For Noetic (ROS 1)
+sudo apt install ros-noetic-rosbridge-suite
+
+# For Galactic (ROS 2)
+sudo apt install ros-galactic-rosbridge-suite
+
+# For ROS 1
+roslaunch rosbridge_server rosbridge_websocket.launch
+
+# For ROS 2
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 ```
 
 
@@ -1505,5 +1546,56 @@ find_package(Ceres REQUIRED)
 # helloworld
 add_executable(helloworld helloworld.cc)
 target_link_libraries(helloworld Ceres::ceres)
+```
+
+# clang formate
+
+## 格式配置
+
+c++格式统一，采用Google的风格
+
+```c++
+# Use the Google style in this project.
+BasedOnStyle: Google
+
+# Some folks prefer to write "int& foo" while others prefer "int &foo".  The
+# Google Style Guide only asks for consistency within a project, we chose
+# "int& foo" for this project:
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+# The Google Style Guide only asks for consistency w.r.t. "east const" vs.
+# "const west" alignment of cv-qualifiers. In this project we use "east const".
+QualifierAlignment: Right
+
+IncludeBlocks: Merge
+IncludeCategories:
+# Matches common headers first, but sorts them after project includes
+- Regex: '^\"google/cloud/internal/disable_deprecation_warnings.inc\"$'
+  Priority: -1
+- Regex: '^\"google/cloud/(internal/|grpc_utils/|testing_util/|[^/]+\.h)'
+  Priority: 1000
+- Regex: '^\"google/cloud/'  # project includes should sort first
+  Priority: 500
+- Regex: '^\"'
+  Priority: 1500
+- Regex: '^<grpc/'
+  Priority: 2000
+- Regex: '^<google/*'
+  Priority: 3000
+- Regex: '^<.*/.*'
+  Priority: 4000
+- Regex: '^<[^/]*>'
+  Priority: 5000
+
+# Format raw string literals with a `pb` or `proto` tag as proto.
+RawStringFormats:
+- Language: TextProto
+  Delimiters:
+  - 'pb'
+  - 'proto'
+  BasedOnStyle: Google
+
+CommentPragmas: '(@copydoc)'
 ```
 

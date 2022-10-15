@@ -11,10 +11,12 @@ add_library(odrSpiral STATIC src/curve.cpp)
 target_include_directories(odrSpiral PUBLIC include)
 set_property(TARGET odrSpiral PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-# Output directory for static libraries
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
-# Output directory for shared libraries and executables
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+# 设置静态库文件目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+# 动态库文件目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+# 可执行文件目录
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 ############################################################################
 # matplotlib-cpp

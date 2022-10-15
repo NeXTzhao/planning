@@ -112,7 +112,7 @@ bool OsqpSpline2dSolver::Solve() {
   }
 
   // Problem settings
-  OSQPSettings* settings =
+  auto* settings =
       reinterpret_cast<OSQPSettings*>(c_malloc(sizeof(OSQPSettings)));
 
   // Populate data

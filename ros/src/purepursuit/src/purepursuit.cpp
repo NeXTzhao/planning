@@ -1,4 +1,9 @@
+#include <geometry_msgs/Twist.h>
+#include <nav_msgs/Path.h>
 #include <ros/ros.h>
+#include <tf/tf.h>
+#include <tf/transform_broadcaster.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -7,16 +12,11 @@
 #include <string>
 #include <vector>
 
-#include <geometry_msgs/Twist.h>
-#include <nav_msgs/Path.h>
-#include <tf/tf.h>
-#include <tf/transform_broadcaster.h>
-#include "geometry_msgs/PoseStamped.h"
-
 #include "cpprobotics_types.h"
 #include "cubic_spline.h"
+#include "geometry_msgs/PoseStamped.h"
 
-#define PREVIEW_DIS 3 //预瞄距离
+#define PREVIEW_DIS 3  //预瞄距离
 
 #define Ld 1.868  //轴距
 
@@ -115,10 +115,10 @@ void poseCallback(const geometry_msgs::PoseStamped &currentWaypoint) {
 
   int temp_index;
   for (int i = index; i < pointNum; i++) {
-    //遍历路径点和预瞄点的距离，从最小横向位置的索引开始
+    // 遍历路径点和预瞄点的距离，从最小横向位置的索引开始
     float dis =
         sqrt(pow(r_y_[index] - r_y_[i], 2) + pow(r_x_[index] - r_x_[i], 2));
-    //判断跟预瞄点的距离
+    // 判断跟预瞄点的距离
     if (dis < preview_dis) {
       temp_index = i;
     } else {
@@ -181,7 +181,7 @@ void pointCallback(const nav_msgs::Path &msg) {
     r_x_.push_back(msg.poses[i].pose.position.x);
     r_y_.push_back(msg.poses[i].pose.position.y);
   }
-} 
+}
 int main(int argc, char **argv) {
   //创建节点
   ros::init(argc, argv, "pure_pursuit");

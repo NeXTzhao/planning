@@ -1,9 +1,8 @@
 #pragma once
-#include <memory>
-#include <set>
-
 #include "Math.hpp"
 #include "RoadGeometry.h"
+#include <memory>
+#include <set>
 
 namespace odr {
 struct Spiral : public RoadGeometry {
@@ -31,3 +30,4 @@ struct Spiral : public RoadGeometry {
 };
 
 }  // namespace odr
+#pragma clang diagnostic pop

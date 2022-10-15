@@ -1,13 +1,10 @@
 #include "Geometries/Spiral.h"
-
-#include <cmath>
-
 #include "Geometries/RoadGeometry.h"
 #include "Geometries/Spiral/odrSpiral.h"
 #include "Math.hpp"
+#include <cmath>
 
 namespace odr {
-
 Spiral::Spiral(double s0, double x0, double y0, double hdg0, double length,
                double curv_start, double curv_end)
     : RoadGeometry(s0, x0, y0, hdg0, length, GeometryType_Spiral),
@@ -28,10 +25,10 @@ Vec2D Spiral::get_xy(double s) const {
   double xs_spiral, ys_spiral, as_spiral;
   odrSpiral(s - s0 + s0_spiral, c_dot, &xs_spiral, &ys_spiral, &as_spiral);
 
-  const double hdg = hdg0 - a0_spiral;
-  const double xt = (std::cos(hdg) * (xs_spiral - x0_spiral)) -
+  double const hdg = hdg0 - a0_spiral;
+  double const xt = (std::cos(hdg) * (xs_spiral - x0_spiral)) -
                     (std::sin(hdg) * (ys_spiral - y0_spiral)) + x0;
-  const double yt = (std::sin(hdg) * (xs_spiral - x0_spiral)) +
+  double const yt = (std::sin(hdg) * (xs_spiral - x0_spiral)) +
                     (std::cos(hdg) * (ys_spiral - y0_spiral)) + y0;
   return Vec2D{xt, yt};
 }
@@ -39,9 +36,9 @@ Vec2D Spiral::get_xy(double s) const {
 Vec2D Spiral::get_grad(double s) const {
   double xs_spiral, ys_spiral, as_spiral;
   odrSpiral(s - s0 + s0_spiral, c_dot, &xs_spiral, &ys_spiral, &as_spiral);
-  const double hdg = as_spiral + hdg0 - a0_spiral;
-  const double dx = std::cos(hdg);
-  const double dy = std::sin(hdg);
+  double const hdg = as_spiral + hdg0 - a0_spiral;
+  double const dx = std::cos(hdg);
+  double const dy = std::sin(hdg);
   return {{dx, dy}};
 }
 

@@ -18,9 +18,9 @@
  * spiral_reference_line_smoother.cc
  */
 
-#include <algorithm>
 #include <coin/IpIpoptApplication.hpp>
 #include <coin/IpSolveStatistics.hpp>
+#include <algorithm>
 #include <utility>
 
 // #include "modules/planning/common/planning_gflags.h"
@@ -37,7 +37,7 @@ namespace planning {
 //     : ReferenceLineSmoother(config) {}
 
 bool SpiralReferenceLineSmoother::Smooth(
-    const ReferenceLine& raw_reference_line,
+    ReferenceLine const& raw_reference_line,
     ReferenceLine* const smoothed_reference_line) {
   std::vector<double> opt_x;
   std::vector<double> opt_y;
@@ -48,16 +48,16 @@ bool SpiralReferenceLineSmoother::Smooth(
 
   if (anchor_points_.empty()) {
     // const double piecewise_length = config_.spiral().piecewise_length();
-    const double piecewise_length = spiral_piecewise_length;
+    double const piecewise_length = spiral_piecewise_length;
     // const double length = raw_reference_line.Length();
     // TODO:这里随便取值方便编译
-    const double length = 5;
+    double const length = 5;
 
     // ADEBUG << "Length = " << length;
     uint32_t num_of_pieces =
         std::max(1u, static_cast<uint32_t>(length / piecewise_length));
 
-    const double delta_s = length / num_of_pieces;
+    double const delta_s = length / num_of_pieces;
     double s = 0.0;
 
     std::vector<Eigen::Vector2d> raw_point2d;
@@ -73,7 +73,7 @@ bool SpiralReferenceLineSmoother::Smooth(
            &opt_y);
   } else {
     size_t start_index = 0;
-    for (const auto& anchor_point : anchor_points_) {
+    for (auto const& anchor_point : anchor_points_) {
       if (anchor_point.enforced) {
         start_index++;
       } else {
@@ -83,15 +83,15 @@ bool SpiralReferenceLineSmoother::Smooth(
 
     std::vector<Eigen::Vector2d> raw_point2d;
     if (start_index == 0) {
-      for (const auto& anchor_point : anchor_points_) {
+      for (auto const& anchor_point : anchor_points_) {
         raw_point2d.emplace_back(anchor_point.path_point.x(),
                                  anchor_point.path_point.y());
       }
     } else {
       std::vector<double> overhead_s;
       for (size_t i = 0; i + 1 < start_index; ++i) {
-        const auto& p0 = anchor_points_[i];
-        const auto& p1 = anchor_points_[i + 1];
+        auto const& p0 = anchor_points_[i];
+        auto const& p1 = anchor_points_[i + 1];
         overhead_s.push_back(p1.path_point.s() - p0.path_point.s());
       }
 
@@ -101,7 +101,7 @@ bool SpiralReferenceLineSmoother::Smooth(
       std::vector<double> overhead_x;
       std::vector<double> overhead_y;
       for (size_t i = 0; i < anchor_points_.size(); ++i) {
-        const auto& p = anchor_points_[i];
+        auto const& p = anchor_points_[i];
         if (i + 1 < start_index) {
           overhead_theta.push_back(p.path_point.theta());
           overhead_kappa.push_back(p.path_point.kappa());
@@ -113,7 +113,7 @@ bool SpiralReferenceLineSmoother::Smooth(
         }
       }
 
-      const auto& start_anchor_point = anchor_points_[start_index - 1];
+      auto const& start_anchor_point = anchor_points_[start_index - 1];
       fixed_start_point_ = true;
       fixed_start_x_ = start_anchor_point.path_point.x();
       fixed_start_y_ = start_anchor_point.path_point.y();
@@ -122,7 +122,7 @@ bool SpiralReferenceLineSmoother::Smooth(
       fixed_start_kappa_ = start_anchor_point.path_point.kappa();
       fixed_start_dkappa_ = start_anchor_point.path_point.dkappa();
 
-      const auto& end_anchor_point = anchor_points_.back();
+      auto const& end_anchor_point = anchor_points_.back();
       fixed_end_x_ = end_anchor_point.path_point.x();
       fixed_end_y_ = end_anchor_point.path_point.y();
 
@@ -234,12 +234,11 @@ int SpiralReferenceLineSmoother::SmoothStandAlone(
       status == Ipopt::Solved_To_Acceptable_Level) {
     // Retrieve some statistics about the solve
     Ipopt::Index iter_count = app->Statistics()->IterationCount();
-    // ADEBUG << "*** The problem solved in " << iter_count << " iterations!";
+    std::cout << "*** The problem solved in " << iter_count << " iterations!\n";
 
     Ipopt::Number final_obj = app->Statistics()->FinalObjective();
-    // ADEBUG << "*** The final value of the objective function is " <<
-    // final_obj
-    //  << '.';
+    std::cout << "*** The final value of the objective function is "
+              << final_obj << '\n';
   } else {
     // ADEBUG << "Return status: " << int(status);
   }
@@ -247,8 +246,8 @@ int SpiralReferenceLineSmoother::SmoothStandAlone(
   ptop->get_optimization_results(ptr_theta, ptr_kappa, ptr_dkappa, ptr_s, ptr_x,
                                  ptr_y);
 
-  if (!(status == Ipopt::Solve_Succeeded) &&
-      !(status == Ipopt::Solved_To_Acceptable_Level)) {
+  if (status != Ipopt::Solve_Succeeded &&
+      status != Ipopt::Solved_To_Acceptable_Level) {
     return -1;
   }
   return app->Statistics()->IterationCount();
@@ -315,14 +314,13 @@ bool SpiralReferenceLineSmoother::Smooth(std::vector<Eigen::Vector2d> point2d,
       status == Ipopt::Solved_To_Acceptable_Level) {
     // Retrieve some statistics about the solve
     Ipopt::Index iter_count = app->Statistics()->IterationCount();
-    // ADEBUG << "*** The problem solved in " << iter_count << " iterations!";
+    std::cout << "*** The problem solved in " << iter_count << " iterations!\n";
 
     Ipopt::Number final_obj = app->Statistics()->FinalObjective();
-    // ADEBUG << "*** The final value of the objective function is " <<
-    // final_obj
-    //  << '.';
+    std::cout << "*** The final value of the objective function is "
+              << final_obj << '\n';
   } else {
-    // ADEBUG << "Return status: " << int(status);
+    std::cout << "Return status: " << int(status) << '\n';
   }
 
   ptop->get_optimization_results(ptr_theta, ptr_kappa, ptr_dkappa, ptr_s, ptr_x,
@@ -333,10 +331,10 @@ bool SpiralReferenceLineSmoother::Smooth(std::vector<Eigen::Vector2d> point2d,
 }
 
 std::vector<common::PathPoint> SpiralReferenceLineSmoother::Interpolate(
-    const std::vector<double>& theta, const std::vector<double>& kappa,
-    const std::vector<double>& dkappa, const std::vector<double>& s,
-    const std::vector<double>& x, const std::vector<double>& y,
-    const double resolution) const {
+    std::vector<double> const& theta, std::vector<double> const& kappa,
+    std::vector<double> const& dkappa, std::vector<double> const& s,
+    std::vector<double> const& x, std::vector<double> const& y,
+    double const resolution) const {
   std::vector<common::PathPoint> smoothed_point2d;
   double start_s = 0.0;
   common::PathPoint first_point =
@@ -361,28 +359,28 @@ std::vector<common::PathPoint> SpiralReferenceLineSmoother::Interpolate(
 }
 
 std::vector<common::PathPoint> SpiralReferenceLineSmoother::Interpolate(
-    const double start_x, const double start_y, const double start_s,
-    const double theta0, const double kappa0, const double dkappa0,
-    const double theta1, const double kappa1, const double dkappa1,
-    const double delta_s, const double resolution) const {
+    double const start_x, double const start_y, double const start_s,
+    double const theta0, double const kappa0, double const dkappa0,
+    double const theta1, double const kappa1, double const dkappa1,
+    double const delta_s, double const resolution) const {
   std::vector<common::PathPoint> path_points;
 
-  const auto angle_diff = common::math::AngleDiff(theta0, theta1);
+  auto const angle_diff = common::math::AngleDiff(theta0, theta1);
 
   QuinticSpiralPath spiral_curve(theta0, kappa0, dkappa0, theta0 + angle_diff,
                                  kappa1, dkappa1, delta_s);
   size_t num_of_points =
       static_cast<size_t>(std::ceil(delta_s / resolution) + 1);
   for (size_t i = 1; i <= num_of_points; ++i) {
-    const double inter_s =
+    double const inter_s =
         delta_s / static_cast<double>(num_of_points) * static_cast<double>(i);
-    const double dx = spiral_curve.ComputeCartesianDeviationX<10>(inter_s);
-    const double dy = spiral_curve.ComputeCartesianDeviationY<10>(inter_s);
+    double const dx = spiral_curve.ComputeCartesianDeviationX<10>(inter_s);
+    double const dy = spiral_curve.ComputeCartesianDeviationY<10>(inter_s);
 
-    const double theta =
+    double const theta =
         common::math::NormalizeAngle(spiral_curve.Evaluate(0, inter_s));
-    const double kappa = spiral_curve.Evaluate(1, inter_s);
-    const double dkappa = spiral_curve.Evaluate(2, inter_s);
+    double const kappa = spiral_curve.Evaluate(1, inter_s);
+    double const dkappa = spiral_curve.Evaluate(2, inter_s);
 
     auto path_point = to_path_point(start_x + dx, start_y + dy,
                                     start_s + inter_s, theta, kappa, dkappa);
@@ -392,8 +390,8 @@ std::vector<common::PathPoint> SpiralReferenceLineSmoother::Interpolate(
 }
 
 common::PathPoint SpiralReferenceLineSmoother::to_path_point(
-    const double x, const double y, const double s, const double theta,
-    const double kappa, const double dkappa) const {
+    double const x, double const y, double const s, double const theta,
+    double const kappa, double const dkappa) const {
   common::PathPoint point;
   point.set_x(x);
   point.set_y(y);
@@ -405,7 +403,7 @@ common::PathPoint SpiralReferenceLineSmoother::to_path_point(
 }
 
 void SpiralReferenceLineSmoother::SetAnchorPoints(
-    const std::vector<AnchorPoint>& anchor_points) {
+    std::vector<AnchorPoint> const& anchor_points) {
   anchor_points_ = std::move(anchor_points);
 
   // CHECK_GT(anchor_points_.size(), 1);

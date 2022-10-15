@@ -9,7 +9,10 @@
  */
 
 #include <chrono>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 //#include "../math/math_method/curve_math.h"
 #include "curve.h"
@@ -42,7 +45,7 @@ namespace apollo::planning {
  * @param  r
  * @param  size
  */
-void div_circle(std::vector<double>& x, std::vector<double>& y, double r,
+void div_circle(std::vector<double> &x, std::vector<double> &y, double r,
                 double size)  // xy对应圆心坐标,r为半径,size用于设置划分的间距
 {
   double angle_step = 0;  //一小步的弧度
@@ -58,7 +61,46 @@ void div_circle(std::vector<double>& x, std::vector<double>& y, double r,
 }
 }  // namespace apollo::planning
 
-void SetPoints(std::vector<Eigen::Vector2d>& raw_points_) {
+void read_csv(std::vector<Eigen::Vector2d> &raw_points_) {
+  std::ifstream inFile(
+      "/home/next/routing_planning/Notes/osqp_eigen/path_points.csv",
+      std::ios::in);
+  std::string lineStr;
+  char delim = ',';
+  if (!inFile) {
+    std::cout << "打开文件失败！" << std::endl;
+  }
+  std::vector<double> raw_xs, raw_ys;
+  getline(inFile, lineStr);
+  while (getline(inFile, lineStr)) {
+    std::stringstream ss(lineStr);
+    std::string str;
+    std::vector<double> points;
+    while (getline(ss, str, delim)) {
+      points.emplace_back(std::stod(str));
+    }
+    raw_xs.emplace_back(points.at(0));
+    raw_ys.emplace_back(points.at(1));
+  }
+
+  raw_points_.resize(raw_xs.size());
+
+  for (size_t i = 0; i < raw_xs.size(); ++i) {
+    raw_points_[i] = {raw_xs[i], raw_ys[i]};
+  }
+}
+
+void write_to_csv(std::vector<double> &r_x_, std::vector<double> &r_y_) {
+  std::ofstream outFile;
+  outFile.open("solve_path_points.csv", std::ios::out);
+  outFile << "x_value" << ',' << "y_value" << '\n';
+  for (size_t i = 0; i < r_x_.size(); ++i) {
+    outFile << r_x_.at(i) << ',' << r_y_.at(i) << '\n';
+  }
+  outFile.close();
+}
+
+void SetPoints(std::vector<Eigen::Vector2d> &raw_points_) {
   /*
   raw_points_.resize(4);
   raw_points_[0] = {0.0, 0.0};
@@ -100,9 +142,9 @@ void SetPoints(std::vector<Eigen::Vector2d>& raw_points_) {
 }
 
 namespace apollo::planning {
-void qp_spline_smoother(const std::vector<Eigen::Vector2d>& raw_points_,
-                        std::vector<double>& sloveX,
-                        std::vector<double>& sloveY) {
+void qp_spline_smoother(const std::vector<Eigen::Vector2d> &raw_points_,
+                        std::vector<double> &sloveX,
+                        std::vector<double> &sloveY) {
   // qp_spline
   std::vector<double> t_knots_;
   uint32_t num_spline = 2;
@@ -113,8 +155,8 @@ void qp_spline_smoother(const std::vector<Eigen::Vector2d>& raw_points_,
   uint32_t order = 5;
   OsqpSpline2dSolver spline_solver(t_knots_, order);
 
-  Spline2dConstraint* constraint = spline_solver.mutable_constraint();
-  Spline2dKernel* kernel = spline_solver.mutable_kernel();
+  Spline2dConstraint *constraint = spline_solver.mutable_constraint();
+  Spline2dKernel *kernel = spline_solver.mutable_kernel();
 
   std::vector<double> t_coord;
   vector_Eigen<Eigen::Vector2d> ref_ft;
@@ -185,11 +227,11 @@ void qp_spline_smoother(const std::vector<Eigen::Vector2d>& raw_points_,
 }  // namespace apollo::planning
 
 namespace apollo::planning {
-void spiral_smoother(std::vector<Eigen::Vector2d>& raw_points_,
-                     std::vector<double>* theta, std::vector<double>* kappa,
-                     std::vector<double>* dkappa, std::vector<double>* s,
-                     std::vector<double>* spiral_x,
-                     std::vector<double>* spiral_y) {
+void spiral_smoother(std::vector<Eigen::Vector2d> &raw_points_,
+                     std::vector<double> *theta, std::vector<double> *kappa,
+                     std::vector<double> *dkappa, std::vector<double> *s,
+                     std::vector<double> *spiral_x,
+                     std::vector<double> *spiral_y) {
   SpiralReferenceLineSmoother spiral_smoother_;
   spiral_smoother_.SmoothStandAlone(raw_points_, theta, kappa, dkappa, s,
                                     spiral_x, spiral_y);
@@ -198,11 +240,12 @@ void spiral_smoother(std::vector<Eigen::Vector2d>& raw_points_,
 
 namespace apollo::planning {
 using namespace reference_line;
-void hermit_spiral(std::vector<double>& raw_xs, std::vector<double>& raw_ys,
-                   std::vector<double>& sloveX, std::vector<double>& sloveY) {
+
+void hermit_spiral(std::vector<double> &raw_xs, std::vector<double> &raw_ys,
+                   std::vector<double> &sloveX, std::vector<double> &sloveY) {
   CurveCreator creator(raw_xs, raw_ys);
   creator.solve();
-  auto& curve = creator.curve();
+  auto &curve = creator.curve();
 
   double length = curve->length();
 
@@ -221,7 +264,7 @@ void hermit_spiral(std::vector<double>& raw_xs, std::vector<double>& raw_ys,
 int main() {
   std::vector<Eigen::Vector2d> raw_points_;
   SetPoints(raw_points_);
-
+  //    read_csv(raw_points_);
   std::vector<double> theta;
   std::vector<double> kappa;
   std::vector<double> dkappa;
@@ -233,29 +276,35 @@ int main() {
 
   /************************************************************************/
 
-  std::vector<double> sloveX, sloveY;
-  qp_spline_smoother(raw_points_, sloveX, sloveY);
+     std::vector<double> sloveX, sloveY;
+     qp_spline_smoother(raw_points_, sloveX, sloveY);
+  //
+  //    /************************************************************************/
+  //    std::vector<double> raw_xs, raw_ys;
+  //    div_circle(raw_xs, raw_ys, 5, 1);
+  //
+  //    std::vector<double> hermit_sloveX, hermit_sloveY;
+  //    hermit_spiral(raw_xs, raw_ys, hermit_sloveX, hermit_sloveY);
 
   /************************************************************************/
-  std::vector<double> raw_xs, raw_ys;
-  div_circle(raw_xs, raw_ys, 5, 1);
 
-  std::vector<double> hermit_sloveX, hermit_sloveY;
-  hermit_spiral(raw_xs, raw_ys, hermit_sloveX, hermit_sloveY);
-
-  /************************************************************************/
- 
   std::vector<double> ref_x, ref_y;
-  for (const auto& item : raw_points_) {
+  for (const auto &item : raw_points_) {
     ref_x.push_back(item.x());
     ref_y.push_back(item.y());
   }
+
+  write_to_csv(spiral_x, spiral_y);
+
   plt::named_plot("refrenceline_XY", ref_x, ref_y, "*");
-  plt::named_plot("spiral_ipopt", spiral_x, spiral_y);
-  plt::named_plot("qp_spline", sloveX, sloveY);
-  plt::named_plot("hermit_spiral_ceres", hermit_sloveX, hermit_sloveY);
+  plt::named_plot("spiral_ipopt_xy", spiral_x, spiral_y);
+
+  //    plt::named_plot("qp_spline", sloveX, sloveY);
+  //    plt::named_plot("hermit_spiral_ceres", hermit_sloveX, hermit_sloveY);
   plt::legend();
-  // plt::figure();
+  plt::axis("equal");
+  plt::figure();
+  plt::named_plot("spiral_ipopt_kappa", kappa);
   plt::axis("equal");
   plt::show();
 

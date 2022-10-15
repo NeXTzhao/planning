@@ -1,0 +1,8 @@
+prefix=/home/next/routing_planning/hybrid_a_star/devel
+
+Name: graph_search_planner
+Description: Description of graph_search_planner
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
