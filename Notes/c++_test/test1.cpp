@@ -86,6 +86,8 @@ std::vector<double> a{1, 2, 3, 4, 5, 6, 7, 8, 9};
 std::vector<double> b{1, 4, 6, 8, 10, 12, 14, 16, 18};
 
 
+// clang
+
 void draw() {
   plt::named_plot("ref_line_kappa", a, b);
 //  plt::named_plot("ref_line", b);

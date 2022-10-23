@@ -15,6 +15,6 @@ leetcode/
 bin
 log
 *.nb
-ReferenceLine*
+referenceLine*
 c++_test
 Mathematica
