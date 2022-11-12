@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="purepursuit" type="splinepathNew_" name="spline_node" output="screen"/>
-</launch>

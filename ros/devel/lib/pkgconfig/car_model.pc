@@ -1,8 +1,0 @@
-prefix=/home/next/routing_planning/ros/devel
-
-Name: car_model
-Description: Description of car_model
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

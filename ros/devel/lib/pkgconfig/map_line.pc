@@ -1,8 +1,0 @@
-prefix=/home/next/routing_planning/ros/devel
-
-Name: map_line
-Description: Description of map_line
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

@@ -1,3 +1,0 @@
-<launch>
-    <node pkg="map_line" type="map_path" name="map_path_node" output="screen"/>
-</launch>
