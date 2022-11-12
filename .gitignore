@@ -1,4 +1,5 @@
 build/
+.idea
 *.a
 *.so
 *.out
@@ -8,10 +9,12 @@ install/
 cmake-build-debug/
 ros/.vscode/browse.vc.db
 ros/src/lqr_steering/.vscode/browse.vc.db
+Typora Notes/*
+apollo_task/
 reading/
 paper/
 rust/
-.vscode
+.vscode/
 *.nb
 referenceLine*
 c++_test/
