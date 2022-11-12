@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg122545"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview122547"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:snap-grids="false"
+     inkscape:snap-bbox="true"
+     inkscape:snap-midpoints="false"
+     inkscape:snap-smooth-nodes="false"
+     inkscape:snap-intersection-paths="false"
+     inkscape:object-paths="false"
+     inkscape:object-nodes="false"
+     inkscape:snap-others="false" />
+  <defs
+     id="defs122542">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect219346"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <marker
+       style="overflow:visible;"
+       id="Arrow2Send"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Send"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.3) rotate(180) translate(-2.3,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="stroke:context-stroke;fill-rule:evenodd;fill:context-stroke;stroke-width:0.62500000;stroke-linejoin:round;"
+         id="path3877" />
+    </marker>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect192076"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect178337"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect178187"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect178117"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <linearGradient
+       id="linearGradient177284"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop177282" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect176735"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect137656"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect137487"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect109190"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <marker
+       style="overflow:visible"
+       id="marker33777"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path33775" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="marker91524"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path91522" />
+    </marker>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect109343"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <marker
+       style="overflow:visible"
+       id="Arrow1Send-2"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Send"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path3859-3" />
+    </marker>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect47915-7"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <marker
+       style="overflow:visible"
+       id="marker91524-1"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:0.625;stroke-linejoin:round"
+         id="path91522-2" />
+    </marker>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect176735-9"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.159;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.159, 1.908;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 37.951367,102.56448 c 2.000061,-1.33337 4.00006,-2.666706 5.666868,-2.999933 1.666808,-0.333227 3.000115,0.333426 4.666673,-2.1e-5 1.666559,-0.333447 3.666518,-1.666752 5.333301,-2.333399 1.666782,-0.666646 3.000089,-0.666646 4.333157,-0.666646"
+       id="path109188"
+       inkscape:path-effect="#path-effect109190"
+       inkscape:original-d="m 37.951367,102.56448 c 2.000263,-1.33307 4.000264,-2.6664 5.999998,-3.999998 1.333625,0.666944 2.666932,1.333598 4,1.999998 2.000306,-1.333094 4.000265,-2.666401 6.000001,-3.999999 1.333625,2.65e-4 2.666932,2.65e-4 4,0" />
+    <rect
+       style="fill:#0000ff;fill-rule:evenodd;stroke-width:0.165326;opacity:0.50067446"
+       id="rect109226"
+       width="1.7938732"
+       height="0.8706125"
+       x="5.6056938"
+       y="104.47812"
+       transform="matrix(0.94429221,-0.32910822,0.33429401,0.94246884,0,0)" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.705556px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="52.822807"
+       y="98.710205"
+       id="text111990"><tspan
+         sodipodi:role="line"
+         id="tspan111988"
+         x="52.822807"
+         y="98.710205"
+         style="font-size:0.705556px;stroke-width:0.264583">reference_line</tspan></text>
+    <ellipse
+       style="opacity:0.446293;fill:#ff0000;fill-rule:evenodd;stroke-width:0.188419"
+       id="path36981-6-0"
+       cx="42.566498"
+       cy="99.994911"
+       rx="0.20546304"
+       ry="0.19043876" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.529167px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="41.47525"
+       y="100.99722"
+       id="text67276-1-9"><tspan
+         sodipodi:role="line"
+         id="tspan67274-8-2"
+         x="41.47525"
+         y="100.99722"
+         style="font-size:0.529167px;stroke-width:0.264583">A1</tspan></text>
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.0267229;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 40.219823,96.622491 c 0,0 1.984981,0.230148 1.984981,0.230148"
+       id="path137485"
+       inkscape:path-effect="#path-effect137487"
+       inkscape:original-d="m 40.219823,96.622491 1.984981,0.230148" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.02645833;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 40.510862,97.443016 c 0,0 1.4029,-1.410904 1.4029,-1.410904"
+       id="path137654"
+       inkscape:path-effect="#path-effect137656"
+       inkscape:original-d="m 40.510862,97.443016 1.4029,-1.410904" />
+    <ellipse
+       style="opacity:0.446293;fill:#ff0000;fill-rule:evenodd;stroke-width:0.188419"
+       id="path36981-6-0-8"
+       cx="41.204105"
+       cy="96.757416"
+       rx="0.20546304"
+       ry="0.19043876" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.529167px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="41.782982"
+       y="97.370995"
+       id="text155045"><tspan
+         sodipodi:role="line"
+         id="tspan155043"
+         style="font-size:0.529167px;stroke-width:0.264583"
+         x="41.782982"
+         y="97.370995">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.529167px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="39.588512"
+       y="102.1067"
+       id="text67276-1-9-9"><tspan
+         sodipodi:role="line"
+         id="tspan67274-8-2-7"
+         x="39.588512"
+         y="102.1067"
+         style="font-size:0.529167px;stroke-width:0.264583">A0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:0.529167px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="43.617161"
+       y="100.10094"
+       id="text67276-1-9-3"><tspan
+         sodipodi:role="line"
+         id="tspan67274-8-2-6"
+         x="43.617161"
+         y="100.10094"
+         style="font-size:0.529167px;stroke-width:0.264583">A2</tspan></text>
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#f90000;stroke-width:0.0726192;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker91524);paint-order:markers stroke fill"
+       d="m 39.784657,101.25364 c 0,0 1.413348,-4.407289 1.413348,-4.407289"
+       id="path176733"
+       inkscape:path-effect="#path-effect176735"
+       inkscape:original-d="m 39.784657,101.25364 1.413348,-4.407289" />
+    <path
+       style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#f90000;stroke-width:0.0657493;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker91524-1);paint-order:markers stroke fill"
+       d="m 41.50627,100.3336 c 0,0 -0.26645,-3.37102 -0.26645,-3.37102"
+       id="path176733-3"
+       inkscape:path-effect="#path-effect176735-9"
+       inkscape:original-d="M 41.50627,100.3336 41.23982,96.96258"
+       inkscape:transform-center-x="-0.022911499"
+       inkscape:transform-center-y="0.033079188" />
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:#f90000;stroke-width:0.0529167;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 51.225201,107.84756 c 0,0 -0.987009,-3.05428 -0.987009,-3.05428"
+       id="path178115"
+       inkscape:path-effect="#path-effect178117"
+       inkscape:original-d="m 51.225201,107.84756 -0.987009,-3.05428" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#00f913;stroke-width:0.0807843;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker91524);paint-order:markers stroke fill"
+       d="m 39.821337,101.35478 c 0,0 3.54789,-1.715818 3.54789,-1.715818"
+       id="path178185"
+       inkscape:path-effect="#path-effect178187"
+       inkscape:original-d="m 39.821337,101.35478 3.54789,-1.715818" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#00f913;stroke-width:0.244756;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:0.489509, 0.979021;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 41.783407,105.37223 c 0,0 6.748506,-0.26075 6.748506,-0.26075"
+       id="path178335"
+       inkscape:path-effect="#path-effect178337"
+       inkscape:original-d="m 41.783407,105.37223 6.748506,-0.26075"
+       inkscape:transform-center-x="-3.5042142"
+       inkscape:transform-center-y="-0.12742241" />
+    <ellipse
+       style="opacity:0.402574;fill:#002cff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.217862"
+       id="path178441"
+       cx="-19.428404"
+       cy="109.00439"
+       rx="0.63239622"
+       ry="0.26334107"
+       transform="matrix(0.8918236,-0.45238332,0.54467032,0.83865025,0,0)" />
+    <path
+       style="opacity:0.485904;fill:#002cff;fill-opacity:1;fill-rule:evenodd;stroke:#ff5252;stroke-width:0.15;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow2Send);paint-order:markers stroke fill"
+       d="m 42.397307,100.57779 c 0,0 0.511052,0.72508 0.511052,0.72508"
+       id="path192074"
+       inkscape:path-effect="#path-effect192076"
+       inkscape:original-d="m 42.397307,100.57779 0.511052,0.72508"
+       inkscape:transform-center-x="0.049676079"
+       inkscape:transform-center-y="-0.090046806" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.529167px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="42.923923"
+       y="101.9876"
+       id="text202486"><tspan
+         sodipodi:role="line"
+         id="tspan202484"
+         style="font-size:0.529167px;stroke-width:0.264583"
+         x="42.923923"
+         y="101.9876">Δs</tspan></text>
+    <path
+       style="opacity:0.500674;fill:#002cff;fill-opacity:1;fill-rule:evenodd;stroke:#ff5252;stroke-width:0.105833;stroke-linecap:square;stroke-miterlimit:4;stroke-dasharray:0.21166601,0.21166601;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 41.248388,96.857559 c 0,0 1.34217,3.142375 1.34217,3.142375"
+       id="path219344"
+       inkscape:path-effect="#path-effect219346"
+       inkscape:original-d="m 41.248388,96.857559 1.34217,3.142375" />
+  </g>
+</svg>

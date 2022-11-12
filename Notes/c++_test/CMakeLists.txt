@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.16)
 project(test)
 
 set(CMAKE_CXX_STANDARD 14)
+
+find_package(Eigen3 REQUIRED)
+include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
+
 ############################################################################
 # matplotlib-cpp
 include(GNUInstallDirs)
@@ -79,7 +83,11 @@ add_executable(pimpl Pimlp.cpp pimlp_main.cpp)
 add_executable(csv csv.cpp)
 add_executable(fsm FSM.cpp)
 add_executable(test9 test9.cpp)
+add_executable(Kalman_filter Kalman_filter.cpp)
+target_link_libraries(Kalman_filter matplotlib_cpp)
 
+add_executable(Kalman kalmanFilter.cpp)
+target_link_libraries(Kalman matplotlib_cpp)
 
 
 

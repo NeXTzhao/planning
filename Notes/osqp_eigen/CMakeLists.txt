@@ -126,16 +126,16 @@ target_link_libraries(carte_frenet_kdtree PUBLIC ${EXTRA_LIBS} PUBLIC matplotlib
 
 # Apollo分段螺旋曲线优化参考线(Ipopt库求解)  这个跟quintic_curve冲突，需要屏蔽一个
 # 添加Ipopt求解库一定要街上系统库文件的链接
- include_directories(/usr/local/include)
- link_directories(/usr/local/lib)
- add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/spiral_reference_line_smoother)
- add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/hermit_spiral_reference_line)
- list(APPEND EXTRA_LIBS spiral_smoother hermit_spiral)
- # list(APPEND EXTRA_LIBS hermit_spiral)
- add_executable(spiral_refrencesline_smoother src/spiral_smoother_main.cpp)
- target_link_libraries(spiral_refrencesline_smoother ${EXTRA_LIBS} ipopt osqp::osqp Ceres::ceres glog::glog matplotlib_cpp)
+include_directories(/usr/local/include)
+link_directories(/usr/local/lib)
+add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/spiral_reference_line_smoother)
+add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/hermit_spiral_reference_line)
+list(APPEND EXTRA_LIBS spiral_smoother hermit_spiral)
+# list(APPEND EXTRA_LIBS hermit_spiral)
+add_executable(spiral_refrencesline_smoother src/spiral_smoother_main.cpp)
+target_link_libraries(spiral_refrencesline_smoother ${EXTRA_LIBS} ipopt osqp::osqp Ceres::ceres glog::glog matplotlib_cpp)
 
- 
+
 # 从离散圆中得到坐标
 add_executable(circle src/circle.cpp)
 target_link_libraries(circle PUBLIC matplotlib_cpp)

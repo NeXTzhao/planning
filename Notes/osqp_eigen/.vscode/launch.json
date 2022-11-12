@@ -5,7 +5,7 @@
             "name": "gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/dis_points_smooth",   //需要修改自己编译的程序的位置和名字
+            "program": "${workspaceFolder}/bin/spiral_refrencesline_smoother",   //需要修改自己编译的程序的位置和名字
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

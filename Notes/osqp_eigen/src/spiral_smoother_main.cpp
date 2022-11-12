@@ -101,13 +101,15 @@ void write_to_csv(std::vector<double> &r_x_, std::vector<double> &r_y_) {
 }
 
 void SetPoints(std::vector<Eigen::Vector2d> &raw_points_) {
-  /*
+#if 0
   raw_points_.resize(4);
   raw_points_[0] = {0.0, 0.0};
   raw_points_[1] = {1.0, 0.3};
   raw_points_[2] = {2.0, 0.0};
   raw_points_[3] = {3, 0.1};
-  */
+#endif
+
+#if 0
   std::vector<double> raw_xs, raw_ys;
   div_circle(raw_xs, raw_ys, 5, 1);
 
@@ -116,29 +118,33 @@ void SetPoints(std::vector<Eigen::Vector2d> &raw_points_) {
   for (size_t i = 0; i < raw_xs.size(); ++i) {
     raw_points_[i] = {raw_xs[i], raw_ys[i]};
   }
-  /*
-    raw_points_[0] = {4.946317773, 0.08436953512};
-    raw_points_[1] = {5.017218975, 0.7205757236};
-    raw_points_[2] = {4.734635316, 1.642930209};
-    raw_points_[3] = {4.425064575, 2.365356462};
-    raw_points_[4] = {3.960102096, 2.991632152};
-    raw_points_[5] = {3.503172702, 3.44091492};
-    raw_points_[6] = {2.989950824, 3.9590821};
-    raw_points_[7] = {2.258523535, 4.554377368};
-    raw_points_[8] = {1.562447892, 4.656801472};
-    raw_points_[9] = {0.8764776599, 4.971705856};
-    raw_points_[10] = {0.09899323097, 4.985845841};
-    raw_points_[11] = {-0.7132021974, 5.010851105};
-    raw_points_[12] = {-1.479055426, 4.680181989};
-    raw_points_[13] = {-2.170306775, 4.463442715};
-    raw_points_[14] = {-3.034455492, 4.074651273};
-    raw_points_[15] = {-3.621987909, 3.585790302};
-    raw_points_[16] = {-3.979289889, 3.014232351};
-    raw_points_[17] = {-4.434628966, 2.367848826};
-    raw_points_[18] = {-4.818245921, 1.467395733};
-    raw_points_[19] = {-4.860190444, 0.8444358019};
-    raw_points_[20] = {-5.09947597, -0.01022405467};
-    */
+#endif
+
+#if 1
+  raw_points_.resize(21);
+
+  raw_points_[0] = {4.946317773, 0.08436953512};
+  raw_points_[1] = {5.017218975, 0.7205757236};
+  raw_points_[2] = {4.734635316, 1.642930209};
+  raw_points_[3] = {4.425064575, 2.365356462};
+  raw_points_[4] = {3.960102096, 2.991632152};
+  raw_points_[5] = {3.503172702, 3.44091492};
+  raw_points_[6] = {2.989950824, 3.9590821};
+  raw_points_[7] = {2.258523535, 4.554377368};
+  raw_points_[8] = {1.562447892, 4.656801472};
+  raw_points_[9] = {0.8764776599, 4.971705856};
+  raw_points_[10] = {0.09899323097, 4.985845841};
+  raw_points_[11] = {-0.7132021974, 5.010851105};
+  raw_points_[12] = {-1.479055426, 4.680181989};
+  raw_points_[13] = {-2.170306775, 4.463442715};
+  raw_points_[14] = {-3.034455492, 4.074651273};
+  raw_points_[15] = {-3.621987909, 3.585790302};
+  raw_points_[16] = {-3.979289889, 3.014232351};
+  raw_points_[17] = {-4.434628966, 2.367848826};
+  raw_points_[18] = {-4.818245921, 1.467395733};
+  raw_points_[19] = {-4.860190444, 0.8444358019};
+  raw_points_[20] = {-5.09947597, -0.01022405467};
+#endif
 }
 
 namespace apollo::planning {
@@ -264,7 +270,8 @@ void hermit_spiral(std::vector<double> &raw_xs, std::vector<double> &raw_ys,
 int main() {
   std::vector<Eigen::Vector2d> raw_points_;
   SetPoints(raw_points_);
-  //    read_csv(raw_points_);
+//    read_csv(raw_points_);
+#if 1
   std::vector<double> theta;
   std::vector<double> kappa;
   std::vector<double> dkappa;
@@ -273,38 +280,43 @@ int main() {
   std::vector<double> spiral_y;
   spiral_smoother(raw_points_, &theta, &kappa, &dkappa, &s, &spiral_x,
                   &spiral_y);
+  plt::named_plot("spiral_ipopt_xy", spiral_x, spiral_y);
+#endif
+  /************************************************************************/
+#if 0
+  std::vector<double> sloveX, sloveY;
+  qp_spline_smoother(raw_points_, sloveX, sloveY);
+  plt::named_plot("qp_spline", sloveX, sloveY);
+
+#endif
 
   /************************************************************************/
-
-     std::vector<double> sloveX, sloveY;
-     qp_spline_smoother(raw_points_, sloveX, sloveY);
-  //
-  //    /************************************************************************/
-  //    std::vector<double> raw_xs, raw_ys;
-  //    div_circle(raw_xs, raw_ys, 5, 1);
-  //
-  //    std::vector<double> hermit_sloveX, hermit_sloveY;
-  //    hermit_spiral(raw_xs, raw_ys, hermit_sloveX, hermit_sloveY);
-
+#if 0
+     std::vector<double> raw_xs, raw_ys;
+     div_circle(raw_xs, raw_ys, 5, 1);
+  
+     std::vector<double> hermit_sloveX, hermit_sloveY;
+     hermit_spiral(raw_xs, raw_ys, hermit_sloveX, hermit_sloveY);
+     plt::named_plot("hermit_spiral_ceres", hermit_sloveX, hermit_sloveY);
+#endif
   /************************************************************************/
 
   std::vector<double> ref_x, ref_y;
+  ref_x.reserve(raw_points_.size());
+  ref_y.reserve(raw_points_.size());
   for (const auto &item : raw_points_) {
-    ref_x.push_back(item.x());
-    ref_y.push_back(item.y());
+    ref_x.emplace_back(item.x());
+    ref_y.emplace_back(item.y());
   }
 
-  write_to_csv(spiral_x, spiral_y);
+  // write_to_csv(spiral_x, spiral_y);
 
-  plt::named_plot("refrenceline_XY", ref_x, ref_y, "*");
-  plt::named_plot("spiral_ipopt_xy", spiral_x, spiral_y);
+  plt::named_plot("refrenceline_XY", ref_x, ref_y);
 
-  //    plt::named_plot("qp_spline", sloveX, sloveY);
-  //    plt::named_plot("hermit_spiral_ceres", hermit_sloveX, hermit_sloveY);
   plt::legend();
   plt::axis("equal");
-  plt::figure();
-  plt::named_plot("spiral_ipopt_kappa", kappa);
+//  plt::figure();
+//   plt::named_plot("spiral_ipopt_kappa", kappa);
   plt::axis("equal");
   plt::show();
 
