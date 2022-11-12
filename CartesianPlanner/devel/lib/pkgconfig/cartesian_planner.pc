@@ -1,8 +1,0 @@
-prefix=/home/next/routing_planning/CartesianPlanner/devel
-
-Name: cartesian_planner
-Description: Description of cartesian_planner
-Version: 0.0.1
-Cflags: -I/home/next/routing_planning/CartesianPlanner/devel/include -I/home/next/routing_planning/CartesianPlanner/src/cartesian_planner/include
-Libs: -L${prefix}/lib -lcartesian_planner
-Requires: roscpp message_runtime
