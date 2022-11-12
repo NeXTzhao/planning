@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/eigen3",
+                "/opt/ros/noetic/include",
+                "/home/next/anaconda3/envs/py3.8/include/OsqpEigen"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++-9",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/Notes/cmake_test_file/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}

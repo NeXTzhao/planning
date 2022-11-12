@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="pathload" type="quinticpath" name="quintic_node" output="screen"/>
+</launch>

@@ -1,0 +1,32 @@
+smart:
+# controls the rear two tires based on individual motors
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+  rear_right_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: rear_right_wheel_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  rear_left_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: rear_left_wheel_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  front_right_steering_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: front_right_steering_joint
+    pid: {p: 40000.0, i: 200.0, d: 1.0}    
+  front_left_steering_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: front_left_steering_joint
+    pid: {p: 40000.0, i: 200.0, d: 1.0}
+  # gazebo_ros_control:
+  #   pid_gains:
+  #     rear_right_wheel_joint:
+  #       p: 100.0
+  #       i: 0.5
+  #       d: 0.0
+  #     rear_left_wheel_joint:
+  #       p: 100.0
+  #       i: 0.5
+  #       d: 0.0

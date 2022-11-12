@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="pathload" type="pathloadNew" name="path_node" output="screen"/>
+</launch>

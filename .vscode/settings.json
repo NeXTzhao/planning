@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.py": "python",
+    "*.json": "python",
+    "eigen": "cpp",
+    "dense": "cpp",
+    "core": "cpp",
+    "lu": "cpp",
+    "cholesky": "cpp",
+    "vector": "cpp"
+  }
+}
