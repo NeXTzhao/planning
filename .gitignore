@@ -10,7 +10,6 @@ cmake-build-debug/
 ros/.vscode/browse.vc.db
 ros/src/lqr_steering/.vscode/browse.vc.db
 ros/devel/
-apollo_task/
 reading/
 paper/
 rust/
