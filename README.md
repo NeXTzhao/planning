@@ -9,7 +9,7 @@
 ### ***2.2 ROS（Gazebo仿真）***
 
 ```shell
-系统要求：ubuntu、ros、gazebo7
+系统要求：ubuntu、ros、gazebo
 ```
 ### 2.2.1 使用Gazebo仿真需要安装的功能包
 
