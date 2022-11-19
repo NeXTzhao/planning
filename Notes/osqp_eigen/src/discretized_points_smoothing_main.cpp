@@ -12,7 +12,7 @@ namespace plt = matplotlibcpp;
 
 void read_csv(std::vector<Eigen::Vector2d> &raw_points_) {
   std::ifstream inFile(
-      "/home/next/routing_planning/Notes/osqp_eigen/bin/path_points.csv",
+      "/home/next/planning/Notes/osqp_eigen/bin/path_points.csv",
       std::ios::in);
   std::string lineStr;
   char delim = ',';

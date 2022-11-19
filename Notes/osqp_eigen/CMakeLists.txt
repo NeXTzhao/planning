@@ -46,6 +46,7 @@ find_package(glog 0.6.0 REQUIRED)
 # find Ceres library and headers
 find_package(Ceres REQUIRED)
 
+
 ############################################################################
 # matplotlib-cpp
 include(GNUInstallDirs)
@@ -131,6 +132,7 @@ link_directories(/usr/local/lib)
 add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/spiral_reference_line_smoother)
 add_subdirectory(${PROJECT_SOURCE_DIR}/common/math/hermit_spiral_reference_line)
 list(APPEND EXTRA_LIBS spiral_smoother hermit_spiral)
+set(REFERENCE ${PROJECT_SOURCE_DIR}/ReferenceLine/*)
 # list(APPEND EXTRA_LIBS hermit_spiral)
 add_executable(spiral_refrencesline_smoother src/spiral_smoother_main.cpp)
 target_link_libraries(spiral_refrencesline_smoother ${EXTRA_LIBS} ipopt osqp::osqp Ceres::ceres glog::glog matplotlib_cpp)

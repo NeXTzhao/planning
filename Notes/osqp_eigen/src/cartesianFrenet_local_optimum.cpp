@@ -145,6 +145,7 @@ int main() {
   plt::axis("equal");
   plt::legend();
   plt::show();
+  
   return 0;
 }
 

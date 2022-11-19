@@ -3,6 +3,7 @@ build/
 *.a
 *.so
 *.out
+# .vscode
 log/
 bin
 install/
