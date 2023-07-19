@@ -12,7 +12,7 @@ namespace plt = matplotlibcpp;
 
 void read_csv(std::vector<Eigen::Vector2d> &raw_points_) {
   std::ifstream inFile(
-      "/home/next/planning/Notes/osqp_eigen/bin/path_points.csv",
+      "/home/next/planning/Notes/osqp_eigen/data/path_points.csv",
       std::ios::in);
   std::string lineStr;
   char delim = ',';
@@ -44,7 +44,8 @@ void write_to_csv(std::vector<double> &r_x_, std::vector<double> &r_y_) {
   outFile.open("solve_path_points.csv", std::ios::out);
   outFile << "x_value" << ',' << "y_value" << '\n';
   for (size_t i = 0; i < r_x_.size(); ++i) {
-    outFile << r_x_.at(i) << ',' << r_y_.at(i) << '\n';
+    // outFile << r_x_.at(i) << ',' << r_y_.at(i) << '\n';
+    outFile << "{" << r_x_.at(i) << ',' << r_y_.at(i) << "}," << '\n';
   }
   outFile.close();
 }
