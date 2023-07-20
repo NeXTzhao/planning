@@ -1,44 +1,101 @@
 from numpy import *
 from scipy.optimize import minimize
+
 import bezier
 
 
 def fitCurve(points, maxError):
     leftTangent = normalize(points[1] - points[0])
     rightTangent = normalize(points[-2] - points[-1])
-    return fitCubic(points, leftTangent, rightTangent, maxError)
+    control_point = fitCubic(points, leftTangent, rightTangent, maxError)
+    return get_fit_curves(control_point, points)
 
+
+def get_fit_curves(control_point, points):
+    curve = []
+    for con in control_point:
+        curve.append(bezier_curve(con, len(points) - 1))
+    return curve
+
+
+# def fitCubic(points, leftTangent, rightTangent, error):
+#     bezier_num = []
+#     u = chordLengthParameterize(points)
+#     bezCurve = generateBezier(points, u, leftTangent, rightTangent)
+#     maxError, splitPoint_error = computeMaxError(points, bezCurve, u, error)
+#     print("maxError:", maxError, "splitPoint_error:", splitPoint_error)
+#     curve = bezier_curve(bezCurve, len(points) - 1)
+#     splitPoint_kappa = find_index_exceed_kappa(curve, 0.015)
+#     if splitPoint_kappa > splitPoint_error:
+#         splitPoint = splitPoint_kappa
+#         print('kappa_index = ', splitPoint)
+#     else:
+#         splitPoint = splitPoint_error
+#         print('error_index = ', splitPoint)
+#     # splitPoint = splitPoint_kappa
+#     # 处理前部分点
+#     frontPoint = points[:splitPoint]
+#     front_left_temp = normalize(frontPoint[1] - frontPoint[0])
+#     front_right_temp = normalize(frontPoint[-2] - frontPoint[-1])
+#     remainPoint = points[splitPoint:]
+#     print('rem = ', len(remainPoint))
+#     print('points_len = ', len(points) - 1)
+#     if splitPoint == len(points):
+#         remainPoint = points
+#
+#     if len(remainPoint) > 2:
+#         u = chordLengthParameterize(remainPoint)
+#         left_temp = normalize(remainPoint[1] - remainPoint[0])
+#         right_temp = normalize(remainPoint[-2] - remainPoint[-1])
+#         bezCurve = generateBezier(remainPoint, u, left_temp, right_temp)
+#         curve = bezier_curve(bezCurve, len(remainPoint) - 1)
+#         bezier_num.append(curve)
+#         leftTangent = normalize(curve[splitPoint + 1] - curve[splitPoint - 1])
+#         leftTangent = normalize(remainPoint[1] - remainPoint[0])
+#         bezier_num += fitCubic(remainPoint, leftTangent, rightTangent, error)
+#     else:
+#         bezier_num.append(curve)
+#
+#     return bezier_num
 
 def fitCubic(points, leftTangent, rightTangent, error):
-    bezier_num = []
+    # Use heuristic if region only has two points in it
+    if len(points) == 2:
+        dist = linalg.norm(points[0] - points[1]) / 3.0
+        bezCurve = [points[0], points[0] + leftTangent * dist, points[1] + rightTangent * dist, points[1]]
+        return [bezCurve]
+
+    # Parameterize points, and attempt to fit curve
     u = chordLengthParameterize(points)
     bezCurve = generateBezier(points, u, leftTangent, rightTangent)
-    maxError, splitPoint_error = computeMaxError(points, bezCurve, u, error)
-    print("maxError:", maxError, "splitPoint_error:", splitPoint_error)
-    curve = bezier_curve(bezCurve, len(points) - 1)
-    splitPoint_kappa = find_index_exceed_kappa(curve, 0.015)
-    if splitPoint_kappa > splitPoint_error:
-        splitPoint = splitPoint_kappa
-        print('kappa_index = ', splitPoint)
-    else:
-        splitPoint = splitPoint_error
-        print('error_index = ', splitPoint)
-    # splitPoint = splitPoint_kappa
-    remainPoint = points[splitPoint:]
-    print('rem = ', len(remainPoint))
-    print('points_len = ', len(points)-1)
-    if splitPoint == len(points):
-        remainPoint = points
+    # Find max deviation of points to fitted curve
+    maxError, splitPoint = computeMaxError(points, bezCurve, u, error)
 
-    if len(remainPoint) > 2:
-        bezier_num.append(curve[:splitPoint])
-        # leftTangent = normalize(curve[splitPoint + 1] - curve[splitPoint - 1])
-        leftTangent = normalize(remainPoint[1] - remainPoint[0])
-        bezier_num += fitCubic(remainPoint, leftTangent, rightTangent, error)
-    else:
-        bezier_num.append(curve)
+    if maxError < error:
+        return [bezCurve]
 
-    return bezier_num
+    # If error not too large, try some reparameterization and iteration
+    if maxError < error ** 2:
+        for i in range(20):
+            uPrime = reparameterize(bezCurve, points, u)
+            bezCurve = generateBezier(points, uPrime, leftTangent, rightTangent)
+            maxError, splitPoint = computeMaxError(points, bezCurve, uPrime)
+            if maxError < error:
+                return [bezCurve]
+            u = uPrime
+
+    # Fitting failed -- split at max error point and fit recursively
+    beziers = []
+    if splitPoint == len(points) - 1:
+        # centerTangent = normalize(points[splitPoint - 1] - points[splitPoint])
+        return beziers
+    else:
+        centerTangent = normalize(points[splitPoint - 1] - points[splitPoint + 1])
+
+    beziers += fitCubic(points[:splitPoint + 1], leftTangent, centerTangent, error)
+    beziers += fitCubic(points[splitPoint:], -centerTangent, rightTangent, error)
+
+    return beziers
 
 
 def compute_curvature(point1, point2, point3):
@@ -261,7 +318,7 @@ def computeMaxError(points, bez, u, error):
         return distance_squared(B, Q_point)
 
     max_distance = 0
-    max_distance_index = -1
+    max_distance_index = len(points) / 2
     for i, point in enumerate(points):
         result = minimize(distance_to_bezier, x0=u[0], bounds=[(u[0], u[-1])], args=(point,))
         t_min_distance = result.x[0]
@@ -272,13 +329,13 @@ def computeMaxError(points, bez, u, error):
         print('dist', i, '=', dist, ',max_distance', i, '=', max_distance, ',max_distance_index', i, '=',
               max_distance_index)
 
-        if dist < error:
-            if dist >= max_distance:
-                max_distance = dist
-                max_distance_index = i
-        else:
-            return max_distance, max_distance_index
-
-        if max_distance < error:
+        # if dist < error:
+        if dist >= max_distance:
+            max_distance = dist
             max_distance_index = i
+        # else:
+        #     return max_distance, max_distance_index
+
+        if max_distance_index == len(points) - 1:
+            max_distance_index = len(points) - 2
     return max_distance, max_distance_index

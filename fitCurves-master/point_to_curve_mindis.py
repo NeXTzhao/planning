@@ -28,7 +28,7 @@ def find_min_distance_to_bezier(Q, P0, P1, P2, P3):
 
 
 # Example usage
-Q = (3, 5)  # Point for which we want to find the minimum distance to the Bezier curve
+Q = (1, 5)  # Point for which we want to find the minimum distance to the Bezier curve
 P0 = (1, 1)
 P1 = (2, 8)
 P2 = (6, 1)

@@ -26,8 +26,8 @@ def generate_data_points():
     x = x[::-1]
     y = y[::-1]
 
-    print("x = ", x)
-    print("y = ", y)
+    # print("x = ", x)
+    # print("y = ", y)
     points = np.column_stack((x, y))
     return points
 
@@ -64,8 +64,8 @@ if __name__ == '__main__':
     points = generate_arc_points(center, start_radius, end_radius, start_angle, end_angle, num_points)
     curvature = calculate_curvature(points)
     print('curvature = ', curvature)
-    # points = generate_data_points()
-    max_error = 1
+    points = generate_data_points()
+    max_error = 1.5
 
     plt.scatter(points[:, 0], points[:, 1], c='red', label='Original Points')
     # 拟合曲线
