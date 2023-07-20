@@ -69,7 +69,7 @@ def fitCubic(points, leftTangent, rightTangent, error):
     u = chordLengthParameterize(points)
     bezCurve = generateBezier(points, u, leftTangent, rightTangent)
     # Find max deviation of points to fitted curve
-    maxError, splitPoint = computeMaxError(points, bezCurve, u, error)
+    maxError, splitPoint = computeMaxError(points, bezCurve, u)
 
     if maxError < error:
         return [bezCurve]
@@ -86,11 +86,11 @@ def fitCubic(points, leftTangent, rightTangent, error):
 
     # Fitting failed -- split at max error point and fit recursively
     beziers = []
-    if splitPoint == len(points) - 1:
-        # centerTangent = normalize(points[splitPoint - 1] - points[splitPoint])
-        return beziers
-    else:
-        centerTangent = normalize(points[splitPoint - 1] - points[splitPoint + 1])
+    # if splitPoint == len(points) - 1:
+    #     centerTangent = normalize(points[splitPoint - 1] - points[splitPoint])
+    #     # return beziers
+    # else:
+    centerTangent = normalize(points[splitPoint - 1] - points[splitPoint + 1])
 
     beziers += fitCubic(points[:splitPoint + 1], leftTangent, centerTangent, error)
     beziers += fitCubic(points[splitPoint:], -centerTangent, rightTangent, error)
@@ -282,7 +282,7 @@ def chordLengthParameterize(points):
     return u
 
 
-def computeMaxError1(points, bez, parameters):
+def computeMaxError(points, bez, parameters):
     maxDist = 0.0
     splitPoint = len(points) / 2
 
@@ -311,7 +311,7 @@ def distance_squared(p1, p2):
     return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
 
 
-def computeMaxError(points, bez, u, error):
+def computeMaxError1(points, bez, u):
     # 定义用于最小化的距离函数
     def distance_to_bezier(t, Q_point):
         B = bezier.q(bez, t)
