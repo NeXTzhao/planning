@@ -8,7 +8,8 @@ def fitCurve(points, maxError):
     leftTangent = normalize(points[1] - points[0])
     rightTangent = normalize(points[-2] - points[-1])
     control_point = fitCubic(points, leftTangent, rightTangent, maxError)
-    return get_fit_curves(control_point, points)
+    curves = get_fit_curves(control_point, points)
+    return control_point, curves
 
 
 def get_fit_curves(control_point, points):
