@@ -1,9 +1,10 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from fitCurves import *
 from bezir_to_poly import *
-from r_fun import *
+from fitCurves import *
 from implicit_fun import *
+from quadrilateral_sdf import *
+
+
+# from r_fun import *
 
 
 def generate_data_points():
@@ -75,6 +76,12 @@ if __name__ == '__main__':
 
     colors = ['blue', 'orange', 'green', 'purple', 'red', 'yellow']  # 定义颜色列表
 
+    lower = -135
+    upper = 135
+    sample = 100
+    x_imp = np.linspace(lower, upper, sample)
+    y_imp = np.linspace(lower, upper, sample)
+    X, Y = np.meshgrid(x_imp, y_imp)
     # 设置子图的行数和列数
     rows = 2
     cols = 3
@@ -83,17 +90,19 @@ if __name__ == '__main__':
     for i, control_point in enumerate(control_points):
         px, py, x, y = bezier_to_poly(control_point)
         color = colors[i % len(colors)]  # 根据索引选择颜色
-
         # 计算等值线数据
-        x_imp = np.linspace(-200, 200, 100)
-        y_imp = np.linspace(-200, 200, 100)
-        X, Y = np.meshgrid(x_imp, y_imp)
         evalxy = implicit_fun(px, py).eval(X, Y)
-        sdf_results.append(evalxy)
+        # sdf_results.append(evalxy)
+        rectangle = create_rectangle_sdf(lower, upper, sample, control_point[0], control_point[1], control_point[2],
+                                         control_point[3])
+        trim_sdf = trim(evalxy, rectangle)
+        # trim_sdf = normalize_sdf(trim_sdf)
+        sdf_results.append(trim_sdf)
 
-        # # 在对应的子图中绘制等值线和拟合曲线
+        # 在对应的子图中绘制等值线和拟合曲线
         ax = axes[i // cols, i % cols]
         cs = ax.contour(X, Y, evalxy, colors='gray', alpha=0.6)
+        # ax.contour(X, Y, trim_sdf, colors='red', alpha=0.6)
         ax.plot(x, y, color=color, label=f'poly{i + 1} curve', linewidth=2)
         plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
     # 在一个子图中绘制所有拟合曲线
@@ -112,19 +121,14 @@ if __name__ == '__main__':
         ax_fit.grid(color='gray', linestyle='--', linewidth=0.5)
 
     integrated_sdf = combined_r_function_n(sdf_results)
-    size = 50
-    x = np.linspace(-size, size, 100)
-    y = np.linspace(-size, size, 100)
-    X, Y = np.meshgrid(x, y)
-    plt.legend()
-
-    cs = plt.contour(X, Y, integrated_sdf, levels=50, cmap='coolwarm')
+    integrated_sdf = normalize_sdf(integrated_sdf)
+    cs = plt.contour(X, Y, integrated_sdf, cmap='coolwarm')
     plt.colorbar()
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.axis('equal')
     plt.title('Integrated SDF Field')
-    plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
+    # plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
 
     plt.tight_layout()
     plt.show()
