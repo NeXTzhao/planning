@@ -159,8 +159,8 @@ import numpy as np
 
 def trim(f, t):
     # return np.sqrt(f ** 2 + (np.abs(t) - t) ** 2 * 0.25)
-    f = normalize_sdf(f)
-    t = normalize_sdf(t)
+    # f = normalize_sdf(f)
+    # t = normalize_sdf(t)
     return np.sqrt(f ** 2 + (np.sqrt(t ** 2 + f ** 4) - t) ** 2 * 0.25)
 
 
@@ -171,8 +171,8 @@ def normalize_sdf(sdf):
 
 
 def combined_r_function_n(sdf_fields, p=2):
-    normalized_sdf_fields = [normalize_sdf(sdf) for sdf in sdf_fields]
-
+    # normalized_sdf_fields = [normalize_sdf(sdf) for sdf in sdf_fields]
+    normalized_sdf_fields=sdf_fields
     result = normalized_sdf_fields[0]
     for sdf in normalized_sdf_fields[1:]:
         denominator = np.sqrt((result ** p + sdf ** p) + 1e-6)
@@ -180,7 +180,7 @@ def combined_r_function_n(sdf_fields, p=2):
     return result
 
 
-def create_rectangle_sdf(lower, upper, sample, p1, p2, p3, p4):
+def create_rectangle_sdf(X, Y, p1, p2, p3, p4):
     def sdf_line_segment(x, y, start_point, end_point):
         # Calculate line segment SDF
         # v = p2 - p1
@@ -219,14 +219,9 @@ def create_rectangle_sdf(lower, upper, sample, p1, p2, p3, p4):
     #     return sdf_a + sdf_b - denominator
     #     # return np.sqrt(sdf_a ** 2 + (np.abs(sdf_b) - sdf_b) ** 2 * 0.25)
     #
-    def r_function(sdf_a, sdf_b, blend):
+    def r_function(sdf_a, sdf_b):
         # 计算 R-合取操作
         return sdf_a + sdf_b - np.sqrt(sdf_a ** 2 + sdf_b ** 2)
-
-    # Generate coordinate grid
-    x = np.linspace(lower, upper, sample)
-    y = np.linspace(lower, upper, sample)
-    X, Y = np.meshgrid(x, y)
 
     # Calculate SDF for four line segments of the rectangle
     sdf_line_segment_1 = sdf_line_segment(X, Y, p1, p2)
@@ -234,20 +229,24 @@ def create_rectangle_sdf(lower, upper, sample, p1, p2, p3, p4):
     sdf_line_segment_3 = sdf_line_segment(X, Y, p3, p4)
     sdf_line_segment_4 = sdf_line_segment(X, Y, p4, p1)
 
+    sdf_line_segment_1 = np.reshape(sdf_line_segment_1, X.shape)
+    sdf_line_segment_2 = np.reshape(sdf_line_segment_2, X.shape)
+    sdf_line_segment_3 = np.reshape(sdf_line_segment_3, X.shape)
+    sdf_line_segment_4 = np.reshape(sdf_line_segment_4, X.shape)
     # Use R function to blend the SDF fields
-    result_sdf = r_function(sdf_line_segment_1, sdf_line_segment_2, 0.5)
-    result_sdf = r_function(result_sdf, sdf_line_segment_3, 0.5)
-    result_sdf = r_function(result_sdf, sdf_line_segment_4, 0.5)
+    result_sdf = r_function(sdf_line_segment_1, sdf_line_segment_2)
+    result_sdf = r_function(result_sdf, sdf_line_segment_3)
+    result_sdf = r_function(result_sdf, sdf_line_segment_4)
 
     # Normalize the SDF fields
-    result_sdf = norm_sdf(result_sdf)
+    # result_sdf = norm_sdf(result_sdf)
 
     # Reshape the results
     # sdf_line_segment_1 = np.reshape(sdf_line_segment_1, X.shape)
     # sdf_line_segment_2 = np.reshape(sdf_line_segment_2, X.shape)
     # sdf_line_segment_3 = np.reshape(sdf_line_segment_3, X.shape)
     # sdf_line_segment_4 = np.reshape(sdf_line_segment_4, X.shape)
-    result_sdf = np.reshape(result_sdf, X.shape)
+    # result_sdf = np.reshape(result_sdf, X.shape)
 
     # return X, Y, sdf_line_segment_1, sdf_line_segment_2, sdf_line_segment_3, sdf_line_segment_4, result_sdf
     return result_sdf

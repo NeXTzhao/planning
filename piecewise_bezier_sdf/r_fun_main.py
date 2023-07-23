@@ -1,21 +1,19 @@
 from bezir_to_poly import *
 from implicit_fun import *
-from r_fun import *
 from quadrilateral_sdf import *
+from r_fun import *
 
 # 贝塞尔曲线的参数
-P0 = np.array([5, 3])
-P1 = np.array([3, 5])
-P2 = np.array([1, 3])
-P3 = np.array([4, 2])
+P0 = np.array([4, 2])
+P1 = np.array([1, 3])
+P2 = np.array([2, 5])
+P3 = np.array([5, 6])
 lower = -15
-upper = 15
+upper = 40
 sample = 500
-
-
-def trim(f, t):
-    # return np.sqrt(f ** 2 + (np.abs(t) - t) ** 2 * 0.25)
-    return np.sqrt(f ** 2 + (np.sqrt(t ** 2 + f ** 4) - t) ** 2 * 0.25)
+x_imp = np.linspace(lower, upper, sample)
+y_imp = np.linspace(lower, upper, sample)
+X, Y = np.meshgrid(x_imp, y_imp)
 
 
 def normalize_sdf(sdf):
@@ -27,25 +25,20 @@ def normalize_sdf(sdf):
     return normalized_sdf
 
 
-rectangle_sdf = create_rectangle_sdf(lower, upper, sample, P0, P1, P2, P3)
-rectangle_sdf_normalized = normalize_sdf(rectangle_sdf)
+rectangle_sdf = create_rectangle_sdf(X, Y, P0, P1, P2, P3)
+rectangle_sdf = normalize_sdf(rectangle_sdf)
 
 control_points = [P0, P1, P2, P3]
 px, py, x, y = bezier_to_poly(control_points)
-x_imp = np.linspace(lower, upper, sample)
-y_imp = np.linspace(lower, upper, sample)
-X, Y = np.meshgrid(x_imp, y_imp)
+
 evalxy = implicit_fun(px, py).eval(X, Y)
-evalxy_normalized = normalize_sdf(evalxy)
+evalxy = normalize_sdf(evalxy)
 
 # con_cur = [evalxy, rectangle_sdf]
 # con_cur_sdf = combined_r_function_n(con_cur)
 con_cur_sdf = trim(evalxy, rectangle_sdf)
-con_cur_sdf_normalized = normalize_sdf(con_cur_sdf)
+con_cur_sdf  = normalize_sdf(con_cur_sdf)
 
-x_imp1 = np.linspace(lower, upper, sample)
-y_imp1 = np.linspace(lower, upper, sample)
-X, Y = np.meshgrid(x_imp1, y_imp1)
 # 提取所有 x 和 y 坐标
 x_coords = np.array([point[0] for point in control_points])
 y_coords = np.array([point[1] for point in control_points])
@@ -64,21 +57,21 @@ axes[0, 1].set_ylabel('Y')
 axes[0, 1].legend()
 
 # Plot the isopotential surface of the rectangle SDF
-cs3 = axes[1, 0].contourf(X, Y, rectangle_sdf_normalized, cmap='coolwarm')
+cs3 = axes[1, 0].contourf(X, Y, rectangle_sdf, cmap='coolwarm')
 axes[1, 0].set_xlabel('X')
 axes[1, 0].set_ylabel('Y')
 axes[1, 0].set_title('Rectangle Isopotential Surface')
 plt.colorbar(cs3, ax=axes[1, 0], label='Normalized SDF')
 
 # Plot the isopotential surface of the Bezier curve SDF
-cs1 = axes[1, 1].contourf(X, Y, evalxy_normalized, cmap='coolwarm')
+cs1 = axes[1, 1].contourf(X, Y, evalxy, cmap='coolwarm')
 axes[1, 1].set_xlabel('X')
 axes[1, 1].set_ylabel('Y')
 axes[1, 1].set_title('Bezier Curve Isopotential Surface')
 plt.colorbar(cs1, ax=axes[1, 1], label='Normalized SDF')
 
 # Plot the isopotential surface of the combined SDF
-cs2 = axes[1, 2].contourf(X, Y, con_cur_sdf_normalized, cmap='coolwarm')
+cs2 = axes[1, 2].contourf(X, Y, con_cur_sdf, cmap='coolwarm')
 axes[1, 2].set_xlabel('X')
 axes[1, 2].set_ylabel('Y')
 axes[1, 2].set_title('Combined Isopotential Surface (Normalized)')
@@ -90,4 +83,3 @@ for ax in axes.flat:
 
 plt.tight_layout()
 plt.show()
-

@@ -65,9 +65,9 @@ if __name__ == '__main__':
     end_angle = np.pi / 2  # 终止角度（弧度）
     num_points = 40  # 离散点数量
 
-    points = generate_arc_points(center, start_radius, end_radius, start_angle, end_angle, num_points)
-    curvature = calculate_curvature(points)
-    print('curvature = ', curvature)
+    # points = generate_arc_points(center, start_radius, end_radius, start_angle, end_angle, num_points)
+    # curvature = calculate_curvature(points)
+    # print('curvature = ', curvature)
     points = generate_data_points()
     max_error = 1.5
 
@@ -76,9 +76,9 @@ if __name__ == '__main__':
 
     colors = ['blue', 'orange', 'green', 'purple', 'red', 'yellow']  # 定义颜色列表
 
-    lower = -135
-    upper = 135
-    sample = 100
+    lower = -150
+    upper = 150
+    sample = 300
     x_imp = np.linspace(lower, upper, sample)
     y_imp = np.linspace(lower, upper, sample)
     X, Y = np.meshgrid(x_imp, y_imp)
@@ -92,9 +92,12 @@ if __name__ == '__main__':
         color = colors[i % len(colors)]  # 根据索引选择颜色
         # 计算等值线数据
         evalxy = implicit_fun(px, py).eval(X, Y)
+        evalxy = normalize_sdf(evalxy)
         # sdf_results.append(evalxy)
-        rectangle = create_rectangle_sdf(lower, upper, sample, control_point[0], control_point[1], control_point[2],
+        rectangle = create_rectangle_sdf(X, Y, control_point[0], control_point[1], control_point[2],
                                          control_point[3])
+        # rectangle = normalize_sdf(rectangle)
+
         trim_sdf = trim(evalxy, rectangle)
         # trim_sdf = normalize_sdf(trim_sdf)
         sdf_results.append(trim_sdf)
@@ -122,11 +125,11 @@ if __name__ == '__main__':
 
     integrated_sdf = combined_r_function_n(sdf_results)
     integrated_sdf = normalize_sdf(integrated_sdf)
-    cs = plt.contour(X, Y, integrated_sdf, cmap='coolwarm')
+    cs = plt.contourf(X, Y, integrated_sdf, cmap='coolwarm')
     plt.colorbar()
     plt.xlabel('X')
     plt.ylabel('Y')
-    plt.axis('equal')
+    # plt.axis('equal')
     plt.title('Integrated SDF Field')
     # plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
 
