@@ -1,5 +1,4 @@
 from numpy import *
-from scipy.optimize import minimize
 
 import bezier
 
@@ -18,46 +17,6 @@ def get_fit_curves(control_point, points):
         curve.append(bezier_curve(con, len(points) - 1))
     return curve
 
-
-# def fitCubic(points, leftTangent, rightTangent, error):
-#     bezier_num = []
-#     u = chordLengthParameterize(points)
-#     bezCurve = generateBezier(points, u, leftTangent, rightTangent)
-#     maxError, splitPoint_error = computeMaxError(points, bezCurve, u, error)
-#     print("maxError:", maxError, "splitPoint_error:", splitPoint_error)
-#     curve = bezier_curve(bezCurve, len(points) - 1)
-#     splitPoint_kappa = find_index_exceed_kappa(curve, 0.015)
-#     if splitPoint_kappa > splitPoint_error:
-#         splitPoint = splitPoint_kappa
-#         print('kappa_index = ', splitPoint)
-#     else:
-#         splitPoint = splitPoint_error
-#         print('error_index = ', splitPoint)
-#     # splitPoint = splitPoint_kappa
-#     # 处理前部分点
-#     frontPoint = points[:splitPoint]
-#     front_left_temp = normalize(frontPoint[1] - frontPoint[0])
-#     front_right_temp = normalize(frontPoint[-2] - frontPoint[-1])
-#     remainPoint = points[splitPoint:]
-#     print('rem = ', len(remainPoint))
-#     print('points_len = ', len(points) - 1)
-#     if splitPoint == len(points):
-#         remainPoint = points
-#
-#     if len(remainPoint) > 2:
-#         u = chordLengthParameterize(remainPoint)
-#         left_temp = normalize(remainPoint[1] - remainPoint[0])
-#         right_temp = normalize(remainPoint[-2] - remainPoint[-1])
-#         bezCurve = generateBezier(remainPoint, u, left_temp, right_temp)
-#         curve = bezier_curve(bezCurve, len(remainPoint) - 1)
-#         bezier_num.append(curve)
-#         leftTangent = normalize(curve[splitPoint + 1] - curve[splitPoint - 1])
-#         leftTangent = normalize(remainPoint[1] - remainPoint[0])
-#         bezier_num += fitCubic(remainPoint, leftTangent, rightTangent, error)
-#     else:
-#         bezier_num.append(curve)
-#
-#     return bezier_num
 
 def fitCubic(points, leftTangent, rightTangent, error):
     # Use heuristic if region only has two points in it
@@ -99,51 +58,6 @@ def fitCubic(points, leftTangent, rightTangent, error):
     return beziers
 
 
-def compute_curvature(point1, point2, point3):
-    # 计算三个点形成的曲率
-    x1, y1 = point1
-    x2, y2 = point2
-    x3, y3 = point3
-
-    dx1 = x2 - x1
-    dy1 = y2 - y1
-    dx2 = x3 - x2
-    dy2 = y3 - y2
-
-    numerator = dx1 * dy2 - dx2 * dy1
-    denominator = (dx1 ** 2 + dy1 ** 2) ** 1.5
-    curvature = numerator / denominator
-
-    return curvature
-
-
-def compute_curve_curvature(curve):
-    num_points = len(curve)
-    curvatures = []
-
-    for i in range(num_points):
-        if i == 0:
-            curvature = compute_curvature(curve[i], curve[i + 1], curve[i + 2])
-        elif i == num_points - 1:
-            curvature = compute_curvature(curve[i - 2], curve[i - 1], curve[i])
-        else:
-            curvature = compute_curvature(curve[i - 1], curve[i], curve[i + 1])
-
-        curvatures.append(curvature)
-
-    return curvatures
-
-
-def find_index_exceed_kappa(curve, threshold):
-    curvatures = compute_curve_curvature(curve)
-
-    for i, kappa in enumerate(curvatures):
-        # print('kappa = ', kappa)
-        if kappa > threshold:
-            return i
-    return -1
-
-
 def calculate_max_error(point, curve_points):
     max_error = 0.0
     max_error_index = None
@@ -156,20 +70,6 @@ def calculate_max_error(point, curve_points):
             max_error_index = i
 
     return max_error, max_error_index
-
-
-def find_curvature_threshold_index(curve, threshold):
-    print('len()curve :', len(curve))
-    for i in range(1, len(curve) - 1):
-        # print('curve :', curve[i - 1])
-        curvature = compute_curvature(curve[i - 1], curve[i], curve[i + 1])
-        # print('kappa = ', curvature)
-        if curvature > 0.1:
-            print('i = ', i)
-            return i
-
-    # 如果没有满足阈值条件的点，则返回 -1 表示未找到
-    return -1
 
 
 def bezier_curve(control_points, num_points):
@@ -310,33 +210,3 @@ def normalize(v):
 
 def distance_squared(p1, p2):
     return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
-
-def computeMaxError1(points, bez, u):
-    # 定义用于最小化的距离函数
-    def distance_to_bezier(t, Q_point):
-        B = bezier.q(bez, t)
-        return distance_squared(B, Q_point)
-
-    max_distance = 0
-    max_distance_index = len(points) / 2
-    for i, point in enumerate(points):
-        result = minimize(distance_to_bezier, x0=u[0], bounds=[(u[0], u[-1])], args=(point,))
-        t_min_distance = result.x[0]
-        B_min_distance = bezier.q(bez, t_min_distance, )
-        dist = distance_squared(B_min_distance, point)
-
-        # 如果当前点的距离更大，则更新最大距离和索引
-        print('dist', i, '=', dist, ',max_distance', i, '=', max_distance, ',max_distance_index', i, '=',
-              max_distance_index)
-
-        # if dist < error:
-        if dist >= max_distance:
-            max_distance = dist
-            max_distance_index = i
-        # else:
-        #     return max_distance, max_distance_index
-
-        if max_distance_index == len(points) - 1:
-            max_distance_index = len(points) - 2
-    return max_distance, max_distance_index

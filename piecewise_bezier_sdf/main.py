@@ -1,10 +1,9 @@
+import matplotlib.pyplot as plt
+
 from bezir_to_poly import *
 from fitCurves import *
 from implicit_fun import *
 from quadrilateral_sdf import *
-
-
-# from r_fun import *
 
 
 def generate_data_points():
@@ -70,7 +69,6 @@ if __name__ == '__main__':
     # print('curvature = ', curvature)
     points = generate_data_points()
     max_error = 1.5
-
     # 拟合曲线
     control_points, curves = fitCurve(points, max_error)
 
@@ -78,42 +76,55 @@ if __name__ == '__main__':
 
     lower = -500
     upper = 500
-    sample = 300
-    x_imp = np.linspace(-120, 120, sample)
-    y_imp = np.linspace(-160, 160, sample)
+    sample = 200
+    x_imp = np.linspace(-130, 130, sample)
+    y_imp = np.linspace(-180, 180, sample)
     X, Y = np.meshgrid(x_imp, y_imp)
     # 设置子图的行数和列数
-    rows = 2
+    rows = 4
     cols = 3
     fig, axes = plt.subplots(rows, cols, figsize=(12, 8))
-    sdf_results = []
-    for i, control_point in enumerate(control_points):
-        px, py, x, y = bezier_to_poly(control_point)
-        color = colors[i % len(colors)]  # 根据索引选择颜色
-        # 计算等值线数据
+    evalxy_list = []
+    rectangle_list = []
+    trim_sdf_list = []
+
+    for control_point in control_points:
+        px, py, x, y, scale = bezier_to_poly(control_point)
+        # Calculate evalxy, rectangle, and trim_sdf
         evalxy = implicit_fun(px, py).eval(X, Y)
         evalxy = normalize_sdf(evalxy)
-        # sdf_results.append(evalxy)
-        rectangle = create_rectangle_sdf(X, Y, control_point[0], control_point[1], control_point[2],
-                                         control_point[3])
+        rectangle = create_rectangle_sdf(X, Y, control_point[0], control_point[1], control_point[2], control_point[3])
         # rectangle = normalize_sdf(rectangle)
-
         trim_sdf = trim(evalxy, rectangle)
-        trim_sdf = normalize_sdf(trim_sdf)
-        sdf_results.append(trim_sdf)
+        # trim_sdf = normalize_sdf(trim_sdf)
 
-        # 在对应的子图中绘制等值线和拟合曲线
-        ax = axes[i // cols, i % cols]
-        cs = ax.contour(X, Y, trim_sdf, colors='gray', alpha=0.6)
-        # ax.contour(X, Y, trim_sdf, colors='red', alpha=0.6)
-        # ax.plot(x, y, color=color, label=f'poly{i + 1} curve', linewidth=2)
-        plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
+        # trim_sdf = trim_sdf * scale
+
+        # Append the results to the lists
+        evalxy_list.append(evalxy)
+        rectangle_list.append(rectangle)
+        trim_sdf_list.append(trim_sdf)
+
+    # Plot the results for each segment
+    for i, (evalxy, rectangle, trim_sdf) in enumerate(zip(evalxy_list, rectangle_list, trim_sdf_list)):
+        ax = axes[0, i]
+        ax1 = axes[1, i]
+        ax2 = axes[2, i]
+
+        cs = ax.contourf(X, Y, evalxy)
+        cs1 = ax1.contourf(X, Y, rectangle)
+        cs2 = ax2.contourf(X, Y, trim_sdf)
+
+        # fig.colorbar(cs, ax=ax)
+        # fig.colorbar(cs1, ax=ax1)
+        # fig.colorbar(cs2, ax=ax2)
+
     # 在一个子图中绘制所有拟合曲线
-    ax_fit = axes[1, 1]
+    ax_fit = axes[3, 1]
     ax_fit.scatter(points[:, 0], points[:, 1], c='red', marker='o', edgecolor='black', s=30, label='Original Points')
 
     for i, control_point in enumerate(control_points):
-        px, py, x, y = bezier_to_poly(control_point)
+        px, py, x, y, scale = bezier_to_poly(control_point)
         color = colors[i % len(colors)]  # 根据索引选择颜色
         label = f'poly_Curve {i + 1}'
         ax_fit.plot(x, y, color=color, label=label, linewidth=2, linestyle='-', alpha=0.8)
@@ -123,18 +134,16 @@ if __name__ == '__main__':
         # 添加网格线
         ax_fit.grid(color='gray', linestyle='--', linewidth=0.5)
 
-    integrated_sdf = combined_r_function_n(sdf_results)
-    integrated_sdf = normalize_sdf(integrated_sdf)
+    x_max = np.min(X)
+    integrated_sdf = combined_r_function_n(trim_sdf_list)
 
     # for ax in axes.flat:
     #     ax.set_aspect('equal')
-    cs = plt.contourf(X, Y, integrated_sdf, cmap='coolwarm')
+    cs = plt.contourf(X, Y, integrated_sdf)
     plt.colorbar()
     plt.xlabel('X')
     plt.ylabel('Y')
-    # plt.axis('equal')
     plt.title('Integrated SDF Field')
-    # plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
 
     plt.tight_layout()
     plt.show()

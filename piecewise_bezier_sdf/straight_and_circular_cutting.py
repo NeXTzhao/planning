@@ -29,7 +29,7 @@ def h(x, y, x1, y1, x2, y2):
     P1 = np.array([3, 5])
     P2 = np.array([1, 3])
     P3 = np.array([4, 2])
-    t = create_rectangle_sdf(X,Y, P0, P1, P2, P3)
+    t = create_rectangle_sdf(X, Y, P0, P1, P2, P3)
     # t = t_fun(x, y, x1, y1, x2, y2)
     f = f_fun(x, y, x1, y1, x2, y2)
     return t, f, np.sqrt(f ** 2 + (np.sqrt(t ** 2 + f ** 4) - t) ** 2 * 0.25)

@@ -32,6 +32,15 @@ def bezier_to_poly(control_points):
     poly_func_x = np.poly1d(poly_coeffs_x)
     poly_func_y = np.poly1d(poly_coeffs_y)
 
+    print('poly_x = ', poly_func_x)
+    print('poly_y = ', poly_func_y)
+
+    x_grad = np.gradient(poly_func_x)[0]
+    y_grad = np.gradient(poly_func_y)[0]
+    scale = 1 / np.hypot(x_grad, y_grad)
+    print('x_grad = ', x_grad)
+    print('y_grad = ', y_grad)
+
     # 参数 t 取值范围为 [0, 1]
     t_poly = np.linspace(0, 1, 100)
 
@@ -41,7 +50,7 @@ def bezier_to_poly(control_points):
     print('coff_x = ', poly_coeffs_x)
     print('coff_y = ', poly_coeffs_y)
 
-    return poly_coeffs_x, poly_coeffs_y, poly_x, poly_y
+    return poly_coeffs_x, poly_coeffs_y, poly_x, poly_y, scale
 
 # 三次贝塞尔曲线的控制点
 # control_point = [

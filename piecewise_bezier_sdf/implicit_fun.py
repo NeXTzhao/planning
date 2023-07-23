@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class implicit_fun:
@@ -33,6 +32,7 @@ class implicit_fun:
                                                  pow(b1, 2) * b2 + pow(b2, 2) * (-b0 + y) + b1 * b3 * (
                                                  -b0 + y))))
         return out / self.scale
+        # return out
 
     def gradx(self, x, y):
         [a3, a2, a1, a0] = self.px
@@ -58,7 +58,6 @@ class implicit_fun:
                   b3, 2) * pow(a0 - x, 2) + a1 * b2 * b3 * (-a0 + x) + 2 * pow(a2, 2) * b2 * (-b0 + y) + a1 * a2 * (
                               b1 * b2 + 6 * b3 * (-b0 + y)))
         return out
-
 
 # # 创建空列表来存储x和y坐标数据
 # xdata = []

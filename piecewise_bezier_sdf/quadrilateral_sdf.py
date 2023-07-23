@@ -171,8 +171,19 @@ def normalize_sdf(sdf):
 
 
 def combined_r_function_n(sdf_fields, p=2):
-    # normalized_sdf_fields = [normalize_sdf(sdf) for sdf in sdf_fields]
-    normalized_sdf_fields=sdf_fields
+    # normalized_sdf_fields = [sdf_norm(sdf) for sdf in sdf_fields]
+    # trim_sdf_array = np.array(sdf_fields)
+    #
+    # # 计算整个 trim_sdf_list 的最大值和最小值
+    # max_value = trim_sdf_array.max()
+    # min_value = trim_sdf_array.min()
+    #
+    # # 进行整体归一化
+    # normalized_trim_sdf_list = (trim_sdf_array - min_value) / (max_value - min_value)
+
+    # 现在 normalized_trim_sdf_list 包含了整体归一化后的 trim_sdf 数据
+
+    normalized_sdf_fields = sdf_fields
     result = normalized_sdf_fields[0]
     for sdf in normalized_sdf_fields[1:]:
         denominator = np.sqrt((result ** p + sdf ** p) + 1e-6)
@@ -182,26 +193,6 @@ def combined_r_function_n(sdf_fields, p=2):
 
 def create_rectangle_sdf(X, Y, p1, p2, p3, p4):
     def sdf_line_segment(x, y, start_point, end_point):
-        # Calculate line segment SDF
-        # v = p2 - p1
-        # w = points - p1
-        #
-        # c1 = np.dot(w, v)
-        # c2 = np.dot(v, v)
-        #
-        # b = c1 / c2
-        #
-        # # Calculate distance from points to the line segment
-        # dist = np.linalg.norm(w - np.outer(b, v), axis=1)
-        #
-        # # Check if points are outside the line segment
-        # mask1 = (c1 <= 0)
-        # mask2 = (c2 <= c1)
-        # dist[mask1] = np.linalg.norm(w[mask1], axis=1)
-        # dist[mask2] = np.linalg.norm(points[mask2] - p2, axis=1)
-        # return dist
-
-        # 计算隐式方程
         xi, yi = start_point
         xi1, yi1 = end_point
         hi = ((x - xi) * (yi1 - yi) - (y - yi) * (xi1 - xi)) / math.sqrt((xi1 - xi) ** 2 + (yi1 - yi) ** 2)
@@ -212,13 +203,6 @@ def create_rectangle_sdf(X, Y, p1, p2, p3, p4):
         min_val = np.min(sdf)
         return (sdf - min_val) / (max_val - min_val)
 
-    # def r_function(sdf_a, sdf_b, blend):
-    #     # R function: blend two SDF fields
-    #     p = 2
-    #     denominator = np.sqrt((sdf_a ** p + sdf_b ** p) + 1e-6)
-    #     return sdf_a + sdf_b - denominator
-    #     # return np.sqrt(sdf_a ** 2 + (np.abs(sdf_b) - sdf_b) ** 2 * 0.25)
-    #
     def r_function(sdf_a, sdf_b):
         # 计算 R-合取操作
         return sdf_a + sdf_b - np.sqrt(sdf_a ** 2 + sdf_b ** 2)
@@ -229,10 +213,10 @@ def create_rectangle_sdf(X, Y, p1, p2, p3, p4):
     sdf_line_segment_3 = sdf_line_segment(X, Y, p3, p4)
     sdf_line_segment_4 = sdf_line_segment(X, Y, p4, p1)
 
-    sdf_line_segment_1 = np.reshape(sdf_line_segment_1, X.shape)
-    sdf_line_segment_2 = np.reshape(sdf_line_segment_2, X.shape)
-    sdf_line_segment_3 = np.reshape(sdf_line_segment_3, X.shape)
-    sdf_line_segment_4 = np.reshape(sdf_line_segment_4, X.shape)
+    # sdf_line_segment_1 = np.reshape(sdf_line_segment_1, X.shape)
+    # sdf_line_segment_2 = np.reshape(sdf_line_segment_2, X.shape)
+    # sdf_line_segment_3 = np.reshape(sdf_line_segment_3, X.shape)
+    # sdf_line_segment_4 = np.reshape(sdf_line_segment_4, X.shape)
     # Use R function to blend the SDF fields
     result_sdf = r_function(sdf_line_segment_1, sdf_line_segment_2)
     result_sdf = r_function(result_sdf, sdf_line_segment_3)
