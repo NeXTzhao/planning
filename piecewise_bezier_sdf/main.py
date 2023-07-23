@@ -76,11 +76,11 @@ if __name__ == '__main__':
 
     colors = ['blue', 'orange', 'green', 'purple', 'red', 'yellow']  # 定义颜色列表
 
-    lower = -150
-    upper = 150
+    lower = -500
+    upper = 500
     sample = 300
-    x_imp = np.linspace(lower, upper, sample)
-    y_imp = np.linspace(lower, upper, sample)
+    x_imp = np.linspace(-120, 120, sample)
+    y_imp = np.linspace(-160, 160, sample)
     X, Y = np.meshgrid(x_imp, y_imp)
     # 设置子图的行数和列数
     rows = 2
@@ -99,14 +99,14 @@ if __name__ == '__main__':
         # rectangle = normalize_sdf(rectangle)
 
         trim_sdf = trim(evalxy, rectangle)
-        # trim_sdf = normalize_sdf(trim_sdf)
+        trim_sdf = normalize_sdf(trim_sdf)
         sdf_results.append(trim_sdf)
 
         # 在对应的子图中绘制等值线和拟合曲线
         ax = axes[i // cols, i % cols]
-        cs = ax.contour(X, Y, evalxy, colors='gray', alpha=0.6)
+        cs = ax.contour(X, Y, trim_sdf, colors='gray', alpha=0.6)
         # ax.contour(X, Y, trim_sdf, colors='red', alpha=0.6)
-        ax.plot(x, y, color=color, label=f'poly{i + 1} curve', linewidth=2)
+        # ax.plot(x, y, color=color, label=f'poly{i + 1} curve', linewidth=2)
         plt.clabel(cs, fmt='%1.1f')  # 添加等值线标签
     # 在一个子图中绘制所有拟合曲线
     ax_fit = axes[1, 1]
@@ -125,6 +125,9 @@ if __name__ == '__main__':
 
     integrated_sdf = combined_r_function_n(sdf_results)
     integrated_sdf = normalize_sdf(integrated_sdf)
+
+    # for ax in axes.flat:
+    #     ax.set_aspect('equal')
     cs = plt.contourf(X, Y, integrated_sdf, cmap='coolwarm')
     plt.colorbar()
     plt.xlabel('X')
