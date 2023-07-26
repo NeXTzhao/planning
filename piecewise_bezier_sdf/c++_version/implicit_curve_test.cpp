@@ -1,9 +1,3 @@
-//
-// Created by vtd on 23-7-24.
-//
-#include "implicit_curve.h"
-#include <iostream>
-
 #include <implicit_curve.h>
 
 #include <memory>
@@ -75,8 +69,6 @@ void generateMeshGrid(double startX, double endX, int numPointsX, double startY,
   }
 }
 
-using namespace hiphi;
-using namespace planning;
 int main() {
   // 调用函数生成弧长数据和坐标数据
   int numPoints = 100;
@@ -94,9 +86,18 @@ int main() {
   auto px = fit->getXFitcoffs();
   auto py = fit->getYFitcoffs();
 
+  px = std::vector<double>{-2, 3, 3, 1};
+  py = std::vector<double>{5.935925e-15, -6.000000e+00, 6.000000e+00, 1.000000e+00};
+
+  std::reverse(px.begin(), px.end());
+  std::reverse(py.begin(), py.end());
+  for (int i = 0; i < px.size(); ++i) {
+    std::cout << "x = " << px[i] << " , "
+              << "y = " << py[i] << '\n';
+  }
   double start = -100.0;
   double end = 100.0;
-  int xnumPoints = 1000;
+  int xnumPoints = 100;
 
   std::vector<std::vector<double>> X;
   std::vector<std::vector<double>> Y;
@@ -107,8 +108,8 @@ int main() {
                                      std::vector<double>(X[0].size(), 0.0));
   auto curve = std::make_shared<Poly_Implicit>(px, py);
 
-  for (size_t i = 0; i < X.size(); ++i) {
-    for (size_t j = 0; j < X[0].size(); ++j) {
+  for (int i = 0; i < X.size(); ++i) {
+    for (int j = 0; j < X[0].size(); ++j) {
       Z[i][j] = curve->eval(X[i][j], Y[i][j]);
     }
   }

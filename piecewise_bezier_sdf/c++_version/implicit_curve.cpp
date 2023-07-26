@@ -2,8 +2,8 @@
 
 #include <algorithm>
 #include <cmath>
-namespace hiphi {
-namespace planning {
+//namespace hiphi {
+//namespace planning {
 CurveFit::CurveFit(const std::vector<double>& sdata,
                    const std::vector<double>& xdata,
                    const std::vector<double>& ydata, int degree)
@@ -45,14 +45,14 @@ void CurveFit::getXYFitData() {
 std::vector<double> CurveFit::cal_coffs(const std::vector<double>& x,
                                         const std::vector<double>& y,
                                         int degree) {
-  int n = x.size();
+  size_t n = x.size();
   int m = degree + 1;
 
   std::vector<double> A((m + 1) * (m + 1), 0.0);
   std::vector<double> B(m + 1, 0.0);
 
   // 构建矩阵A和向量B
-  for (int i = 0; i < n; ++i) {
+  for (size_t i = 0; i < n; ++i) {
     double xi = x[i];
     double yi = y[i];
     double w = 1.0;
@@ -142,7 +142,7 @@ double CurveFit::cal_fit_ydata(double y) const {
 //  sdata_ = s;
 //}
 
-Fxy_Implicit::Fxy_Implicit(const std::vector<double>& px,
+Poly_Implicit::Poly_Implicit(const std::vector<double>& px,
                            const std::vector<double>& py) {
   this->px = px;
   this->py = py;
@@ -154,7 +154,7 @@ Fxy_Implicit::Fxy_Implicit(const std::vector<double>& px,
   scale = std::hypot(dx, dy);
 }
 
-double Fxy_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
+double Poly_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
                                         double x) {
   double result = 0.0;
   int degree = coeffs.size() - 1;
@@ -163,7 +163,8 @@ double Fxy_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
   }
   return result;
 }
-double Fxy_Implicit::eval(double x, double y) {
+
+double Poly_Implicit::eval(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
   double out =
@@ -198,7 +199,7 @@ double Fxy_Implicit::eval(double x, double y) {
   return out / scale;
 }
 
-double Fxy_Implicit::gradx(double x, double y) {
+double Poly_Implicit::gradx(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
   double out =
@@ -219,7 +220,7 @@ double Fxy_Implicit::gradx(double x, double y) {
   return out;
 }
 
-double Fxy_Implicit::grady(double x, double y) {
+double Poly_Implicit::grady(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
   double out =
@@ -238,5 +239,5 @@ double Fxy_Implicit::grady(double x, double y) {
             a1 * a2 * (b1 * b2 + 6 * b3 * (-b0 + y)));
   return out;
 }
-}  // namespace planning
-}  // namespace hiphi
+//}  // namespace planning
+//}  // namespace hiphi

@@ -1,6 +1,24 @@
 from numpy import *
 
-import bezier
+
+# import bezier
+
+
+def q(ctrlPoly, t):
+    return (1.0 - t) ** 3 * ctrlPoly[0] + 3 * (1.0 - t) ** 2 * t * ctrlPoly[1] + 3 * (1.0 - t) * t ** 2 * ctrlPoly[
+        2] + t ** 3 * ctrlPoly[3]
+
+
+# evaluates cubic bezier first derivative at t, return point
+def qprime(ctrlPoly, t):
+    return 3 * (1.0 - t) ** 2 * (ctrlPoly[1] - ctrlPoly[0]) + 6 * (1.0 - t) * t * (
+            ctrlPoly[2] - ctrlPoly[1]) + 3 * t ** 2 * (ctrlPoly[3] - ctrlPoly[2])
+
+
+# evaluates cubic bezier second derivative at t, return point
+def qprimeprime(ctrlPoly, t):
+    return 6 * (1.0 - t) * (ctrlPoly[2] - 2 * ctrlPoly[1] + ctrlPoly[0]) + 6 * (t) * (
+            ctrlPoly[3] - 2 * ctrlPoly[2] + ctrlPoly[1])
 
 
 def fitCurve(points, maxError):
@@ -19,22 +37,18 @@ def get_fit_curves(control_point, points):
 
 
 def fitCubic(points, leftTangent, rightTangent, error):
-    # Use heuristic if region only has two points in it
     if len(points) == 2:
         dist = linalg.norm(points[0] - points[1]) / 3.0
         bezCurve = [points[0], points[0] + leftTangent * dist, points[1] + rightTangent * dist, points[1]]
         return [bezCurve]
 
-    # Parameterize points, and attempt to fit curve
     u = chordLengthParameterize(points)
     bezCurve = generateBezier(points, u, leftTangent, rightTangent)
-    # Find max deviation of points to fitted curve
     maxError, splitPoint = computeMaxError(points, bezCurve, u)
 
     if maxError < error:
         return [bezCurve]
 
-    # If error not too large, try some reparameterization and iteration
     if maxError < error ** 2:
         for i in range(20):
             uPrime = reparameterize(bezCurve, points, u)
@@ -44,12 +58,7 @@ def fitCubic(points, leftTangent, rightTangent, error):
                 return [bezCurve]
             u = uPrime
 
-    # Fitting failed -- split at max error point and fit recursively
     beziers = []
-    # if splitPoint == len(points) - 1:
-    #     centerTangent = normalize(points[splitPoint - 1] - points[splitPoint])
-    #     # return beziers
-    # else:
     centerTangent = normalize(points[splitPoint - 1] - points[splitPoint + 1])
 
     beziers += fitCubic(points[:splitPoint + 1], leftTangent, centerTangent, error)
@@ -88,7 +97,6 @@ def binomial_coefficient(n, k):
     return math.factorial(n) / (math.factorial(k) * math.factorial(n - k))
 
 
-# Use least-squares method to find Bezier control points for region.
 def generateBezier(points, parameters, leftTangent, rightTangent):
     bezCurve = [points[0], None, None, points[-1]]
 
@@ -106,24 +114,21 @@ def generateBezier(points, parameters, leftTangent, rightTangent):
         C[1][0] += dot(A[i][0], A[i][1])
         C[1][1] += dot(A[i][1], A[i][1])
 
-        tmp = point - bezier.q([points[0], points[0], points[-1], points[-1]], u)
+        tmp = point - q([points[0], points[0], points[-1], points[-1]], u)
 
         X[0] += dot(A[i][0], tmp)
         X[1] += dot(A[i][1], tmp)
 
-    # Compute the determinants of C and X
     det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1]
     det_C0_X = C[0][0] * X[1] - C[1][0] * X[0]
     det_X_C1 = X[0] * C[1][1] - X[1] * C[0][1]
 
-    # Finally, derive alpha values
     alpha_l = 0.0 if det_C0_C1 == 0 else det_X_C1 / det_C0_C1
     alpha_r = 0.0 if det_C0_C1 == 0 else det_C0_X / det_C0_C1
 
     segLength = linalg.norm(points[0] - points[-1])
     epsilon = 1.0e-6 * segLength
     if alpha_l < epsilon or alpha_r < epsilon:
-        # fall back on standard (probably inaccurate) formula, and subdivide further if needed.
         bezCurve[1] = bezCurve[0] + leftTangent * (segLength / 3.0)
         bezCurve[2] = bezCurve[3] + rightTangent * (segLength / 3.0)
 
@@ -134,32 +139,15 @@ def generateBezier(points, parameters, leftTangent, rightTangent):
     return bezCurve
 
 
-def generateBezier1(points, parameters, leftTangent, rightTangent):
-    bezCurve = [points[0], None, points[-1]]
-
-    segLength = linalg.norm(points[0] - points[-1])
-    epsilon = 1.0e-6 * segLength
-
-    alpha_l = linalg.norm(leftTangent) / segLength
-    alpha_r = linalg.norm(rightTangent) / segLength
-
-    if alpha_l < epsilon or alpha_r < epsilon:
-        bezCurve[1] = bezCurve[0] + leftTangent * (segLength / 3.0)
-    else:
-        bezCurve[1] = bezCurve[0] + leftTangent * alpha_l
-
-    return bezCurve
-
-
 def reparameterize(bezier, points, parameters):
     return [newtonRaphsonRootFind(bezier, point, u) for point, u in zip(points, parameters)]
 
 
 def newtonRaphsonRootFind(bez, point, u):
-    d = bezier.q(bez, u) - point
+    d = q(bez, u) - point
 
-    numerator = (d * bezier.qprime(bez, u)).sum()
-    denominator = (bezier.qprime(bez, u) ** 2 + d * bezier.qprimeprime(bez, u)).sum()
+    numerator = (d * qprime(bez, u)).sum()
+    denominator = (qprime(bez, u) ** 2 + d * qprimeprime(bez, u)).sum()
 
     if denominator == 0.0:
         return u
@@ -168,15 +156,10 @@ def newtonRaphsonRootFind(bez, point, u):
 
 
 def chordLengthParameterize(points):
-    # 初始化参数列表，第一个点的参数值为0.0
     u = [0.0]
-
-    # 计算相邻点之间的弦长并累积得到每个点的参数值
     for i in range(1, len(points)):
-        # linalg.norm(points[i] - points[i - 1]) 计算两个点之间的欧几里得距离，即弦长
         u.append(u[i - 1] + linalg.norm(points[i] - points[i - 1]))
 
-    # 将参数值归一化到[0, 1]的范围内
     for i, _ in enumerate(u):
         u[i] = u[i] / u[-1]
 
@@ -187,20 +170,11 @@ def computeMaxError(points, bez, parameters):
     maxDist = 0.0
     splitPoint = len(points) / 2
 
-    # 对于给定的点和参数列表，遍历每个点及其对应的参数。
     for i, (point, u) in enumerate(zip(points, parameters)):
-        # 使用贝塞尔曲线的控制点bez和参数u，在贝塞尔曲线上计算点P。
-        # bezier.q(bez, u)函数贝塞尔曲线上求点的函数，
-
-        # 计算贝塞尔曲线上的点P与实际点point之间的距离（平方距离）。
-        dist = linalg.norm(bezier.q(bez, u) - point) ** 2
-
-        # 如果当前距离dist大于之前的最大误差maxDist，则更新maxDist和splitPoint。
+        dist = linalg.norm(q(bez, u) - point) ** 2
         if dist > maxDist:
             maxDist = dist
             splitPoint = i
-
-    # 返回最大误差maxDist和对应的分割点splitPoint。
     return maxDist, splitPoint
 
 

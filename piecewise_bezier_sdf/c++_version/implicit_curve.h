@@ -7,8 +7,9 @@
 
 //#include "modules/planning/reference_line/reference_line.h"
 
-namespace hiphi {
-namespace planning {
+//namespace hiphi {
+//namespace planning {
+
 class CurveFit {
  private:
   std::vector<double> sdata_;
@@ -46,8 +47,8 @@ class CurveFit {
   void getXYFitData();
 };
 
-class Fxy_Implicit {
- private:
+class Poly_Implicit {
+ public:
   std::vector<double> px;
   std::vector<double> py;
   double scale{};
@@ -55,13 +56,13 @@ class Fxy_Implicit {
   static double evaluatePolynomial(const std::vector<double> &coeffs, double x);
 
  public:
-  Fxy_Implicit() = default;
-  Fxy_Implicit(const std::vector<double> &px, const std::vector<double> &py);
+  Poly_Implicit() = default;
+  Poly_Implicit(const std::vector<double> &px, const std::vector<double> &py);
 
   double getDistance(double x, double y) { return std::abs(eval(x, y)); }
   double eval(double x, double y);
   double gradx(double x, double y);
   double grady(double x, double y);
 };
-}  // namespace planning
-}  // namespace hiphi
+//}  // namespace planning
+//}  // namespace hiphi

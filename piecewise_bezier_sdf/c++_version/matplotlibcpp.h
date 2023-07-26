@@ -584,7 +584,7 @@ void plot_surface(const std::vector<::std::vector<Numeric>> &x,
 }
 
 template <typename Numeric>
-void contour(const std::vector<::std::vector<Numeric>> &x,
+void *contour(const std::vector<::std::vector<Numeric>> &x,
              const std::vector<::std::vector<Numeric>> &y,
              const std::vector<::std::vector<Numeric>> &z,
              const std::map<std::string, std::string> &keywords = {})
@@ -1380,7 +1380,7 @@ bool plot(const std::vector<NumericX>& x, const std::vector<NumericY>& y, const 
 }
 
 template <typename NumericX, typename NumericY, typename NumericZ>
-bool contour(const std::vector<NumericX>& x, const std::vector<NumericY>& y,
+void *contour(const std::vector<NumericX>& x, const std::vector<NumericY>& y,
              const std::vector<NumericZ>& z,
              const std::map<std::string, std::string>& keywords = {}) {
     assert(x.size() == y.size() && x.size() == z.size());

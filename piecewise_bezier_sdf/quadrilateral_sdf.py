@@ -161,6 +161,8 @@ def trim(f, t):
     # return np.sqrt(f ** 2 + (np.abs(t) - t) ** 2 * 0.25)
     # f = normalize_sdf(f)
     # t = normalize_sdf(t)
+    print('f = ', f)
+    print('t = ', t)
     return np.sqrt(f ** 2 + (np.sqrt(t ** 2 + f ** 4) - t) ** 2 * 0.25)
 
 
@@ -183,11 +185,14 @@ def combined_r_function_n(sdf_fields, p=2):
 
     # 现在 normalized_trim_sdf_list 包含了整体归一化后的 trim_sdf 数据
 
-    normalized_sdf_fields = sdf_fields
+    normalized_sdf_fields = sdf_fields.copy()
     result = normalized_sdf_fields[0]
+
     for sdf in normalized_sdf_fields[1:]:
-        denominator = np.sqrt((result ** p + sdf ** p) + 1e-6)
+        sum_powers = result ** p + sdf ** p
+        denominator = sum_powers ** (1 / p)
         result = result + sdf - denominator
+
     return result
 
 

@@ -1,18 +1,22 @@
-//
-// Created by vtd on 23-7-24.
-//
+#include "iostream"
+#include "matplotlibcpp.h"
 #include "piecewise_bezier_curve.h"
 #include "vector"
-#include "iostream"
 
+namespace plt = matplotlibcpp;
 int main() {
-  // 示例用法
-  Point2 points[] = {{0.0, 0.0}, {1.0, 1.5}, {2.0, 2.0}, {3.0, 1.0}, {4.0, 0.5}};
-  int numPoints = sizeof(points) / sizeof(points[0]);
+  std::vector<Point2> points = {
+      {0.0, 0.0},
+      {0.0, 0.5},
+      {1.1, 1.4},
+      {2.1, 1.6},
+      {3.2, 1.1},
+      {4.0, 0.2},
+      {4.0, 0.0}};
+  double error = 4.0;
 
-  double errorThreshold = 0.1; // 设置拟合误差阈值
-  BezierFitting bezierFitting(errorThreshold);
-  bezierFitting.FitCurve(points, numPoints);
+  BezierFitting bezierFitting(points, error);
+  bezierFitting.DrawBezierCurve(4);
 
   return 0;
 }
