@@ -1,394 +1,245 @@
 #include "piecewise_bezier_curve.h"
 #include <cmath>
-#include <iostream>
 
-BezierFitting::BezierFitting(const std::vector<Point2> &points, double error) : tolerance(error) {
-  FitCurve(points, points.size(), error);
+BezierFitter::Point operator+(const BezierFitter::Point &p1, const BezierFitter::Point &p2) {
+  return {p1.x + p2.x, p1.y + p2.y};
 }
 
-BezierCurve BezierFitting::GenerateBezier(Point2 *d,
-                                          int first, int last,
-                                          double *uPrime,
-                                          Vector2 tHat1, Vector2 tHat2) {
-  int i;
-
-  Vector2 A[MAXPOINTS][2]; /* Precomputed rhs for eqn	*/
-  int nPts;                /* Number of pts in sub-curve */
-  double C[2][2];          /* Matrix C		*/
-  double X[2];             /* Matrix X			*/
-  double det_C0_C1,        /* Determinants of matrices	*/
-      det_C0_X, det_X_C1;
-  double alpha_l, /* Alpha values, left and right	*/
-      alpha_r;
-  Vector2 tmp;          /* Utility variable		*/
-  BezierCurve bezCurve; /* RETURN bezier curve ctl pts	*/
-  double segLength;
-  double epsilon;
-
-  bezCurve = (Point2 *) malloc(4 * sizeof(Point2));
-  nPts = last - first + 1;
-
-  /* Compute the A's	*/
-  for (i = 0; i < nPts; i++) {
-    Vector2 v1, v2;
-    v1 = tHat1;
-    v2 = tHat2;
-    V2Scale(&v1, B1(uPrime[i]));
-    V2Scale(&v2, B2(uPrime[i]));
-    A[i][0] = v1;
-    A[i][1] = v2;
-  }
-
-  /* Create the C and X matrices	*/
-  C[0][0] = 0.0;
-  C[0][1] = 0.0;
-  C[1][0] = 0.0;
-  C[1][1] = 0.0;
-  X[0] = 0.0;
-  X[1] = 0.0;
-
-  for (i = 0; i < nPts; i++) {
-    C[0][0] += V2Dot(&A[i][0], &A[i][0]);
-    C[0][1] += V2Dot(&A[i][0], &A[i][1]);
-    /*					C[1][0] += V2Dot(&A[i][0], &A[i][1]);*/
-    C[1][0] = C[0][1];
-    C[1][1] += V2Dot(&A[i][1], &A[i][1]);
-
-    tmp =
-        V2SubII(d[first + i],
-                V2AddII(V2ScaleIII(d[first], B0(uPrime[i])),
-                        V2AddII(V2ScaleIII(d[first], B1(uPrime[i])),
-                                V2AddII(V2ScaleIII(d[last], B2(uPrime[i])),
-                                        V2ScaleIII(d[last], B3(uPrime[i]))))));
-
-    X[0] += V2Dot(&A[i][0], &tmp);
-    X[1] += V2Dot(&A[i][1], &tmp);
-  }
-
-  /* Compute the determinants of C and X	*/
-  det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
-  det_C0_X = C[0][0] * X[1] - C[1][0] * X[0];
-  det_X_C1 = X[0] * C[1][1] - X[1] * C[0][1];
-
-  /* Finally, derive alpha values	*/
-  alpha_l = (det_C0_C1 == 0) ? 0.0 : det_X_C1 / det_C0_C1;
-  alpha_r = (det_C0_C1 == 0) ? 0.0 : det_C0_X / det_C0_C1;
-
-  /* If alpha negative, use the Wu/Barsky heuristic (see text) */
-  /* (if alpha is 0, you get coincident control points that lead to
- * divide by zero in any subsequent NewtonRaphsonRootFind() call. */
-  segLength = V2DistanceBetween2Points(&d[last], &d[first]);
-  epsilon = 1.0e-6 * segLength;
-  if (alpha_l < epsilon || alpha_r < epsilon) {
-    /* fall back on standard (probably inaccurate) formula, and subdivide
- * further if needed. */
-    double dist = segLength / 3.0;
-    bezCurve[0] = d[first];
-    bezCurve[3] = d[last];
-    V2Add(&bezCurve[0], V2Scale(&tHat1, dist), &bezCurve[1]);
-    V2Add(&bezCurve[3], V2Scale(&tHat2, dist), &bezCurve[2]);
-    return (bezCurve);
-  }
-
-  /*  First and last control points of the Bezier curve are */
-  /*  positioned exactly at the first and last data points */
-  /*  Control points 1 and 2 are positioned an alpha distance out */
-  /*  on the tangent vectors, left and right, respectively */
-  bezCurve[0] = d[first];
-  bezCurve[3] = d[last];
-  V2Add(&bezCurve[0], V2Scale(&tHat1, alpha_l), &bezCurve[1]);
-  V2Add(&bezCurve[3], V2Scale(&tHat2, alpha_r), &bezCurve[2]);
-  return (bezCurve);
+BezierFitter::Point operator-(const BezierFitter::Point &p1, const BezierFitter::Point &p2) {
+  return {p1.x - p2.x, p1.y - p2.y};
 }
 
-void BezierFitting::DrawBezierCurve(int n) {
-  // Implementation of this function is not provided here.
-  // You'll need to write this yourself based on your requirements.
-  // It could be drawing the Bezier curve using a graphics library or
-  // simply printing the points of the curve, etc.
-  // For testing purposes, you can just output the points to the console.
-  for (int i = 0; i < n; ++i) {
-    std::cout << "x: " << controlPoints[i].x << ", y: " << controlPoints[i].y << std::endl;
-  }
+BezierFitter::Point operator*(double scalar, const BezierFitter::Point &p) {
+  return {scalar * p.x, scalar * p.y};
 }
 
-void BezierFitting::FitCurve(const std::vector<Point2> &d, int nPts, double error) {
-  Vector2 tHat1, tHat2;
-
-  tHat1 = ComputeLeftTangent(d, 0);
-  tHat2 = ComputeRightTangent(d, nPts - 1);
-  FitCubic(d, 0, nPts - 1, tHat1, tHat2, error);
+BezierFitter::Point operator*(const BezierFitter::Point &p, double scalar) {
+  return {scalar * p.x, scalar * p.y};
 }
 
-void BezierFitting::FitCubic(const std::vector<Point2> &d,
-                             int first,
-                             int last,
-                             Vector2 tHat1,
-                             Vector2 tHat2,
-                             double error) {
-  BezierCurve bezCurve;  /* Control points of fitted Bezier curve */
-  std::vector<double> u; /* Parameter values for point  */
-  double *uPrime;        /* Improved parameter values */
-  double maxError;       /* Maximum fitting error	 */
-  int splitPoint;        /* Point to split point set at	 */
-  int nPts;              /* Number of points in subset  */
-  double iterationError; /* Error below which you try iterating  */
-  int maxIterations = 4; /* Max times to try iterating  */
-  Vector2 tHatCenter;    /* Unit tangent vector at splitPoint */
-  int i;
+BezierFitter::BezierFitter(double maxError) : maxError(maxError) {}
 
-  iterationError = error * 4.0; /* fixed issue 23 */
-  nPts = last - first + 1;
-
-  /* Use heuristic if the region only has two points in it */
-  if (nPts == 2) {
-    double dist = V2DistanceBetween2Points(&d[last], &d[first]) / 3.0;
-
-    bezCurve = new Point2[4];
-    bezCurve[0] = d[first];
-    bezCurve[3] = d[last];
-    V2Add(&bezCurve[0], V2Scale(&tHat1, dist), &bezCurve[1]);
-    V2Add(&bezCurve[3], V2Scale(&tHat2, dist), &bezCurve[2]);
-    DrawBezierCurve(3);
-    return;
-  }
-
-  /* Parameterize points and attempt to fit the curve */
-  u = ChordLengthParameterize(d, first, last);
-  bezCurve = GenerateBezier(d, first, last, u, tHat1, tHat2);
-
-  /* Find the max deviation of points to the fitted curve */
-  maxError = ComputeMaxError(d, first, last, bezCurve, u, splitPoint);
-  if (maxError < error) {
-    //    DrawBezierCurve(3);
-    //    delete[] u;
-    return;
-  }
-
-  /* If the error is not too large, try some reparameterization and iteration */
-  if (maxError < iterationError) {
-    for (i = 0; i < maxIterations; i++) {
-      uPrime = Reparameterize(d, first, last, u, bezCurve);
-      delete[] bezCurve;
-      bezCurve = GenerateBezier(d, first, last, uPrime, tHat1, tHat2);
-      maxError = ComputeMaxError(d, first, last, bezCurve, uPrime, splitPoint);
-      if (maxError < error) {
-        DrawBezierCurve(3);
-        delete[] u;
-        delete[] uPrime;
-        return;
-      }
-      delete[] u;
-      u = uPrime;
-    }
-  }
-
-  /* Fitting failed -- split at the max error point and fit recursively */
-  delete[] u;
-  delete[] bezCurve;
-  tHatCenter = ComputeCenterTangent(d, splitPoint);
-  FitCubic(d, first, splitPoint, tHat1, tHatCenter, error);
-  V2Negate(&tHatCenter);
-  FitCubic(d, splitPoint, last, tHatCenter, tHat2, error);
+void BezierFitter::fitCurve(const std::vector<Point> &points) {
+  Point leftTangent = normalize(points[1] - points[0]);
+  Point rightTangent = normalize(points[points.size() - 2] - points[points.size() - 1]);
+  controlPoints = fitCubic(points, leftTangent, rightTangent, maxError);
+  curves = get_fit_curves(controlPoints, points);
 }
 
-std::vector<double> BezierFitting::ChordLengthParameterize(const std::vector<Point2> &d, int first, int last) {
-  int i;
-  std::vector<double> u(last - first + 1);
+std::vector<BezierFitter::Point> BezierFitter::getControlPoints() const {
+  return controlPoints;
+}
 
-  u[0] = 0.0;
-  for (i = first + 1; i <= last; i++) {
-    u[i - first] = u[i - first - 1] + V2DistanceBetween2Points(&d[i], &d[i - 1]);
+std::vector<std::vector<BezierFitter::Point>> BezierFitter::getCurves() const {
+  return curves;
+}
+
+double BezierFitter::dot(const Point &p1, const Point &p2) {
+  return p1.x * p2.x + p1.y * p2.y;
+}
+
+BezierFitter::Point BezierFitter::q(const std::array<Point, 4> &ctrlPoly, double t) {
+  double t_1 = 1.0 - t;
+  return pow(t_1, 3) * ctrlPoly[0] + 3 * pow(t_1, 2) * t * ctrlPoly[1] + 3 * t_1 * pow(t, 2) * ctrlPoly[2] + pow(t, 3) * ctrlPoly[3];
+}
+
+BezierFitter::Point BezierFitter::qprime(const std::array<Point, 4> &ctrlPoly, double t) {
+  double t_1 = 1.0 - t;
+  return 3 * pow(t_1, 2) * (ctrlPoly[1] - ctrlPoly[0]) + 6 * t_1 * t * (ctrlPoly[2] - ctrlPoly[1]) + 3 * pow(t, 2) * (ctrlPoly[3] - ctrlPoly[2]);
+}
+
+BezierFitter::Point BezierFitter::qprimeprime(const std::array<Point, 4> &ctrlPoly, double t) {
+  return 6 * (1.0 - t) * (ctrlPoly[2] - 2 * ctrlPoly[1] + ctrlPoly[0]) + 6 * (t) * (ctrlPoly[3] - 2 * ctrlPoly[2] + ctrlPoly[1]);
+}
+
+BezierFitter::Point BezierFitter::normalize(const Point &v) {
+  double length = sqrt(v.x * v.x + v.y * v.y);
+  return {v.x / length, v.y / length};
+}
+
+std::vector<double> BezierFitter::chordLengthParameterize(const std::vector<Point> &points) {
+  std::vector<double> u;
+  u.push_back(0.0);
+  for (size_t i = 1; i < points.size(); ++i) {
+    double segmentLength = sqrt(pow(points[i].x - points[i - 1].x, 2) + pow(points[i].y - points[i - 1].y, 2));
+    u.push_back(u[i - 1] + segmentLength);
   }
 
-  for (i = first + 1; i <= last; i++) {
-    u[i - first] = u[i - first] / u[last - first];
+  for (size_t i = 0; i < u.size(); ++i) {
+    u[i] /= u.back();
   }
 
   return u;
 }
 
-double *BezierFitting::Reparameterize(const std::vector<Point2> &d,
-                                      int first,
-                                      int last,
-                                      double *u,
-                                      const std::vector<Point2> &bezCurve) {
-  int nPts = last - first + 1;
-  int i;
-  auto *uPrime = new double[nPts];
-
-  for (i = first; i <= last; i++) {
-    uPrime[i - first] = NewtonRaphsonRootFind(bezCurve, d[i], u[i - first]);
+double BezierFitter::binomialCoefficient(int n, int k) {
+  double result = 1.0;
+  for (int i = 1; i <= k; ++i) {
+    result *= (n - i + 1) / static_cast<double>(i);
   }
-  return uPrime;
-}
-
-double BezierFitting::NewtonRaphsonRootFind(const std::vector<Point2> &Q, Point2 P, double u) {
-  double numerator, denominator;
-  std::vector<Point2> Q1(3), Q2(2); /* Q' and Q'' */
-  Point2 Q_u, Q1_u{}, Q2_u{};       /* u evaluated at Q, Q', & Q'' */
-  double uPrime;                    /* Improved u */
-  int i;
-
-  /* Compute Q(u) */
-  Q_u = BezierII(3, Q, u);
-
-  /* Generate control vertices for Q' */
-  for (i = 0; i <= 2; i++) {
-    Q1[i].x = (Q[i + 1].x - Q[i].x) * 3.0;
-    Q1[i].y = (Q[i + 1].y - Q[i].y) * 3.0;
-  }
-
-  /* Generate control vertices for Q'' */
-  for (i = 0; i <= 1; i++) {
-    Q2[i].x = (Q1[i + 1].x - Q1[i].x) * 2.0;
-    Q2[i].y = (Q1[i + 1].y - Q1[i].y) * 2.0;
-  }
-
-  /* Compute Q'(u) and Q''(u) */
-  Q1_u = BezierII(2, Q1, u);
-  Q2_u = BezierII(1, Q2, u);
-
-  /* Compute f(u)/f'(u) */
-  numerator = (Q_u.x - P.x) * (Q1_u.x) + (Q_u.y - P.y) * (Q1_u.y);
-  denominator = (Q1_u.x) * (Q1_u.x) + (Q1_u.y) * (Q1_u.y) + (Q_u.x - P.x) * (Q2_u.x) + (Q_u.y - P.y) * (Q2_u.y);
-
-  /* u = u - f(u)/f'(u) */
-  uPrime = u - (numerator / denominator);
-  return uPrime;
-}
-
-Point2 BezierFitting::BezierII(int degree, const std::vector<Point2> &V, double t) {
-  int i, j;
-  Point2 Q{}; /* Point on curve at parameter t */
-  int n = degree;
-  std::vector<Point2> Vtemp(degree + 1); /* Local copy of control points  */
-
-  for (i = 0; i <= degree; i++) {
-    Vtemp[i] = V[i];
-  }
-
-  /* Triangle computation */
-  for (i = 1; i <= n; i++) {
-    for (j = 0; j <= n - i; j++) {
-      Vtemp[j].x = (1.0 - t) * Vtemp[j].x + t * Vtemp[j + 1].x;
-      Vtemp[j].y = (1.0 - t) * Vtemp[j].y + t * Vtemp[j + 1].y;
-    }
-  }
-
-  Q = Vtemp[0];
-  return Q;
-}
-
-double BezierFitting::B0(double u) {
-  double tmp = 1.0 - u;
-  return (tmp * tmp * tmp);
-}
-
-double BezierFitting::B1(double u) {
-  double tmp = 1.0 - u;
-  return (3 * u * (tmp * tmp));
-}
-
-double BezierFitting::B2(double u) {
-  double tmp = 1.0 - u;
-  return (3 * u * u * tmp);
-}
-
-double BezierFitting::B3(double u) {
-  return (u * u * u);
-}
-
-Vector2 BezierFitting::ComputeLeftTangent(const std::vector<Point2> &d, int end) {
-  Vector2 tHat1;
-
-  tHat1.x = d[end + 1].x - d[end].x;
-  tHat1.y = d[end + 1].y - d[end].y;
-  V2Normalize(&tHat1);
-  return tHat1;
-}
-
-Vector2 BezierFitting::ComputeRightTangent(const std::vector<Point2> &d, int end) {
-  Vector2 tHat2;
-
-  tHat2.x = d[end - 1].x - d[end].x;
-  tHat2.y = d[end - 1].y - d[end].y;
-  V2Normalize(&tHat2);
-  return tHat2;
-}
-
-Vector2 BezierFitting::ComputeCenterTangent(const std::vector<Point2> &d, int center) {
-  Vector2 V1, V2, tHatCenter;
-
-  V1.x = d[center - 1].x - d[center].x;
-  V1.y = d[center - 1].y - d[center].y;
-  V2.x = d[center].x - d[center + 1].x;
-  V2.y = d[center].y - d[center + 1].y;
-  tHatCenter.x = (V1.x + V2.x) / 2.0;
-  tHatCenter.y = (V1.y + V2.y) / 2.0;
-  V2Normalize(&tHatCenter);
-  return tHatCenter;
-}
-
-double BezierFitting::ComputeMaxError(Point2 *d,
-                                      int first, int last,
-                                      BezierCurve bezCurve,
-                                      double *u,
-                                      int *splitPoint) {
-  int i;
-  double maxDist; /* Maximum error */
-  double dist;    /* Current error */
-  Point2 P{};     /* Point on curve */
-  Vector2 v;      /* Vector from point to curve */
-
-  *splitPoint = (last - first + 1) / 2;
-  maxDist = 0.0;
-  for (i = first + 1; i < last; i++) {
-    P = BezierII(3, bezCurve, u[i - first]);
-    v.x = P.x - d[i].x;
-    v.y = P.y - d[i].y;
-    dist = V2SquaredLength(&v);
-    if (dist >= maxDist) {
-      maxDist = dist;
-      splitPoint = i;
-    }
-  }
-  return maxDist;
-}
-
-/* Helper functions for vector operations */
-
-double V2Length(Vector2 *a) {
-  return sqrt(a->x * a->x + a->y * a->y);
-}
-
-double V2DistanceBetween2Points(Point2 *a, Point2 *b) {
-  double dx = a->x - b->x;
-  double dy = a->y - b->y;
-  return sqrt(dx * dx + dy * dy);
-}
-
-void V2Normalize(Vector2 *a) {
-  double len = V2Length(a);
-  if (len != 0.0) {
-    a->x /= len;
-    a->y /= len;
-  }
-}
-
-void V2Add(Vector2 *a, Vector2 *b, Vector2 *result) {
-  result->x = a->x + b->x;
-  result->y = a->y + b->y;
-}
-
-void V2Negate(Vector2 *a) {
-  a->x = -a->x;
-  a->y = -a->y;
-}
-
-Vector2 V2Scale(Vector2 *a, double s) {
-  Vector2 result;
-  result.x = a->x * s;
-  result.y = a->y * s;
   return result;
 }
+
+BezierFitter::Point BezierFitter::generateBezier(const std::array<Point, 4> &bez, const std::vector<double> &parameters, const Point &leftTangent, const Point &rightTangent) {
+  std::array<std::array<Point, 2>, 2> A{};
+  std::array<Point, 2> C{};
+  Point X{};
+
+  for (size_t i = 0; i < parameters.size(); ++i) {
+    double u = parameters[i];
+    double u2 = u * u;
+    double u3 = u2 * u;
+    double oneMinusU = 1.0 - u;
+    double oneMinusU2 = oneMinusU * oneMinusU;
+    double oneMinusU3 = oneMinusU2 * oneMinusU;
+
+    A[0][0] = leftTangent * (3.0 * oneMinusU2);
+    A[0][1] = leftTangent * (3.0 * oneMinusU * u);
+    A[1][0] = rightTangent * (3.0 * u2);
+    A[1][1] = rightTangent * (3.0 * u * oneMinusU);
+
+    C[0] = C[0] + bez[i] * oneMinusU3;
+    C[1] = C[1] + bez[i] * u3;
+
+    X = X + (A[0][0] + A[0][1] + A[1][0] + A[1][1]) * bez[i] * u2;
+  }
+
+  // Calculate the determinant
+  double detA = A[0][0].x * A[1][1].y - A[1][0].x * A[0][1].y;
+
+  // Invert the determinant to calculate alpha values
+  double alpha1 = std::abs(detA) < 1e-6 ? 0.0 : (X.x * A[1][1].y - X.y * A[1][1].x) / detA;
+  double alpha2 = std::abs(detA) < 1e-6 ? 0.0 : (X.y * A[0][0].x - X.x * A[0][0].y) / detA;
+
+  // Calculate the final control points of the cubic Bezier curve
+  std::array<Point, 4> bezCurve = {bez[0], bez[0] + alpha1 * leftTangent, bez[3] + alpha2 * rightTangent, bez[3]};
+
+  return bezCurve[3];
+}
+
+std::vector<BezierFitter::Point> BezierFitter::bezierCurve(const std::vector<Point> &control_points, int num_points) {
+  int n = control_points.size() - 1;
+  std::vector<double> t(num_points);
+  for (int i = 0; i < num_points; ++i) {
+    t[i] = static_cast<double>(i) / (num_points - 1);
+  }
+
+  std::vector<Point> curve_points(num_points, {0.0, 0.0});
+
+  for (int i = 0; i < num_points; ++i) {
+    for (int j = 0; j <= n; ++j) {
+      double coeff = binomialCoefficient(n, j) * pow(1 - t[i], n - j) * pow(t[i], j);
+      curve_points[i] = curve_points[i] + coeff * control_points[j];
+    }
+  }
+
+  return curve_points;
+}
+
+std::vector<BezierFitter::Point> BezierFitter::fitCubic(const std::vector<Point> &points, const Point &leftTangent, const Point &rightTangent, double error) {
+  if (points.size() == 2) {
+    double dist = std::sqrt(std::pow(points[0].x - points[1].x, 2) + std::pow(points[0].y - points[1].y, 2)) / 3.0;
+    Point bezCurve[4] = {points[0], points[0] + dist * leftTangent, points[1] + dist * rightTangent, points[1]};
+    return {bezCurve[0], bezCurve[1], bezCurve[2], bezCurve[3]};
+  }
+
+  std::vector<double> u = chordLengthParameterize(points);
+  Point bezCurve[4] = {points[0], leftTangent, rightTangent, points.back()};
+  double maxError, splitPoint;
+
+  do {
+    maxError = 0.0;
+    splitPoint = points.size() / 2;
+    for (size_t i = 1; i < points.size() - 1; ++i) {
+      Point bez1[4], bez2[4];
+      Point centerTangent = normalize(points[i - 1] - points[i + 1]);
+      bez1[0] = bezCurve[0];
+      bez1[1] = bezCurve[1];
+      bez1[2] = bezCurve[2];
+      bez1[3] = bezCurve[3];
+      bez2[0] = bezCurve[3];
+      bez2[1] = bezCurve[2];
+      bez2[2] = bezCurve[1];
+      bez2[3] = bezCurve[0];
+
+      double uPrime = reparameterize(bez1, points[i], u[i]);
+      Point bez1OnCurve = generateBezier(bez1, {uPrime, 1.0}, bez1[1] - bez1[0], bez1[2] - bez1[3]);
+
+      uPrime = reparameterize(bez2, points[i], 1.0 - u[i]);
+      Point bez2OnCurve = generateBezier(bez2, {uPrime, 1.0}, bez2[1] - bez2[0], bez2[2] - bez2[3]);
+
+      double dist1 = std::sqrt(std::pow(points[i].x - bez1OnCurve.x, 2) + std::pow(points[i].y - bez1OnCurve.y, 2));
+      double dist2 = std::sqrt(std::pow(points[i].x - bez2OnCurve.x, 2) + std::pow(points[i].y - bez2OnCurve.y, 2));
+
+      if (dist1 < dist2) {
+        bezCurve[1] = bez1[1];
+        bezCurve[2] = bez1[2];
+        u[i] = uPrime;
+      } else {
+        bezCurve[1] = bez2[1];
+        bezCurve[2] = bez2[2];
+        u[i] = 1.0 - uPrime;
+      }
+
+      double errorDist = std::sqrt(std::pow(points[i].x - bezCurve[1].x, 2) + std::pow(points[i].y - bezCurve[1].y, 2));
+      if (errorDist > maxError) {
+        maxError = errorDist;
+        splitPoint = i;
+      }
+    }
+  } while (maxError > error);
+
+  std::vector<Point> leftCurve = fitCubic(std::vector<Point>(points.begin(), points.begin() + splitPoint + 1), leftTangent, normalize(bezCurve[2] - bezCurve[1]), error);
+  std::vector<Point> rightCurve = fitCubic(std::vector<Point>(points.begin() + splitPoint, points.end()), normalize(bezCurve[1] - bezCurve[2]), rightTangent, error);
+
+  std::vector<Point> result(leftCurve.begin(), leftCurve.end() - 1);
+  result.insert(result.end(), rightCurve.begin(), rightCurve.end());
+
+  return result;
+}
+
+std::vector<std::vector<BezierFitter::Point>> BezierFitter::get_fit_curves(const std::vector<Point> &control_points, const std::vector<Point> &original_points) {
+  int num_points = original_points.size();
+  std::vector<std::vector<Point>> curves;
+
+  for (size_t i = 0; i < control_points.size() - 1; ++i) {
+    Point left_tangent = (i == 0) ? control_points[i + 1] - control_points[i] : control_points[i] - control_points[i - 1];
+    Point right_tangent = (i == control_points.size() - 2) ? control_points[i + 1] - control_points[i] : control_points[i + 2] - control_points[i + 1];
+    std::vector<Point> curve_points = bezierCurve(control_points.data() + i, 4, num_points, left_tangent, right_tangent);
+    curves.push_back(curve_points);
+  }
+
+  return curves;
+}
+
+std::vector<double> BezierFitter::reparameterize(const std::array<Point, 4>& bezier, const std::vector<Point>& points, const std::vector<double>& parameters) {
+  std::vector<double> newParameters;
+  newParameters.reserve(points.size());
+
+  for (size_t i = 0; i < points.size(); ++i) {
+    double u = parameters[i];
+    Point point = points[i];
+    double newU = newtonRaphsonRootFind(bezier, point, u);
+    newParameters.push_back(newU);
+  }
+
+  return newParameters;
+}
+
+double BezierFitter::newtonRaphsonRootFind(const std::array<Point, 4>& bez, const Point& point, double u) {
+  Point d = q(bez, u) - point;
+  Point qprimeU = qprime(bez, u);
+  Point qprimeprimeU = qprimeprime(bez, u);
+
+  double numerator = d.x * qprimeU.x + d.y * qprimeU.y;
+  double denominator = qprimeU.x * qprimeU.x + qprimeU.y * qprimeU.y + d.x * qprimeprimeU.x + d.y * qprimeprimeU.y;
+
+  if (std::abs(denominator) < 1e-6) {
+    return u;
+  } else {
+    return u - numerator / denominator;
+  }
+}
+
+
+// Rest of the private member functions implementation

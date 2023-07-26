@@ -1,9 +1,6 @@
 from numpy import *
 
 
-# import bezier
-
-
 def q(ctrlPoly, t):
     return (1.0 - t) ** 3 * ctrlPoly[0] + 3 * (1.0 - t) ** 2 * t * ctrlPoly[1] + 3 * (1.0 - t) * t ** 2 * ctrlPoly[
         2] + t ** 3 * ctrlPoly[3]
