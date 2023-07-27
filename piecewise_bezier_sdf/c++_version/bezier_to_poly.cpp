@@ -3,7 +3,7 @@
 #include <cmath>
 #include <numeric>
 
-Bezier2Poly::Bezier2Poly(const std::vector<Point> &controlPoints)
+Bezier2Poly::Bezier2Poly(const std::array<Point, 4> &controlPoints)
     : controlPoints_(controlPoints) {
   tValues_ = linspace(0.0, 1.0, 50);
   calculateBasisFunctions();

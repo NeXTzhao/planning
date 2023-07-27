@@ -12,7 +12,7 @@ struct Point {
 };
 class Bezier2Poly {
  public:
-  explicit Bezier2Poly(const std::vector<Point> &controlPoints);
+  explicit Bezier2Poly(const std::array<Point, 4> &controlPoints);
 
   std::vector<double> getXCoefficients() const;
   std::vector<double> getYCoefficients() const;
@@ -20,7 +20,7 @@ class Bezier2Poly {
   double getScale() const;
 
  private:
-  std::vector<Point> controlPoints_;
+  std::array<Point, 4> controlPoints_;
   std::vector<double> tValues_;
   std::vector<double> B0_, B1_, B2_, B3_;
   std::vector<double> poly_coeffs_x_, poly_coeffs_y_;

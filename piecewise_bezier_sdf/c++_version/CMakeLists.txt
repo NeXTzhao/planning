@@ -65,3 +65,12 @@ target_link_libraries(bezier_to_poly PUBLIC matplotlib_cpp)
 
 add_executable(r_fun r_function.cpp r_function.h r_function_test.cpp implicit_curve.cpp bezier_to_poly.cpp)
 target_link_libraries(r_fun PUBLIC matplotlib_cpp)
+
+add_executable(main
+        main.cpp
+        bezier_to_poly.cpp
+        implicit_curve.cpp
+        piecewise_bezier_curve.cpp
+        r_function.cpp
+        )
+target_link_libraries(main PUBLIC matplotlib_cpp)

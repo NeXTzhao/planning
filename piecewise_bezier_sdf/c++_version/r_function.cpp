@@ -1,7 +1,10 @@
 #include "r_function.h"
+
 #include <cmath>
 
-RFunction::RFunction( std::vector<double>& px,  std::vector<double>& py,const std::vector<Point> &control_points):control_points_(control_points){
+RFunction::RFunction(std::vector<double> &px, std::vector<double> &py,
+                     const std::array<Point, 4> &control_points)
+    : control_points_(control_points) {
   std::reverse(px.begin(), px.end());
   std::reverse(py.begin(), py.end());
   implicit_curve_ = std::make_shared<Poly_Implicit>(px, py);
@@ -56,7 +59,6 @@ void RFunction::normalizeSdf(SdfFunction &arr) {
  * @return
  */
 double RFunction::composedSdf(const std::vector<double> &sdf_fields, int p) {
-
   std::vector<double> normalized_sdf_fields = sdf_fields;
   double result = normalized_sdf_fields[0];
 
@@ -70,16 +72,20 @@ double RFunction::composedSdf(const std::vector<double> &sdf_fields, int p) {
   return result;
 }
 
-std::vector<double> RFunction::linspace(double start, double end, size_t numPoints) {
+std::vector<double> RFunction::linspace(double start, double end,
+                                        size_t numPoints) {
   std::vector<double> result(numPoints);
   double step = (end - start) / (numPoints - 1);
   std::iota(result.begin(), result.end(), 0);
-  std::transform(result.begin(), result.end(), result.begin(), [start, step](double index) {
-    return start + index * step;
-  });
+  std::transform(result.begin(), result.end(), result.begin(),
+                 [start, step](double index) { return start + index * step; });
   return result;
 }
 
+void fun(const std::vector<std::array<Point, 4>> &control_points) {
+  for (const auto &con_pt : control_points) {
+  }
+}
 
 double RFunction::trimmingArea(double x, double y) const {
   double x1 = control_points_[0].x;
@@ -93,39 +99,90 @@ double RFunction::trimmingArea(double x, double y) const {
 
   double x4 = control_points_[3].x;
   double y4 = control_points_[3].y;
-//  贝塞尔凸包等势面
+  //  贝塞尔凸包等势面
+  double sdf_map_time = clock();
+
   double t =
-      (-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2))/(Power(-x1 + x2,2) + Power(-y1 + y2,2)) +
-      (-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3))/(Power(-x2 + x3,2) + Power(-y2 + y3,2)) -
-      Sqrt(Power(-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2),2)/Power(Power(-x1 + x2,2) + Power(-y1 + y2,2),2) +
-           Power(-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3),2)/Power(Power(-x2 + x3,2) + Power(-y2 + y3,2),2)) +
-      (-((x1 - x4)*(y - y4)) + (x - x4)*(y1 - y4))/(Power(x1 - x4,2) + Power(y1 - y4,2)) +
-      (-((-x3 + x4)*(y - y3)) + (x - x3)*(-y3 + y4))/(Power(-x3 + x4,2) + Power(-y3 + y4,2)) -
-      Sqrt(Power((-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2))/(Power(-x1 + x2,2) + Power(-y1 + y2,2)) +
-                     (-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3))/(Power(-x2 + x3,2) + Power(-y2 + y3,2)) -
-                     Sqrt(Power(-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2),2)/Power(Power(-x1 + x2,2) + Power(-y1 + y2,2),2) +
-                          Power(-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3),2)/Power(Power(-x2 + x3,2) + Power(-y2 + y3,2),2)),2) +
-           Power(-((-x3 + x4)*(y - y3)) + (x - x3)*(-y3 + y4),2)/Power(Power(-x3 + x4,2) + Power(-y3 + y4,2),2)) -
-      Sqrt(Power(-((x1 - x4)*(y - y4)) + (x - x4)*(y1 - y4),2)/Power(Power(x1 - x4,2) + Power(y1 - y4,2),2) +
-           Power((-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2))/(Power(-x1 + x2,2) + Power(-y1 + y2,2)) +
-                     (-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3))/(Power(-x2 + x3,2) + Power(-y2 + y3,2)) -
-                     Sqrt(Power(-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2),2)/Power(Power(-x1 + x2,2) + Power(-y1 + y2,2),2) +
-                          Power(-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3),2)/Power(Power(-x2 + x3,2) + Power(-y2 + y3,2),2)) +
-                     (-((-x3 + x4)*(y - y3)) + (x - x3)*(-y3 + y4))/(Power(-x3 + x4,2) + Power(-y3 + y4,2)) -
-                     Sqrt(Power((-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2))/(Power(-x1 + x2,2) + Power(-y1 + y2,2)) +
-                                    (-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3))/(Power(-x2 + x3,2) + Power(-y2 + y3,2)) -
-                                    Sqrt(Power(-((-x1 + x2)*(y - y1)) + (x - x1)*(-y1 + y2),2)/Power(Power(-x1 + x2,2) + Power(-y1 + y2,2),2) +
-                                         Power(-((-x2 + x3)*(y - y2)) + (x - x2)*(-y2 + y3),2)/Power(Power(-x2 + x3,2) + Power(-y2 + y3,2),2)),2) +
-                          Power(-((-x3 + x4)*(y - y3)) + (x - x3)*(-y3 + y4),2)/Power(Power(-x3 + x4,2) + Power(-y3 + y4,2),2)),2));
+      (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
+          (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
+      (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
+          (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
+      Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2), 2) /
+               Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
+           Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3), 2) /
+               Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)) +
+      (-((x1 - x4) * (y - y4)) + (x - x4) * (y1 - y4)) /
+          (Power(x1 - x4, 2) + Power(y1 - y4, 2)) +
+      (-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4)) /
+          (Power(-x3 + x4, 2) + Power(-y3 + y4, 2)) -
+      Sqrt(
+          Power((-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
+                        (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
+                    (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
+                        (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
+                    Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2),
+                               2) /
+                             Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
+                         Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3),
+                               2) /
+                             Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)),
+                2) +
+          Power(-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4), 2) /
+              Power(Power(-x3 + x4, 2) + Power(-y3 + y4, 2), 2)) -
+      Sqrt(Power(-((x1 - x4) * (y - y4)) + (x - x4) * (y1 - y4), 2) /
+               Power(Power(x1 - x4, 2) + Power(y1 - y4, 2), 2) +
+           Power(
+               (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
+                       (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
+                   (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
+                       (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
+                   Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2),
+                              2) /
+                            Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
+                        Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3),
+                              2) /
+                            Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)) +
+                   (-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4)) /
+                       (Power(-x3 + x4, 2) + Power(-y3 + y4, 2)) -
+                   Sqrt(Power(
+                            (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
+                                    (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
+                                (-((-x2 + x3) * (y - y2)) +
+                                 (x - x2) * (-y2 + y3)) /
+                                    (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
+                                Sqrt(Power(-((-x1 + x2) * (y - y1)) +
+                                               (x - x1) * (-y1 + y2),
+                                           2) /
+                                         Power(Power(-x1 + x2, 2) +
+                                                   Power(-y1 + y2, 2),
+                                               2) +
+                                     Power(-((-x2 + x3) * (y - y2)) +
+                                               (x - x2) * (-y2 + y3),
+                                           2) /
+                                         Power(Power(-x2 + x3, 2) +
+                                                   Power(-y2 + y3, 2),
+                                               2)),
+                            2) +
+                        Power(-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4),
+                              2) /
+                            Power(Power(-x3 + x4, 2) + Power(-y3 + y4, 2), 2)),
+               2));
   // 曲线等势面步骤：
   //  1.得到贝塞尔控制点
   //  2.将贝塞尔转化为多项式得到多项式系数，得到曲线等势面
   //  3.输入(x,y)得到计算值
-//  t = t * implicit_curve_->scale;
-  double scale = implicit_curve_->scale;
+  //  t = t * implicit_curve_->scale;
+  //  double scale = implicit_curve_->scale;
+  std::cout << "t time: " << 1000 * (clock() - sdf_map_time) / CLOCKS_PER_SEC
+            << "ms \n";
+  double f_time = clock();
   double f = implicit_curve_->eval(x, y);
-  auto result = trim(f, t)/scale;
-  printf("scale = %f, t = %f, f = %f, result = %f\n", implicit_curve_->scale, t, f, result);
+  std::cout << "f time: " << 1000 * (clock() - f_time) / CLOCKS_PER_SEC
+            << "ms \n";
+
+  auto result = trim(f, t);
+  //  printf("scale = %f, t = %f, f = %f, result = %f\n",
+  //  implicit_curve_->scale, t, f, result);
 
   return result;
 }

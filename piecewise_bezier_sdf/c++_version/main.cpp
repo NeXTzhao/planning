@@ -1,25 +1,22 @@
 //
 // Created by vtd on 23-7-24.
 //
+#include "bezier_to_poly.h"
 #include "implicit_curve.h"
-#include <iostream>
-
-#include <implicit_curve.h>
-
-#include <memory>
-
 #include "matplotlibcpp.h"
+#include "piecewise_bezier_curve.h"
+#include "r_function.h"
+
+#include <iostream>
+#include <memory>
 namespace plt = matplotlibcpp;
 
 // 函数：生成弧长数据和坐标数据
 void generateData(int numPoints, double startAngle, double endAngle,
-                  double radius, std::vector<double> &sdata,
-                  std::vector<double> &xdata, std::vector<double> &ydata) {
-  sdata.resize(numPoints);
-  xdata.resize(numPoints);
-  ydata.resize(numPoints);
+                  double radius,
+                  std::vector<Point> &point) {
+  point.resize(numPoints);
 
-  // 添加数据点
   std::vector<double> tdata(numPoints);
   double angleIncrement = (endAngle - startAngle) / (numPoints - 1);
   for (int i = 0; i < numPoints; ++i) {
@@ -31,16 +28,7 @@ void generateData(int numPoints, double startAngle, double endAngle,
     double t = tdata[i];
     double x = radius * std::cos(t);
     double y = radius * std::sin(t);
-    xdata[i] = x;
-    ydata[i] = y;
-    if (i == 0) {
-      sdata[0] = 0.0;
-    } else {
-      double dx = x - xdata[i - 1];
-      double dy = y - ydata[i - 1];
-      double s = sdata[i - 1] + std::hypot(dx, dy);
-      sdata[i] = s;
-    }
+    point[i] = Point{x, y};
   }
 }
 
@@ -75,28 +63,28 @@ void generateMeshGrid(double startX, double endX, int numPointsX, double startY,
   }
 }
 
-using namespace hiphi;
-using namespace planning;
 int main() {
+  std::vector<Point> points;
+
   // 调用函数生成弧长数据和坐标数据
   int numPoints = 100;
   double startAngle = 0.0;
   double endAngle = M_PI;
   double radius = 100.0;
 
-  std::vector<double> sdata, xdata, ydata;
+  generateData(numPoints, startAngle, endAngle, radius, points);
 
-  generateData(numPoints, startAngle, endAngle, radius, sdata, xdata, ydata);
+  double error = 1;
 
-  auto fit = std::make_unique<CurveFit>(sdata, xdata, ydata, 2);
-  std::vector<double> x_fit, y_fit;
-  fit->getXYFitData(x_fit, y_fit);
-  auto px = fit->getXFitcoffs();
-  auto py = fit->getYFitcoffs();
+  auto pieceBez = std::make_shared<BezierFitter>(points, error);
 
-  double start = -100.0;
-  double end = 100.0;
-  int xnumPoints = 1000;
+  auto control_point = pieceBez->getControlPoints();
+
+  auto curve_points = pieceBez->getPiecewiseBezierCurves();
+
+  double start = -300.0;
+  double end = 300.0;
+  int xnumPoints = 100;
 
   std::vector<std::vector<double>> X;
   std::vector<std::vector<double>> Y;
@@ -105,31 +93,43 @@ int main() {
 
   std::vector<std::vector<double>> Z(X.size(),
                                      std::vector<double>(X[0].size(), 0.0));
-  auto curve = std::make_shared<Poly_Implicit>(px, py);
-
-  for (size_t i = 0; i < X.size(); ++i) {
-    for (size_t j = 0; j < X[0].size(); ++j) {
-      Z[i][j] = curve->eval(X[i][j], Y[i][j]);
-    }
-  }
-
-  std::cout << "get dis = " << std::abs(curve->eval(0, 100)) << std::endl;
+  //  for (size_t i = 0; i < X.size(); ++i) {
+  //    for (size_t j = 0; j < X[0].size(); ++j) {
+  //      Z[i][j] = pieceBez->getTrimmingAreas(X[i][j], Y[i][j]);
+  //    }
+  //  }
+  double sdf_map_time = clock();
+  auto dis = std::abs(pieceBez->getSDFDis(50, 32));
+  std::cout << "sdf map time: " << 1000 * (clock() - sdf_map_time) / CLOCKS_PER_SEC << "ms \n";
+  std::cout << "dis = " << dis << std::endl;
   /**************************************************/
-  plt::figure();
-
-  plt::subplot(1, 2, 1);
-  plt::named_plot("raw", xdata, ydata, "r.");
-  plt::named_plot("fit_curve", x_fit, y_fit, "b-");
-  plt::legend();
-  plt::axis("equal");
-  plt::title("fit curve");
-
-  plt::subplot(1, 2, 2);
-  plt::contour(X, Y, Z);
-  plt::axis("equal");
-  plt::title("sdf");
-
-  plt::show();
+  //  std::vector<double> row_x, row_y;
+  //  for (const auto point : points) {
+  //    row_x.push_back(point.x);
+  //    row_y.push_back(point.y);
+  //  }
+  //
+  //  plt::named_plot("row", row_x, row_y, "r.");
+  //
+  //  for (const auto &curve : curve_points) {
+  //    std::vector<double> x, y;
+  //    for (const auto &point : curve) {
+  //      x.push_back(point.x);
+  //      y.push_back(point.y);
+  //    }
+  //    plt::named_plot("curve", x, y, "-");
+  //
+  //    std::vector<double> con_x, con_y;
+  //    for (const auto &con : curve) {
+  //      con_x.push_back(con.x);
+  //      con_y.push_back(con.y);
+  //    }
+  //    plt::named_plot("con_point", con_x, con_y, "*");
+  //  }
+  //  plt::contour(X, Y, Z);
+  //  plt::grid("true");
+  //  plt::legend();
+  //  plt::show();
 
   return 0;
 }

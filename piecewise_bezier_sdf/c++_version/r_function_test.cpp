@@ -35,7 +35,7 @@ void generateMeshGrid(double startX, double endX, int numPointsX, double startY,
 }
 
 int main() {
-  std::vector<Point> control_points = {{1.0, 1.0}, {8.0, 10.0}, {16.0, 10.0}, {32.0, 1.0}};
+  std::array<Point, 4> control_points{{1.0, 1.0}, {8.0, 10.0}, {16.0, 10.0}, {32.0, 1.0}};
   auto beziertopoly = std::make_unique<Bezier2Poly>(control_points);
   auto px = beziertopoly->getXCoefficients();
   auto py = beziertopoly->getYCoefficients();
@@ -89,11 +89,11 @@ int main() {
   plt::named_plot("raw", xdata, ydata, "r.");
   //  plt::named_plot("fit_curve", x_fit, y_fit, "b-");
   plt::legend();
-//  plt::axis("equal");
+  //  plt::axis("equal");
   plt::title("fit curve");
   plt::subplot(1, 2, 2);
   plt::contour(X, Y, Z);
-//  plt::axis("equal");
+  //  plt::axis("equal");
   plt::title("sdf");
 
   plt::show();

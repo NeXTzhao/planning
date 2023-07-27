@@ -4,7 +4,7 @@
 #include <cmath>
 //namespace hiphi {
 //namespace planning {
-CurveFit::CurveFit(const std::vector<double>& sdata,
+PolyCurveFit::PolyCurveFit(const std::vector<double>& sdata,
                    const std::vector<double>& xdata,
                    const std::vector<double>& ydata, int degree)
     : sdata_(sdata),
@@ -28,21 +28,21 @@ CurveFit::CurveFit(const std::vector<double>& sdata,
 //  std::reverse(y_coeffs_.begin(), y_coeffs_.end());
 //}
 
-void CurveFit::getXYFitData(std::vector<double>& x, std::vector<double>& y) {
+void PolyCurveFit::getXYFitData(std::vector<double>& x, std::vector<double>& y) {
   for (double i : sdata_) {
     x.push_back(cal_fit_xdata(i));
     y.push_back(cal_fit_ydata(i));
   }
 }
 
-void CurveFit::getXYFitData() {
+void PolyCurveFit::getXYFitData() {
   for (double i : sdata_) {
     fit_x_data.push_back(cal_fit_xdata(i));
     fit_y_data.push_back(cal_fit_ydata(i));
   }
 }
 
-std::vector<double> CurveFit::cal_coffs(const std::vector<double>& x,
+std::vector<double> PolyCurveFit::cal_coffs(const std::vector<double>& x,
                                         const std::vector<double>& y,
                                         int degree) {
   size_t n = x.size();
@@ -94,7 +94,7 @@ std::vector<double> CurveFit::cal_coffs(const std::vector<double>& x,
   return coefficients;
 }
 
-double CurveFit::cal_fit_xdata(double x) const {
+double PolyCurveFit::cal_fit_xdata(double x) const {
   double result = 0.0;
   double power = 1.0;
   for (double x_coeff : x_coeffs_) {
@@ -104,7 +104,7 @@ double CurveFit::cal_fit_xdata(double x) const {
   return result;
 }
 
-double CurveFit::cal_fit_ydata(double y) const {
+double PolyCurveFit::cal_fit_ydata(double y) const {
   double result = 0.0;
   double power = 1.0;
   for (double y_coeff : y_coeffs_) {

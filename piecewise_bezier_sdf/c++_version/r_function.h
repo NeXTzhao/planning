@@ -22,7 +22,7 @@ using SdfFunction = std::vector<std::vector<double>>;
 class RFunction {
  public:
   RFunction() = default;
-  RFunction(std::vector<double> &px, std::vector<double> &py, const std::vector<Point> &control_points);
+  RFunction(std::vector<double> &px, std::vector<double> &py, const std::array<Point, 4> &control_points);
 
   /**
    * @brief 凸包裁剪等势面
@@ -81,6 +81,6 @@ class RFunction {
   static std::vector<double> linspace(double start, double end, size_t numPoints);
 
  public:
-  std::vector<Point> control_points_;
+  std::array<Point, 4> control_points_;
   std::shared_ptr<Poly_Implicit> implicit_curve_;
 };

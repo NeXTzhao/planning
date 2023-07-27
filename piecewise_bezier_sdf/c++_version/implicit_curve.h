@@ -10,7 +10,7 @@
 //namespace hiphi {
 //namespace planning {
 
-class CurveFit {
+class PolyCurveFit {
  private:
   std::vector<double> sdata_;
   std::vector<double> xdata_;
@@ -35,7 +35,7 @@ class CurveFit {
 //  void setXYSData(const ReferenceLine &ref_line);
 
  public:
-  CurveFit(const std::vector<double> &sdata, const std::vector<double> &xdata,
+  PolyCurveFit(const std::vector<double> &sdata, const std::vector<double> &xdata,
            const std::vector<double> &ydata, int degree);
 //  CurveFit(const ReferenceLine &ref_line, int degree);
 

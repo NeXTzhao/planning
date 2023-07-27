@@ -1,15 +1,17 @@
-#ifndef BEZIERFITTER_H
-#define BEZIERFITTER_H
+#pragma once
 
 #include <array>
+#include <memory>
 #include <vector>
-struct Point {
-  double x, y;
-};
+
+#include "r_function.h"
+//struct Point {
+//  double x, y;
+//};
 
 class BezierFitter {
  public:
-  BezierFitter(const std::vector<Point> &points,double maxError);
+  BezierFitter(const std::vector<Point> &points, double maxError);
 
   void fitCurve(const std::vector<Point> &points);
 
@@ -20,6 +22,9 @@ class BezierFitter {
   double maxError_;
   std::vector<std::array<Point, 4>> controlPoints;
   std::vector<std::vector<Point>> piecewise_bezier_curve;
+
+ public:
+  std::vector<std::shared_ptr<RFunction>> RFuns;
 
   double dot(const Point &p1, const Point &p2);
 
@@ -40,6 +45,5 @@ class BezierFitter {
   double binomial_coefficient(int n, int k);
   std::vector<Point> bezier_curve(const std::array<Point, 4> &control_points, int num_points);
   void generate_bezier_curves(const std::vector<std::array<Point, 4>> &control_points_list, int num_points);
+  double getSDFDis(double x, double y, int p = 2);
 };
-
-#endif// BEZIERFITTER_H

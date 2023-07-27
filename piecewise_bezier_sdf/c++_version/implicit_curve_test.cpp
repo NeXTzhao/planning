@@ -80,7 +80,7 @@ int main() {
 
   generateData(numPoints, startAngle, endAngle, radius, sdata, xdata, ydata);
 
-  auto fit = std::make_unique<CurveFit>(sdata, xdata, ydata, 2);
+  auto fit = std::make_unique<PolyCurveFit>(sdata, xdata, ydata, 2);
   std::vector<double> x_fit, y_fit;
   fit->getXYFitData(x_fit, y_fit);
   auto px = fit->getXFitcoffs();
@@ -116,6 +116,7 @@ int main() {
 
   std::cout << "get dis = " << std::abs(curve->eval(0, 100)) << std::endl;
   /**************************************************/
+
   plt::figure();
 
   plt::subplot(1, 2, 1);

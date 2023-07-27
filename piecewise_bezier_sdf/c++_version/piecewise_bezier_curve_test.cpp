@@ -37,14 +37,12 @@ int main() {
   generateData(numPoints, startAngle, endAngle, radius, points);
 
   double error = 1;
-  //
+
   auto pieceBez = std::make_shared<BezierFitter>(points, error);
 
   auto con = pieceBez->getControlPoints();
 
   auto curve_points = pieceBez->getPiecewiseBezierCurves();
-
-
 
   /********************** plt *************************************/
   std::vector<double> row_x, row_y;

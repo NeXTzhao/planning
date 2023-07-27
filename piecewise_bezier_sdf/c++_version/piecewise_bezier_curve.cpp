@@ -292,3 +292,32 @@ void BezierFitter::generate_bezier_curves(const std::vector<std::array<Point, 4>
   }
   piecewise_bezier_curve = curves;
 }
+
+double BezierFitter::getSDFDis(double x, double y, int p) {
+  std::vector<double> r_res;
+  r_res.reserve(controlPoints.size());
+  double sdf_map_time = clock();
+  for (const auto &con_point : controlPoints) {
+    Bezier2Poly bezier2poly(con_point);
+    auto px = bezier2poly.getXCoefficients();
+    auto py = bezier2poly.getYCoefficients();
+    RFunction r_fun(px, py, con_point);
+    r_res.push_back(r_fun.trimmingArea(x, y));
+//    RFuns.push_back(std::make_shared<RFunction>(r_fun)); // Assuming RFuns is a vector of shared_ptr<RFunction>
+  }
+  std::cout << "com sdf time: " << 1000 * (clock() - sdf_map_time) / CLOCKS_PER_SEC << "ms \n";
+
+  double result = r_res[0];
+
+  double result_pow_p = std::pow(result, p); // Cache result^p
+  for (size_t i = 1; i < r_res.size(); ++i) {
+    double sdf = r_res[i];
+    double sdf_pow_p = std::pow(sdf, p); // Cache sdf^p
+    double sum_powers = result_pow_p + sdf_pow_p;
+    double denominator = std::pow(sum_powers, 1.0 / p);
+    result = result + sdf - denominator;
+    result_pow_p = std::pow(result, p); // Update cached result^p for next iteration
+  }
+
+  return result;
+}
