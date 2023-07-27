@@ -1,22 +1,78 @@
-#include "iostream"
 #include "matplotlibcpp.h"
 #include "piecewise_bezier_curve.h"
-#include "vector"
+#include <memory>
+#include <vector>
 
 namespace plt = matplotlibcpp;
-int main() {
-  std::vector<Point2> points = {
-      {0.0, 0.0},
-      {0.0, 0.5},
-      {1.1, 1.4},
-      {2.1, 1.6},
-      {3.2, 1.1},
-      {4.0, 0.2},
-      {4.0, 0.0}};
-  double error = 4.0;
+// 函数：生成弧长数据和坐标数据
+void generateData(int numPoints, double startAngle, double endAngle,
+                  double radius,
+                  std::vector<Point> &point) {
+  point.resize(numPoints);
 
-  BezierFitting bezierFitting(points, error);
-  bezierFitting.DrawBezierCurve(4);
+  std::vector<double> tdata(numPoints);
+  double angleIncrement = (endAngle - startAngle) / (numPoints - 1);
+  for (int i = 0; i < numPoints; ++i) {
+    double t = startAngle + i * angleIncrement;
+    tdata[i] = t;
+  }
+
+  for (int i = 0; i < numPoints; ++i) {
+    double t = tdata[i];
+    double x = radius * std::cos(t);
+    double y = radius * std::sin(t);
+    point[i] = Point{x, y};
+  }
+}
+
+int main() {
+  std::vector<Point> points;
+
+  // 调用函数生成弧长数据和坐标数据
+  int numPoints = 50;
+  double startAngle = 0.0;
+  double endAngle = M_PI;
+  double radius = 100.0;
+
+  generateData(numPoints, startAngle, endAngle, radius, points);
+
+  double error = 1;
+  //
+  auto pieceBez = std::make_shared<BezierFitter>(points, error);
+
+  auto con = pieceBez->getControlPoints();
+
+  auto curve_points = pieceBez->getPiecewiseBezierCurves();
+
+
+
+  /********************** plt *************************************/
+  std::vector<double> row_x, row_y;
+  for (const auto point : points) {
+    row_x.push_back(point.x);
+    row_y.push_back(point.y);
+  }
+
+  plt::named_plot("row", row_x, row_y, "r.");
+
+  for (const auto &curve : curve_points) {
+    std::vector<double> x, y;
+    for (const auto &point : curve) {
+      x.push_back(point.x);
+      y.push_back(point.y);
+    }
+    plt::named_plot("curve", x, y, "-");
+
+    std::vector<double> con_x, con_y;
+    for (const auto &con : curve) {
+      con_x.push_back(con.x);
+      con_y.push_back(con.y);
+    }
+    plt::named_plot("con_point", con_x, con_y, "*");
+  }
+  plt::grid("true");
+  plt::legend();
+  plt::show();
 
   return 0;
 }

@@ -33,6 +33,22 @@ def get_fit_curves(control_point, points):
     return curve
 
 
+def bezier_curve(control_points, num_points):
+    n = len(control_points) - 1
+    t = linspace(0, 1, num_points)
+    curve_points = zeros((num_points, 2))
+
+    for i in range(num_points):
+        for j in range(n + 1):
+            curve_points[i] += control_points[j] * binomial_coefficient(n, j) * (1 - t[i]) ** (n - j) * t[i] ** j
+
+    return curve_points
+
+
+def binomial_coefficient(n, k):
+    return math.factorial(n) / (math.factorial(k) * math.factorial(n - k))
+
+
 def fitCubic(points, leftTangent, rightTangent, error):
     if len(points) == 2:
         dist = linalg.norm(points[0] - points[1]) / 3.0
@@ -57,7 +73,7 @@ def fitCubic(points, leftTangent, rightTangent, error):
 
     beziers = []
     centerTangent = normalize(points[splitPoint - 1] - points[splitPoint + 1])
-
+    print('center = ', centerTangent)
     beziers += fitCubic(points[:splitPoint + 1], leftTangent, centerTangent, error)
     beziers += fitCubic(points[splitPoint:], -centerTangent, rightTangent, error)
 
@@ -76,18 +92,6 @@ def calculate_max_error(point, curve_points):
             max_error_index = i
 
     return max_error, max_error_index
-
-
-def bezier_curve(control_points, num_points):
-    n = len(control_points) - 1
-    t = linspace(0, 1, num_points)
-    curve_points = zeros((num_points, 2))
-
-    for i in range(num_points):
-        for j in range(n + 1):
-            curve_points[i] += control_points[j] * binomial_coefficient(n, j) * (1 - t[i]) ** (n - j) * t[i] ** j
-
-    return curve_points
 
 
 def binomial_coefficient(n, k):
