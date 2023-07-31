@@ -1,14 +1,23 @@
 #include "bezier_to_poly.h"
 #include <Eigen/Dense>
 #include <cmath>
+#include <iostream>
 #include <numeric>
 
-Bezier2Poly::Bezier2Poly(const std::array<Point, 4> &controlPoints)
-    : controlPoints_(controlPoints) {
-  tValues_ = linspace(0.0, 1.0, 50);
+Bezier2Poly::Bezier2Poly(const std::array<Point, 4> &controlPoints, int degree)
+    : controlPoints4_(controlPoints), degree_(degree) {
+  tValues_ = linspace(0.0, 1.0, 30);
   calculateBasisFunctions();
   calculatePolynomial();
-  calculateGradients();
+  //  calculateGradients();
+}
+
+Bezier2Poly::Bezier2Poly(const std::vector<Point> &controlPoints, int degree)
+    : controlPoints3_(controlPoints), degree_(degree) {
+  tValues_ = linspace(0.0, 1.0, 30);
+  calculateBasisFunctions();
+  calculatePolynomial();
+  //  calculateGradients();
 }
 
 std::vector<double> Bezier2Poly::getXCoefficients() const {
@@ -37,38 +46,74 @@ double Bezier2Poly::getScale() const {
 }
 
 void Bezier2Poly::calculateBasisFunctions() {
-  B0_.resize(tValues_.size());
-  B1_.resize(tValues_.size());
-  B2_.resize(tValues_.size());
-  B3_.resize(tValues_.size());
+  if (degree_ == 3) {
+    B0_.resize(tValues_.size());
+    B1_.resize(tValues_.size());
+    B2_.resize(tValues_.size());
+    B3_.resize(tValues_.size());
 
-  for (size_t i = 0; i < tValues_.size(); ++i) {
-    double t = tValues_[i];
-    B0_[i] = std::pow(1 - t, 3);
-    B1_[i] = 3 * std::pow(1 - t, 2) * t;
-    B2_[i] = 3 * (1 - t) * std::pow(t, 2);
-    B3_[i] = std::pow(t, 3);
+    for (size_t i = 0; i < tValues_.size(); ++i) {
+      double t = tValues_[i];
+      B0_[i] = std::pow(1 - t, 3);
+      B1_[i] = 3 * std::pow(1 - t, 2) * t;
+      B2_[i] = 3 * (1 - t) * std::pow(t, 2);
+      B3_[i] = std::pow(t, 3);
+    }
+  } else if (degree_ == 2) {
+    C0_.resize(tValues_.size());
+    C1_.resize(tValues_.size());
+    C2_.resize(tValues_.size());
+
+    for (size_t i = 0; i < tValues_.size(); ++i) {
+      double t = tValues_[i];
+      C0_[i] = std::pow(1 - t, 2);
+      C1_[i] = 2 * (1 - t) * t;
+      C2_[i] = std::pow(t, 2);
+    }
+  } else {
+    std::cout << " degree_ setting error" << std::endl;
   }
 }
 
 void Bezier2Poly::calculatePolynomial() {
-  std::vector<double> polyX, polyY;
+  if (degree_ == 3) {
+    std::vector<double> polyX, polyY;
 
-  Point P0 = controlPoints_[0];
-  Point P1 = controlPoints_[1];
-  Point P2 = controlPoints_[2];
-  Point P3 = controlPoints_[3];
+    Point P0 = controlPoints4_[0];
+    Point P1 = controlPoints4_[1];
+    Point P2 = controlPoints4_[2];
+    Point P3 = controlPoints4_[3];
 
-  for (size_t i = 0; i < tValues_.size(); ++i) {
-    polyX.push_back(B0_[i] * P0.x + B1_[i] * P1.x + B2_[i] * P2.x + B3_[i] * P3.x);
-    polyY.push_back(B0_[i] * P0.y + B1_[i] * P1.y + B2_[i] * P2.y + B3_[i] * P3.y);
+    for (size_t i = 0; i < tValues_.size(); ++i) {
+      polyX.push_back(B0_[i] * P0.x + B1_[i] * P1.x + B2_[i] * P2.x + B3_[i] * P3.x);
+      polyY.push_back(B0_[i] * P0.y + B1_[i] * P1.y + B2_[i] * P2.y + B3_[i] * P3.y);
+    }
+
+    poly_coeffs_x_ = polynomialFit(tValues_, polyX, 3);
+    poly_coeffs_y_ = polynomialFit(tValues_, polyY, 3);
+
+    polyFuncX_ = polynomialFunction(poly_coeffs_x_);
+    polyFuncY_ = polynomialFunction(poly_coeffs_y_);
+  } else if (degree_ == 2) {
+    std::vector<double> polyX, polyY;
+
+    Point P0 = controlPoints3_[0];
+    Point P1 = controlPoints3_[1];
+    Point P2 = controlPoints3_[2];
+
+    for (size_t i = 0; i < tValues_.size(); ++i) {
+      polyX.push_back(C0_[i] * P0.x + C1_[i] * P1.x + C2_[i] * P2.x);
+      polyY.push_back(C0_[i] * P0.y + C1_[i] * P1.y + C2_[i] * P2.y);
+    }
+
+    poly_coeffs_x_ = polynomialFit(tValues_, polyX, 2);
+    poly_coeffs_y_ = polynomialFit(tValues_, polyY, 2);
+
+    polyFuncX_ = polynomialFunction(poly_coeffs_x_);
+    polyFuncY_ = polynomialFunction(poly_coeffs_y_);
+  } else {
+    std::cout << " degree_ setting error" << std::endl;
   }
-
-  poly_coeffs_x_ = polynomialFit(tValues_, polyX, 3);
-  poly_coeffs_y_ = polynomialFit(tValues_, polyY, 3);
-
-  polyFuncX_ = polynomialFunction(poly_coeffs_x_);
-  polyFuncY_ = polynomialFunction(poly_coeffs_y_);
 }
 
 void Bezier2Poly::calculateGradients() {
@@ -103,7 +148,7 @@ std::vector<double> Bezier2Poly::polynomialFit(const std::vector<double> &x, con
   for (int i = 0; i <= order; ++i) {
     coefficients[i] = coeffs(i);
   }
-//  std::reverse(coefficients.begin(), coefficients.end());
+  //  std::reverse(coefficients.begin(), coefficients.end());
   return coefficients;
 }
 

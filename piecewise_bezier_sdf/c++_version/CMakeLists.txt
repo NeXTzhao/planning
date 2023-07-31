@@ -8,9 +8,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 # 添加Eigen库
 find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
 
-include_directories(.)
+include_directories(
+        .
+        ${EIGEN3_INCLUDE_DIR})
 
 ############################################################################
 # matplotlib-cpp
@@ -48,29 +49,33 @@ install(
 )
 ############################################################################
 
-add_executable(implicit_curve implicit_curve.cpp implicit_curve_test.cpp)
-target_link_libraries(implicit_curve PUBLIC matplotlib_cpp)
-
-add_executable(sdf implicit_curve.cpp main.cpp piecewise_bezier_curve.cpp piecewise_bezier_curve.h)
-target_link_libraries(sdf PUBLIC matplotlib_cpp)
-
-add_executable(bezier_curve bezier.cpp bezier.h bezier_test.cpp)
-target_link_libraries(bezier_curve PUBLIC matplotlib_cpp)
-
-add_executable(piecewise_bezier_curve piecewise_bezier_curve.cpp piecewise_bezier_curve_test.cpp)
-target_link_libraries(piecewise_bezier_curve PUBLIC matplotlib_cpp)
-
-add_executable(bezier_to_poly bezier_to_poly.cpp bezier_to_poly_test.cpp)
-target_link_libraries(bezier_to_poly PUBLIC matplotlib_cpp)
-
-add_executable(r_fun r_function.cpp r_function.h r_function_test.cpp implicit_curve.cpp bezier_to_poly.cpp)
-target_link_libraries(r_fun PUBLIC matplotlib_cpp)
+#add_executable(implicit_curve implicit_curve.cpp implicit_curve_test.cpp)
+#target_link_libraries(implicit_curve PUBLIC matplotlib_cpp)
+#
+#add_executable(sdf implicit_curve.cpp main.cpp piecewise_bezier_curve.cpp piecewise_bezier_curve.h)
+#target_link_libraries(sdf PUBLIC matplotlib_cpp)
+#
+#add_executable(bezier_curve bezier.cpp bezier.h bezier_test.cpp)
+#target_link_libraries(bezier_curve PUBLIC matplotlib_cpp)
+#
+#add_executable(piecewise_bezier_curve piecewise_bezier_curve.cpp piecewise_bezier_curve_test.cpp)
+#target_link_libraries(piecewise_bezier_curve PUBLIC matplotlib_cpp)
+#
+#add_executable(bezier_to_poly bezier_to_poly.cpp bezier_to_poly_test.cpp)
+#target_link_libraries(bezier_to_poly PUBLIC matplotlib_cpp)
+#
+#add_executable(r_fun r_function.cpp r_function.h r_function_test.cpp implicit_curve.cpp bezier_to_poly.cpp)
+#target_link_libraries(r_fun PUBLIC matplotlib_cpp)
 
 add_executable(main
         main.cpp
         bezier_to_poly.cpp
         implicit_curve.cpp
-        piecewise_bezier_curve.cpp
+#        piecewise_bezier_curve.cpp
+        piecewise_bezier_curve2.cpp
         r_function.cpp
         )
 target_link_libraries(main PUBLIC matplotlib_cpp)
+
+add_executable(second_bezier second_bezier.cpp)
+target_link_libraries(second_bezier PUBLIC matplotlib_cpp)

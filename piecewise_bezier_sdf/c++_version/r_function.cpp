@@ -1,9 +1,10 @@
 #include "r_function.h"
 
+#include <chrono>
 #include <cmath>
 
 RFunction::RFunction(std::vector<double> &px, std::vector<double> &py,
-                     const std::array<Point, 4> &control_points)
+                     const std::vector<Point> &control_points)
     : control_points_(control_points) {
   std::reverse(px.begin(), px.end());
   std::reverse(py.begin(), py.end());
@@ -68,7 +69,6 @@ double RFunction::composedSdf(const std::vector<double> &sdf_fields, int p) {
     double denominator = std::pow(sum_powers, 1.0 / p);
     result = result + sdf - denominator;
   }
-
   return result;
 }
 
@@ -82,107 +82,87 @@ std::vector<double> RFunction::linspace(double start, double end,
   return result;
 }
 
-void fun(const std::vector<std::array<Point, 4>> &control_points) {
-  for (const auto &con_pt : control_points) {
-  }
+double RFunction::generateLineSdf(double x, double y, Point &a, Point &b) {
+  double x1 = a.x;
+  double y1 = a.y;
+  double x2 = b.x;
+  double y2 = b.y;
+
+  return (x2 * (-y + y1) + x1 * (y - y2) + x * (-y1 + y2)) / (Power(x1 - x2, 2) + Power(y1 - y2, 2));
 }
 
+double RFunction::composedLineSdf(double sdfA, double sdfB) {
+  return sdfA + sdfB - Sqrt(Power(sdfA, 2) + Power(sdfB, 2));
+}
+
+//double RFunction::getPolygonSdf(double x, double y) const {
+//
+//  auto p0 = control_points_[0];
+//  auto p1 = control_points_[1];
+//  auto p2 = control_points_[2];
+//  auto p3 = control_points_[3];
+//
+//  auto line0 = generateLineSdf(x, y, p0, p1);
+//  auto line1 = generateLineSdf(x, y, p1, p2);
+//  auto line2 = generateLineSdf(x, y, p2, p3);
+//  auto line3 = generateLineSdf(x, y, p3, p0);
+//
+//  auto r1 = composedLineSdf(line0, line1);
+//  auto r2 = composedLineSdf(r1, line2);
+//  auto res = composedLineSdf(r2, line3);
+//  return res;
+//}
+
+// 计算多边形的SDF
+double RFunction::getPolygonSdf(double x, double y) const {
+  double res = 0.0;
+  int num_points = control_points_.size();
+
+  for (int i = 0; i < num_points; i++) {
+    Point p0 = control_points_[i];
+    Point p1 = control_points_[(i + 1) % num_points];// 获取下一个点，形成闭合多边形
+
+    double line_sdf = generateLineSdf(x, y, p0, p1);
+    res = composedLineSdf(res, line_sdf);
+  }
+
+  return res;
+}
+
+/**
+ * @brief 曲线等势面步骤：
+            1.得到贝塞尔控制点
+            2.将贝塞尔转化为多项式得到多项式系数，得到曲线等势面
+            3.输入(x,y)得到计算值
+ * @param x
+ * @param y
+ * @return
+ */
 double RFunction::trimmingArea(double x, double y) const {
-  double x1 = control_points_[0].x;
-  double y1 = control_points_[0].y;
 
-  double x2 = control_points_[1].x;
-  double y2 = control_points_[1].y;
-
-  double x3 = control_points_[2].x;
-  double y3 = control_points_[2].y;
-
-  double x4 = control_points_[3].x;
-  double y4 = control_points_[3].y;
   //  贝塞尔凸包等势面
-  double sdf_map_time = clock();
+  auto scale = implicit_curve_->scale + 1e-6;
+  auto start_t = std::chrono::high_resolution_clock::now();
+  double t = getPolygonSdf(x, y);
+  auto end_t = std::chrono::high_resolution_clock::now();
 
-  double t =
-      (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
-          (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
-      (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
-          (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
-      Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2), 2) /
-               Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
-           Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3), 2) /
-               Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)) +
-      (-((x1 - x4) * (y - y4)) + (x - x4) * (y1 - y4)) /
-          (Power(x1 - x4, 2) + Power(y1 - y4, 2)) +
-      (-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4)) /
-          (Power(-x3 + x4, 2) + Power(-y3 + y4, 2)) -
-      Sqrt(
-          Power((-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
-                        (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
-                    (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
-                        (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
-                    Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2),
-                               2) /
-                             Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
-                         Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3),
-                               2) /
-                             Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)),
-                2) +
-          Power(-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4), 2) /
-              Power(Power(-x3 + x4, 2) + Power(-y3 + y4, 2), 2)) -
-      Sqrt(Power(-((x1 - x4) * (y - y4)) + (x - x4) * (y1 - y4), 2) /
-               Power(Power(x1 - x4, 2) + Power(y1 - y4, 2), 2) +
-           Power(
-               (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
-                       (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
-                   (-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3)) /
-                       (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
-                   Sqrt(Power(-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2),
-                              2) /
-                            Power(Power(-x1 + x2, 2) + Power(-y1 + y2, 2), 2) +
-                        Power(-((-x2 + x3) * (y - y2)) + (x - x2) * (-y2 + y3),
-                              2) /
-                            Power(Power(-x2 + x3, 2) + Power(-y2 + y3, 2), 2)) +
-                   (-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4)) /
-                       (Power(-x3 + x4, 2) + Power(-y3 + y4, 2)) -
-                   Sqrt(Power(
-                            (-((-x1 + x2) * (y - y1)) + (x - x1) * (-y1 + y2)) /
-                                    (Power(-x1 + x2, 2) + Power(-y1 + y2, 2)) +
-                                (-((-x2 + x3) * (y - y2)) +
-                                 (x - x2) * (-y2 + y3)) /
-                                    (Power(-x2 + x3, 2) + Power(-y2 + y3, 2)) -
-                                Sqrt(Power(-((-x1 + x2) * (y - y1)) +
-                                               (x - x1) * (-y1 + y2),
-                                           2) /
-                                         Power(Power(-x1 + x2, 2) +
-                                                   Power(-y1 + y2, 2),
-                                               2) +
-                                     Power(-((-x2 + x3) * (y - y2)) +
-                                               (x - x2) * (-y2 + y3),
-                                           2) /
-                                         Power(Power(-x2 + x3, 2) +
-                                                   Power(-y2 + y3, 2),
-                                               2)),
-                            2) +
-                        Power(-((-x3 + x4) * (y - y3)) + (x - x3) * (-y3 + y4),
-                              2) /
-                            Power(Power(-x3 + x4, 2) + Power(-y3 + y4, 2), 2)),
-               2));
-  // 曲线等势面步骤：
-  //  1.得到贝塞尔控制点
-  //  2.将贝塞尔转化为多项式得到多项式系数，得到曲线等势面
-  //  3.输入(x,y)得到计算值
-  //  t = t * implicit_curve_->scale;
-  //  double scale = implicit_curve_->scale;
-  std::cout << "t time: " << 1000 * (clock() - sdf_map_time) / CLOCKS_PER_SEC
-            << "ms \n";
-  double f_time = clock();
-  double f = implicit_curve_->eval(x, y);
-  std::cout << "f time: " << 1000 * (clock() - f_time) / CLOCKS_PER_SEC
-            << "ms \n";
+  auto start_f = std::chrono::high_resolution_clock::now();
+  double f = implicit_curve_->eval3(x, y);
+  auto end_f = std::chrono::high_resolution_clock::now();
 
+  auto start_trim = std::chrono::high_resolution_clock::now();
   auto result = trim(f, t);
+  auto end_trim = std::chrono::high_resolution_clock::now();
+
+  // 计算执行时间并输出
+  auto duration_t = std::chrono::duration_cast<std::chrono::microseconds>(end_t - start_t).count();
+  auto duration_f = std::chrono::duration_cast<std::chrono::microseconds>(end_f - start_f).count();
+  auto duration_trim = std::chrono::duration_cast<std::chrono::microseconds>(end_trim - start_trim).count();
+
+  //  std::cout << "t time: " << duration_t / 1000.0 << "ms\n";
+  //  std::cout << "f time: " << duration_f / 1000.0 << "ms\n";
+  //  std::cout << "trim time: " << duration_trim / 1000.0 << "ms\n";
   //  printf("scale = %f, t = %f, f = %f, result = %f\n",
-  //  implicit_curve_->scale, t, f, result);
 
   return result;
 }

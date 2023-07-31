@@ -13,18 +13,18 @@ def generate_data_points():
     tdata1 = np.linspace(-60, -10, 5)
     tdata2 = np.linspace(-10, -60, 5)
 
-    for t1 in tdata1:
-        x.append(100)
-        y.append(t1)
+    # for t1 in tdata1:
+    #     x.append(100)
+    #     y.append(t1)
 
     tdata = np.linspace(0, np.pi, 30)
     for t in tdata:
         x.append(100 * np.cos(t))
         y.append(100 * np.sin(t))
 
-    for t2 in tdata2:
-        x.append(-100)
-        y.append(t2)
+    # for t2 in tdata2:
+    #     x.append(-100)
+    #     y.append(t2)
 
     x = x[::-1]
     y = y[::-1]

@@ -22,7 +22,8 @@ using SdfFunction = std::vector<std::vector<double>>;
 class RFunction {
  public:
   RFunction() = default;
-  RFunction(std::vector<double> &px, std::vector<double> &py, const std::array<Point, 4> &control_points);
+  //  RFunction(std::vector<double> &px, std::vector<double> &py, const std::array<Point, 4> &control_points);
+  RFunction(std::vector<double> &px, std::vector<double> &py, const std::vector<Point> &control_points);
 
   /**
    * @brief 凸包裁剪等势面
@@ -79,8 +80,11 @@ class RFunction {
    * @return
    */
   static std::vector<double> linspace(double start, double end, size_t numPoints);
+  static double generateLineSdf(double x, double y, Point &a, Point &b);
 
  public:
-  std::array<Point, 4> control_points_;
+  std::vector<Point> control_points_;
   std::shared_ptr<Poly_Implicit> implicit_curve_;
+  static double composedLineSdf(double sdfA, double sdfB);
+  double getPolygonSdf(double x, double y) const;
 };

@@ -143,15 +143,23 @@ double PolyCurveFit::cal_fit_ydata(double y) const {
 //}
 
 Poly_Implicit::Poly_Implicit(const std::vector<double>& px,
-                           const std::vector<double>& py) {
+                           const std::vector<double>& py, int degree) {
   this->px = px;
   this->py = py;
 
   double x0 = evaluatePolynomial(px, 0.0);
   double y0 = evaluatePolynomial(py, 0.0);
-  double dx = gradx(x0, y0);
-  double dy = grady(x0, y0);
-  scale = std::hypot(dx, dy);
+  if (degree == 3) {
+    double dx = gradx3(x0, y0);
+    double dy = grady3(x0, y0);
+    scale = std::hypot(dx, dy);
+  } else if (degree == 2) {
+    double dx = gradx2(x0, y0);
+    double dy = grady2(x0, y0);
+    scale = std::hypot(dx, dy);
+  } else {
+    std::cout << "degree set error" << std::endl;
+  }
 }
 
 double Poly_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
@@ -163,10 +171,35 @@ double Poly_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
   }
   return result;
 }
+double Poly_Implicit::eval2(double x, double y){
+  double a2 = px[1], a1 = px[2], a0 = px[3];
+  double b2 = py[1], b1 = py[2], b0 = py[3];
 
-double Poly_Implicit::eval(double x, double y) {
+  double out = std::pow(a2,2)*std::pow(b0,2) - a1*a2*b0*b1 + a0*a2*std::pow(b1,2) + std::pow(a1,2)*b0*b2 - 2*a0*a2*b0*b2 - a0*a1*b1*b2 + std::pow(a0,2)*std::pow(b2,2) - a2*std::pow(b1,2)*x +
+      2*a2*b0*b2*x + a1*b1*b2*x - 2*a0*std::pow(b2,2)*x + std::pow(b2,2)*std::pow(x,2) - 2*std::pow(a2,2)*b0*y + a1*a2*b1*y - std::pow(a1,2)*b2*y + 2*a0*a2*b2*y - 2*a2*b2*x*y +
+      std::pow(a2,2)*std::pow(y,2);
+}
+double Poly_Implicit::gradx2(double x, double y) {
+  double a2 = px[1], a1 = px[2], a0 = px[3];
+  double b2 = py[1], b1 = py[2], b0 = py[3];
+  double out =
+      -(a2*std::pow(b1,2)) + 2*a2*b0*b2 + a1*b1*b2 - 2*a0*std::pow(b2,2) + 2*std::pow(b2,2)*x - 2*a2*b2*y;
+  return out;
+}
+double Poly_Implicit::grady2(double x, double y) {
+  double a2 = px[1], a1 = px[2], a0 = px[3];
+  double b2 = py[1], b1 = py[2], b0 = py[3];
+  double out =
+      -2*std::pow(a2,2)*b0 + a1*a2*b1 - std::pow(a1,2)*b2 + 2*a0*a2*b2 - 2*a2*b2*x + 2*std::pow(a2,2)*y;
+  return out;
+}
+
+
+double Poly_Implicit::eval3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
+
+
   double out =
       (b0 - y) * (std::pow(a3, 3) * std::pow(b0 - y, 2) +
                   b3 * (std::pow(a1, 3) * b3 +
@@ -196,10 +229,13 @@ double Poly_Implicit::eval(double x, double y) {
                              2 * std::pow(b3, 2) * (b0 - y)) -
                  a2 * (std::pow(b1, 2) * b2 + std::pow(b2, 2) * (-b0 + y) +
                        b1 * b3 * (-b0 + y))));
+  if (std::abs(scale - 0.0) < 1e-3) {
+    return out;
+  }
   return out / scale;
 }
 
-double Poly_Implicit::gradx(double x, double y) {
+double Poly_Implicit::gradx3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
   double out =
@@ -220,7 +256,7 @@ double Poly_Implicit::gradx(double x, double y) {
   return out;
 }
 
-double Poly_Implicit::grady(double x, double y) {
+double Poly_Implicit::grady3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
   double out =
