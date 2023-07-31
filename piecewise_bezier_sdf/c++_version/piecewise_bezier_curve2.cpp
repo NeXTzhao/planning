@@ -140,17 +140,23 @@ Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(const Eigen::Vector2d &p1,
 }
 
 // 通过梯度下降法找到最佳的中间控制点 P1
-std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint(const std::vector<Point> &point, const std::vector<double> &parameters,const Point &leftTangent, const Point &rightTangent, double learning_rate, int max_iterations) {
+std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint(const std::vector<Point> &control_point, const std::vector<Point> &row_points, const std::vector<double> &parameters, const Point &leftTangent, const Point &rightTangent, double learning_rate, int max_iterations) {
   std::vector<Eigen::Vector2d> points;
-  for (const auto& point : point) {
-    points.push_back(Eigen::Vector2d(point.x, point.y));
+  for (const auto &point : control_point) {
+    points.emplace_back(point.x, point.y);
   }
+  std::vector<Eigen::Vector2d> row_point;
+  for (const auto &point : row_points) {
+    row_point.emplace_back(point.x, point.y);
+  }
+  Eigen::VectorXd t_value = Eigen::Map<Eigen::VectorXd>(parameters.data(), parameters.size());
+
   Eigen::Vector2d initial_p1 = (points[0] + points[1]) / 2.0;// 初始值可以取为贝塞尔曲线两端点的平均值
 
   Eigen::Vector2d p1 = initial_p1;
 
   for (int iteration = 0; iteration < max_iterations; ++iteration) {
-    Eigen::Vector2d gradient = compute_gradient(p1, parameters, points, samples);
+    Eigen::Vector2d gradient = compute_gradient(p1, t_value, points, row_point);
     p1 -= learning_rate * gradient;
   }
   std::vector<Point> control_points = {{{points[0].x(), points[0].y()}, {p1.x(), p1.y()}, {points[1].x(), points[1].y()}}};
