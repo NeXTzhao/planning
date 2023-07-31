@@ -167,21 +167,23 @@ Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(
 // 通过梯度下降法找到最佳的中间控制点 P1
 std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint(
     std::vector<Point> &control_points, std::vector<Point> &row_points,
-    std::vector<double> &parameters, const Point &leftTangent,
-    const Point &rightTangent, double learning_rate, int max_iterations) {
-  std::vector<Eigen::Vector2d> con_pt;
-  for (const auto &point : control_points) {
-    con_pt.emplace_back(point.x, point.y);
-  }
-  std::vector<Eigen::Vector2d> row_point;
-  for (const auto &point : row_points) {
-    row_point.emplace_back(point.x, point.y);
-  }
+    std::vector<double> &parameters, double learning_rate, int max_iterations) {
+
+  // Convert std::vector<Point> to std::vector<Eigen::Vector2d> using Eigen::Map
+  std::vector<Eigen::Vector2d> con_pt(control_points.size());
+  std::vector<Eigen::Vector2d> row_point(row_points.size());
+
+  std::transform(control_points.begin(), control_points.end(), con_pt.begin(),
+                 [](const Point &p) { return Eigen::Vector2d(p.x, p.y); });
+
+  std::transform(row_points.begin(), row_points.end(), row_point.begin(),
+                 [](const Point &p) { return Eigen::Vector2d(p.x, p.y); });
+
   Eigen::VectorXd t_value =
       Eigen::Map<Eigen::VectorXd>(parameters.data(), parameters.size());
 
-  Eigen::Vector2d initial_p1 =
-      (con_pt[0] + con_pt[1]) / 2.0;// 初始值可以取为贝塞尔曲线两端点的平均值
+  // Initial value can be taken as the average of the endpoints of the Bezier curve
+  Eigen::Vector2d initial_p1 = (con_pt[0] + con_pt[1]) / 2.0;
 
   Eigen::Vector2d p1 = initial_p1;
 
@@ -189,9 +191,10 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint(
     Eigen::Vector2d gradient = compute_gradient(p1, t_value, con_pt, row_point);
     p1 -= learning_rate * gradient;
   }
-  std::vector<Point> conpt = {{{con_pt[0].x(), con_pt[0].y()},
-                               {p1.x(), p1.y()},
-                               {con_pt[1].x(), con_pt[1].y()}}};
+
+  std::vector<Point> conpt = {{con_pt[0].x(), con_pt[0].y()},
+                              {p1.x(), p1.y()},
+                              {con_pt[1].x(), con_pt[1].y()}};
 
   return conpt;
 }
@@ -230,15 +233,14 @@ PiecewiseBezierFit2::fitCubicBezier(std::vector<Point> &points,
                             + std::pow(points[0].y - points[1].y, 2))
         / 3.0;
     std::vector<Point> control_point = {
-        points[0], points[0] + dist * leftTangent,
-        points[1] + dist * rightTangent, points[1]};
+        points[0], points[0] + dist * leftTangent,points[1]};
     bezCtlPts.emplace_back(control_point);
     return bezCtlPts;
   }
   std::vector<Point> con_pt{points[0], points[points.size() - 1]};
   std::vector<double> u = chordLengthParameterize(points);
   auto control_point =
-      generateBezierControlPoint(con_pt, points, u, leftTangent, rightTangent);
+      generateBezierControlPoint(con_pt, points, u);
   auto error_split = computeMaxError(points, control_point, u);
   double point2CurveMaxError = error_split.first;
   int splitPoint = error_split.second;
@@ -247,22 +249,21 @@ PiecewiseBezierFit2::fitCubicBezier(std::vector<Point> &points,
     bezCtlPts.emplace_back(control_point);
     return bezCtlPts;
   }
-
-  if (point2CurveMaxError < error * error) {
-    for (int i = 0; i < 2; i++) {
-      auto uPrime = reparameterize(control_point, points, u);
-      control_point = generateBezierControlPoint(con_pt, points, u, leftTangent,
-                                                 rightTangent);
-      error_split = computeMaxError(points, control_point, uPrime);
-      point2CurveMaxError = error_split.first;
-      splitPoint = error_split.second;
-      if (point2CurveMaxError < error) {
-        bezCtlPts.emplace_back(control_point);
-        return bezCtlPts;
-      }
-      u = uPrime;
-    }
-  }
+//
+//  if (point2CurveMaxError < error * error) {
+//    for (int i = 0; i < 20; i++) {
+//      auto uPrime = reparameterize(control_point, points, u);
+//      control_point = generateBezierControlPoint(con_pt, points, u);
+//      error_split = computeMaxError(points, control_point, uPrime);
+//      point2CurveMaxError = error_split.first;
+//      splitPoint = error_split.second;
+//      if (point2CurveMaxError < error) {
+//        bezCtlPts.emplace_back(control_point);
+//        return bezCtlPts;
+//      }
+//      u = uPrime;
+//    }
+//  }
 
   // 把切分出切线方向
   Point centerTangent =

@@ -77,10 +77,8 @@ class PiecewiseBezierFit2 {
                                    const std::vector<Eigen::Vector2d> &points,
                                    const std::vector<Eigen::Vector2d> &samples,
                                    double epsilon = 1e-6);
-  //  std::vector<Point> generateBezierControlPoint(const std::vector<Eigen::Vector2d> &points, const Eigen::VectorXd &t_values, const std::vector<Eigen::Vector2d> &samples, double learning_rate = 0.01, int max_iterations = 1000);
   std::vector<Point> generateBezierControlPoint(
       std::vector<Point> &control_points, std::vector<Point> &row_points,
-      std::vector<double> &parameters, const Point &leftTangent,
-      const Point &rightTangent, double learning_rate = 0.01,
-      int max_iterations = 50);
+      std::vector<double> &parameters, double learning_rate = 0.01,
+      int max_iterations = 25);
 };

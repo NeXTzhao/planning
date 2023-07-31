@@ -65,33 +65,33 @@ void generateMeshGrid(double startX, double endX, int numPointsX, double startY,
 
 int main() {
   std::vector<Point> points;
-  //
-  for (int i = 0; i <= 50; i++) {
-    points.push_back({static_cast<double>(i), 0});
-  }
-  double h = 0;
-  for (int i = 0; i < 5; i++) {
-    h++;
-    points.push_back({50, h});
-  }
-  points.pop_back();
-  points.push_back({50, 5});
-  for (int i = 51; i < 61; i++) {
-    points.push_back({static_cast<double>(i), 5});
-  }
-  for (int i = 0; i < 5; i++) {
-    points.push_back({61, h});
-    h--;
-  }
 
-  for (int i = 61; i <= 81; i++) {
-    points.push_back({static_cast<double>(i), 0});
-  }
-
-  //    for (const auto &point : points) {
-  //      std::cout << "x = " << point.x << " , "
-  //                << " y = " << point.y << '\n';
-  //    }
+//  for (int i = 0; i <= 50; i++) {
+//    points.push_back({static_cast<double>(i), 0});
+//  }
+//  double h = 0;
+//  for (int i = 0; i < 5; i++) {
+//    h++;
+//    points.push_back({50, h});
+//  }
+//  points.pop_back();
+//  points.push_back({50, 5});
+//  for (int i = 51; i < 61; i++) {
+//    points.push_back({static_cast<double>(i), 5});
+//  }
+//  for (int i = 0; i < 5; i++) {
+//    points.push_back({61, h});
+//    h--;
+//  }
+//
+//  for (int i = 61; i <= 81; i++) {
+//    points.push_back({static_cast<double>(i), 0});
+//  }
+//
+//  //    for (const auto &point : points) {
+//  //      std::cout << "x = " << point.x << " , "
+//  //                << " y = " << point.y << '\n';
+//  //    }
 
   // 调用函数生成弧长数据和坐标数据
   int numPoints = 100;
@@ -99,7 +99,7 @@ int main() {
   double endAngle = M_PI;
   double radius = 100.0;
 
-  //  generateData(numPoints, startAngle, endAngle, radius, points);
+    generateData(numPoints, startAngle, endAngle, radius, points);
 
   double error = 4;
 
@@ -143,36 +143,36 @@ int main() {
 
   std::cout << "dis = " << dis << std::endl;
   //  //  /**************************************************/
-  //  std::vector<double> row_x, row_y;
-  //  for (const auto point : points) {
-  //    row_x.push_back(point.x);
-  //    row_y.push_back(point.y);
-  //  }
-  //
-  //  plt::named_plot("row", row_x, row_y, "r.");
-  //
-  //  for (const auto &curve : curve_points) {
-  //    std::vector<double> x, y;
-  //    for (const auto &point : curve) {
-  //      x.push_back(point.x);
-  //      y.push_back(point.y);
-  //    }
-  //    plt::named_plot("curve", x, y, "-");
-  //
-  //    std::vector<double> con_x, con_y;
-  //    for (const auto &cons : control_point) {
-  //      for (const auto &con : cons) {
-  //        con_x.push_back(con.x);
-  //        con_y.push_back(con.y);
-  //      }
-  //    }
-  //            plt::named_plot("con_point", con_x, con_y, "*");
-  //  }
-  //  //    plt::contour(X, Y, Z);
-  //  plt::grid("true");
-  //  plt::axis("equal");
-  //  plt::legend();
-  //  plt::show();
+    std::vector<double> row_x, row_y;
+    for (const auto point : points) {
+      row_x.push_back(point.x);
+      row_y.push_back(point.y);
+    }
+
+    plt::named_plot("row", row_x, row_y, "r.");
+
+    for (const auto &curve : curve_points) {
+      std::vector<double> x, y;
+      for (const auto &point : curve) {
+        x.push_back(point.x);
+        y.push_back(point.y);
+      }
+      plt::named_plot("curve", x, y, "-");
+
+      std::vector<double> con_x, con_y;
+      for (const auto &cons : control_point) {
+        for (const auto &con : cons) {
+          con_x.push_back(con.x);
+          con_y.push_back(con.y);
+        }
+      }
+              plt::named_plot("con_point", con_x, con_y, "*");
+    }
+    //    plt::contour(X, Y, Z);
+    plt::grid("true");
+    plt::axis("equal");
+    plt::legend();
+    plt::show();
 
   return 0;
 }
