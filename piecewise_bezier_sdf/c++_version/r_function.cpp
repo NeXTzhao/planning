@@ -39,16 +39,12 @@ void RFunction::normalizeSdf(SdfFunction &arr) {
     max_val = std::max(max_val, row_max);
   }
   if (max_val == min_val) {
-    for (auto &row : arr) {
-      std::fill(row.begin(), row.end(), 0.0);
-    }
+    for (auto &row : arr) { std::fill(row.begin(), row.end(), 0.0); }
     return;
   }
   double range = max_val - min_val;
   for (auto &row : arr) {
-    for (double &val : row) {
-      val = (val - min_val) / range;
-    }
+    for (double &val : row) { val = (val - min_val) / range; }
   }
 }
 
@@ -88,7 +84,8 @@ double RFunction::generateLineSdf(double x, double y, Point &a, Point &b) {
   double x2 = b.x;
   double y2 = b.y;
 
-  return (x2 * (-y + y1) + x1 * (y - y2) + x * (-y1 + y2)) / (Power(x1 - x2, 2) + Power(y1 - y2, 2));
+  return (x2 * (-y + y1) + x1 * (y - y2) + x * (-y1 + y2))
+      / (Power(x1 - x2, 2) + Power(y1 - y2, 2));
 }
 
 double RFunction::composedLineSdf(double sdfA, double sdfB) {
@@ -120,7 +117,8 @@ double RFunction::getPolygonSdf(double x, double y) const {
 
   for (int i = 0; i < num_points; i++) {
     Point p0 = control_points_[i];
-    Point p1 = control_points_[(i + 1) % num_points];// 获取下一个点，形成闭合多边形
+    Point p1 =
+        control_points_[(i + 1) % num_points];// 获取下一个点，形成闭合多边形
 
     double line_sdf = generateLineSdf(x, y, p0, p1);
     res = composedLineSdf(res, line_sdf);
@@ -147,7 +145,7 @@ double RFunction::trimmingArea(double x, double y) const {
   auto end_t = std::chrono::high_resolution_clock::now();
 
   auto start_f = std::chrono::high_resolution_clock::now();
-  double f = implicit_curve_->eval3(x, y);
+  double f = implicit_curve_->eval2(x, y);
   auto end_f = std::chrono::high_resolution_clock::now();
 
   auto start_trim = std::chrono::high_resolution_clock::now();
@@ -155,9 +153,15 @@ double RFunction::trimmingArea(double x, double y) const {
   auto end_trim = std::chrono::high_resolution_clock::now();
 
   // 计算执行时间并输出
-  auto duration_t = std::chrono::duration_cast<std::chrono::microseconds>(end_t - start_t).count();
-  auto duration_f = std::chrono::duration_cast<std::chrono::microseconds>(end_f - start_f).count();
-  auto duration_trim = std::chrono::duration_cast<std::chrono::microseconds>(end_trim - start_trim).count();
+  auto duration_t =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_t - start_t)
+          .count();
+  auto duration_f =
+      std::chrono::duration_cast<std::chrono::microseconds>(end_f - start_f)
+          .count();
+  auto duration_trim = std::chrono::duration_cast<std::chrono::microseconds>(
+                           end_trim - start_trim)
+                           .count();
 
   //  std::cout << "t time: " << duration_t / 1000.0 << "ms\n";
   //  std::cout << "f time: " << duration_f / 1000.0 << "ms\n";

@@ -77,5 +77,5 @@ add_executable(main
         )
 target_link_libraries(main PUBLIC matplotlib_cpp)
 
-add_executable(second_bezier second_bezier.cpp)
-target_link_libraries(second_bezier PUBLIC matplotlib_cpp)
+#add_executable(second_bezier second_bezier.cpp)
+#target_link_libraries(second_bezier PUBLIC matplotlib_cpp)

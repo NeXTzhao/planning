@@ -26,7 +26,8 @@ class PolyCurveFit {
 
  private:
   static std::vector<double> cal_coffs(const std::vector<double> &x,
-                                       const std::vector<double> &y, int degree);
+                                       const std::vector<double> &y,
+                                       int degree);
 
   double cal_fit_xdata(double x) const;
 
@@ -35,7 +36,8 @@ class PolyCurveFit {
   //  void setXYSData(const ReferenceLine &ref_line);
 
  public:
-  PolyCurveFit(const std::vector<double> &sdata, const std::vector<double> &xdata,
+  PolyCurveFit(const std::vector<double> &sdata,
+               const std::vector<double> &xdata,
                const std::vector<double> &ydata, int degree);
   //  CurveFit(const ReferenceLine &ref_line, int degree);
 
@@ -57,7 +59,8 @@ class Poly_Implicit {
 
  public:
   Poly_Implicit() = default;
-  Poly_Implicit(const std::vector<double> &px, const std::vector<double> &py, int degree);
+  Poly_Implicit(const std::vector<double> &px, const std::vector<double> &py,
+                int degree = 2);
 
   double getDistance(double x, double y) { return std::abs(eval3(x, y)); }
   double eval2(double x, double y);

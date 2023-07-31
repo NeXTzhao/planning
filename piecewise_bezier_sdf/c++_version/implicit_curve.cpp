@@ -4,12 +4,10 @@
 #include <cmath>
 //namespace hiphi {
 //namespace planning {
-PolyCurveFit::PolyCurveFit(const std::vector<double>& sdata,
-                   const std::vector<double>& xdata,
-                   const std::vector<double>& ydata, int degree)
-    : sdata_(sdata),
-      xdata_(xdata),
-      ydata_(ydata) {
+PolyCurveFit::PolyCurveFit(const std::vector<double> &sdata,
+                           const std::vector<double> &xdata,
+                           const std::vector<double> &ydata, int degree)
+    : sdata_(sdata), xdata_(xdata), ydata_(ydata) {
   x_coeffs_ = cal_coffs(sdata, xdata, degree);
   y_coeffs_ = cal_coffs(sdata, ydata, degree);
   reserve_x_coeffs_ = x_coeffs_;
@@ -28,7 +26,8 @@ PolyCurveFit::PolyCurveFit(const std::vector<double>& sdata,
 //  std::reverse(y_coeffs_.begin(), y_coeffs_.end());
 //}
 
-void PolyCurveFit::getXYFitData(std::vector<double>& x, std::vector<double>& y) {
+void PolyCurveFit::getXYFitData(std::vector<double> &x,
+                                std::vector<double> &y) {
   for (double i : sdata_) {
     x.push_back(cal_fit_xdata(i));
     y.push_back(cal_fit_ydata(i));
@@ -42,9 +41,9 @@ void PolyCurveFit::getXYFitData() {
   }
 }
 
-std::vector<double> PolyCurveFit::cal_coffs(const std::vector<double>& x,
-                                        const std::vector<double>& y,
-                                        int degree) {
+std::vector<double> PolyCurveFit::cal_coffs(const std::vector<double> &x,
+                                            const std::vector<double> &y,
+                                            int degree) {
   size_t n = x.size();
   int m = degree + 1;
 
@@ -142,8 +141,8 @@ double PolyCurveFit::cal_fit_ydata(double y) const {
 //  sdata_ = s;
 //}
 
-Poly_Implicit::Poly_Implicit(const std::vector<double>& px,
-                           const std::vector<double>& py, int degree) {
+Poly_Implicit::Poly_Implicit(const std::vector<double> &px,
+                             const std::vector<double> &py, int degree) {
   this->px = px;
   this->py = py;
 
@@ -162,117 +161,134 @@ Poly_Implicit::Poly_Implicit(const std::vector<double>& px,
   }
 }
 
-double Poly_Implicit::evaluatePolynomial(const std::vector<double>& coeffs,
-                                        double x) {
+double Poly_Implicit::evaluatePolynomial(const std::vector<double> &coeffs,
+                                         double x) {
   double result = 0.0;
   int degree = coeffs.size() - 1;
-  for (int i = degree; i >= 0; --i) {
-    result += coeffs[i] * std::pow(x, i);
-  }
+  for (int i = degree; i >= 0; --i) { result += coeffs[i] * std::pow(x, i); }
   return result;
 }
-double Poly_Implicit::eval2(double x, double y){
+
+double Poly_Implicit::eval2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
 
-  double out = std::pow(a2,2)*std::pow(b0,2) - a1*a2*b0*b1 + a0*a2*std::pow(b1,2) + std::pow(a1,2)*b0*b2 - 2*a0*a2*b0*b2 - a0*a1*b1*b2 + std::pow(a0,2)*std::pow(b2,2) - a2*std::pow(b1,2)*x +
-      2*a2*b0*b2*x + a1*b1*b2*x - 2*a0*std::pow(b2,2)*x + std::pow(b2,2)*std::pow(x,2) - 2*std::pow(a2,2)*b0*y + a1*a2*b1*y - std::pow(a1,2)*b2*y + 2*a0*a2*b2*y - 2*a2*b2*x*y +
-      std::pow(a2,2)*std::pow(y,2);
+  double out = std::pow(a2, 2) * std::pow(b0, 2) - a1 * a2 * b0 * b1
+      + a0 * a2 * std::pow(b1, 2) + std::pow(a1, 2) * b0 * b2
+      - 2 * a0 * a2 * b0 * b2 - a0 * a1 * b1 * b2
+      + std::pow(a0, 2) * std::pow(b2, 2) - a2 * std::pow(b1, 2) * x
+      + 2 * a2 * b0 * b2 * x + a1 * b1 * b2 * x - 2 * a0 * std::pow(b2, 2) * x
+      + std::pow(b2, 2) * std::pow(x, 2) - 2 * std::pow(a2, 2) * b0 * y
+      + a1 * a2 * b1 * y - std::pow(a1, 2) * b2 * y + 2 * a0 * a2 * b2 * y
+      - 2 * a2 * b2 * x * y + std::pow(a2, 2) * std::pow(y, 2);
+  return out / scale;
 }
 double Poly_Implicit::gradx2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
-  double out =
-      -(a2*std::pow(b1,2)) + 2*a2*b0*b2 + a1*b1*b2 - 2*a0*std::pow(b2,2) + 2*std::pow(b2,2)*x - 2*a2*b2*y;
+  double out = -(a2 * std::pow(b1, 2)) + 2 * a2 * b0 * b2 + a1 * b1 * b2
+      - 2 * a0 * std::pow(b2, 2) + 2 * std::pow(b2, 2) * x - 2 * a2 * b2 * y;
   return out;
 }
 double Poly_Implicit::grady2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
-  double out =
-      -2*std::pow(a2,2)*b0 + a1*a2*b1 - std::pow(a1,2)*b2 + 2*a0*a2*b2 - 2*a2*b2*x + 2*std::pow(a2,2)*y;
+  double out = -2 * std::pow(a2, 2) * b0 + a1 * a2 * b1 - std::pow(a1, 2) * b2
+      + 2 * a0 * a2 * b2 - 2 * a2 * b2 * x + 2 * std::pow(a2, 2) * y;
   return out;
 }
-
 
 double Poly_Implicit::eval3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
 
-
-  double out =
-      (b0 - y) * (std::pow(a3, 3) * std::pow(b0 - y, 2) +
-                  b3 * (std::pow(a1, 3) * b3 +
-                        std::pow(a2, 2) * (a1 * b1 + b2 * (a0 - x)) -
-                        a1 * a2 * (a1 * b2 + 2 * b3 * (a0 - x)) +
-                        std::pow(a2, 3) * (-b0 + y)) +
-                  std::pow(a3, 2) *
-                      (a2 * b1 * (-b0 + y) +
-                       a1 * (std::pow(b1, 2) - 2 * b0 * b2 + 2 * b2 * y) +
-                       (a0 - x) * (b1 * b2 - 2 * b0 * b3 + 2 * b3 * y)) +
-                  a3 * (std::pow(a1, 2) * (std::pow(b2, 2) - 2 * b1 * b3) +
-                        a1 * b2 * b3 * (a0 - x) +
-                        std::pow(b3, 2) * std::pow(a0 - x, 2) +
-                        std::pow(a2, 2) * b2 * (b0 - y) -
-                        a2 * (a1 * b1 * b2 + std::pow(b2, 2) * (a0 - x) +
-                              3 * a1 * b3 * (-b0 + y)))) -
-      (a0 - x) *
-          (std::pow(a3, 2) * (std::pow(b1, 3) + b3 * std::pow(b0 - y, 2) +
-                              2 * b1 * b2 * (-b0 + y)) +
-           b3 * (a2 * (std::pow(b2, 2) - 2 * b1 * b3) * (a0 - x) +
-                 b3 * (std::pow(a1, 2) * b1 + b3 * std::pow(a0 - x, 2) +
-                       a1 * b2 * (-a0 + x)) -
-                 a1 * a2 * (b1 * b2 - b0 * b3 + b3 * y) +
-                 std::pow(a2, 2) * (std::pow(b1, 2) + b2 * (-b0 + y))) +
-           a3 * (a1 * b1 * (std::pow(b2, 2) - 2 * b1 * b3) -
-                 (a0 - x) * (std::pow(b2, 3) - 3 * b1 * b2 * b3 +
-                             2 * std::pow(b3, 2) * (b0 - y)) -
-                 a2 * (std::pow(b1, 2) * b2 + std::pow(b2, 2) * (-b0 + y) +
-                       b1 * b3 * (-b0 + y))));
-  if (std::abs(scale - 0.0) < 1e-3) {
-    return out;
-  }
+  double out = (b0 - y)
+          * (std::pow(a3, 3) * std::pow(b0 - y, 2)
+             + b3
+                 * (std::pow(a1, 3) * b3
+                    + std::pow(a2, 2) * (a1 * b1 + b2 * (a0 - x))
+                    - a1 * a2 * (a1 * b2 + 2 * b3 * (a0 - x))
+                    + std::pow(a2, 3) * (-b0 + y))
+             + std::pow(a3, 2)
+                 * (a2 * b1 * (-b0 + y)
+                    + a1 * (std::pow(b1, 2) - 2 * b0 * b2 + 2 * b2 * y)
+                    + (a0 - x) * (b1 * b2 - 2 * b0 * b3 + 2 * b3 * y))
+             + a3
+                 * (std::pow(a1, 2) * (std::pow(b2, 2) - 2 * b1 * b3)
+                    + a1 * b2 * b3 * (a0 - x)
+                    + std::pow(b3, 2) * std::pow(a0 - x, 2)
+                    + std::pow(a2, 2) * b2 * (b0 - y)
+                    - a2
+                        * (a1 * b1 * b2 + std::pow(b2, 2) * (a0 - x)
+                           + 3 * a1 * b3 * (-b0 + y))))
+      - (a0 - x)
+          * (std::pow(a3, 2)
+                 * (std::pow(b1, 3) + b3 * std::pow(b0 - y, 2)
+                    + 2 * b1 * b2 * (-b0 + y))
+             + b3
+                 * (a2 * (std::pow(b2, 2) - 2 * b1 * b3) * (a0 - x)
+                    + b3
+                        * (std::pow(a1, 2) * b1 + b3 * std::pow(a0 - x, 2)
+                           + a1 * b2 * (-a0 + x))
+                    - a1 * a2 * (b1 * b2 - b0 * b3 + b3 * y)
+                    + std::pow(a2, 2) * (std::pow(b1, 2) + b2 * (-b0 + y)))
+             + a3
+                 * (a1 * b1 * (std::pow(b2, 2) - 2 * b1 * b3)
+                    - (a0 - x)
+                        * (std::pow(b2, 3) - 3 * b1 * b2 * b3
+                           + 2 * std::pow(b3, 2) * (b0 - y))
+                    - a2
+                        * (std::pow(b1, 2) * b2 + std::pow(b2, 2) * (-b0 + y)
+                           + b1 * b3 * (-b0 + y))));
+  if (std::abs(scale - 0.0) < 1e-3) { return out; }
   return out / scale;
 }
 
 double Poly_Implicit::gradx3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
-  double out =
-      std::pow(a3, 2) * (std::pow(b1, 3) + 3 * b3 * std::pow(b0 - y, 2) +
-                         3 * b1 * b2 * (-b0 + y)) +
-      b3 * (2 * a2 * (std::pow(b2, 2) - 2 * b1 * b3) * (a0 - x) +
-            b3 * (std::pow(a1, 2) * b1 + 3 * b3 * std::pow(a0 - x, 2) +
-                  2 * a1 * b2 * (-a0 + x)) -
-            a1 * a2 * (b1 * b2 - 3 * b0 * b3 + 3 * b3 * y) +
-            std::pow(a2, 2) * (std::pow(b1, 2) + 2 * b2 * (-b0 + y))) +
-      a3 * (-2 * (a0 - x) *
-                (std::pow(b2, 3) - 3 * b1 * b2 * b3 +
-                 3 * std::pow(b3, 2) * (b0 - y)) -
-            a2 * (std::pow(b1, 2) * b2 + 2 * std::pow(b2, 2) * (-b0 + y) +
-                  b1 * b3 * (-b0 + y)) +
-            a1 * (b1 * std::pow(b2, 2) - 2 * std::pow(b1, 2) * b3 +
-                  b2 * b3 * (-b0 + y)));
+  double out = std::pow(a3, 2)
+          * (std::pow(b1, 3) + 3 * b3 * std::pow(b0 - y, 2)
+             + 3 * b1 * b2 * (-b0 + y))
+      + b3
+          * (2 * a2 * (std::pow(b2, 2) - 2 * b1 * b3) * (a0 - x)
+             + b3
+                 * (std::pow(a1, 2) * b1 + 3 * b3 * std::pow(a0 - x, 2)
+                    + 2 * a1 * b2 * (-a0 + x))
+             - a1 * a2 * (b1 * b2 - 3 * b0 * b3 + 3 * b3 * y)
+             + std::pow(a2, 2) * (std::pow(b1, 2) + 2 * b2 * (-b0 + y)))
+      + a3
+          * (-2 * (a0 - x)
+                 * (std::pow(b2, 3) - 3 * b1 * b2 * b3
+                    + 3 * std::pow(b3, 2) * (b0 - y))
+             - a2
+                 * (std::pow(b1, 2) * b2 + 2 * std::pow(b2, 2) * (-b0 + y)
+                    + b1 * b3 * (-b0 + y))
+             + a1
+                 * (b1 * std::pow(b2, 2) - 2 * std::pow(b1, 2) * b3
+                    + b2 * b3 * (-b0 + y)));
   return out;
 }
 
 double Poly_Implicit::grady3(double x, double y) {
   double a3 = px[0], a2 = px[1], a1 = px[2], a0 = px[3];
   double b3 = py[0], b2 = py[1], b1 = py[2], b0 = py[3];
-  double out =
-      b3 * (-(std::pow(a1, 3) * b3) -
-            std::pow(a2, 2) * (a1 * b1 + 2 * b2 * (a0 - x)) +
-            a1 * a2 * (a1 * b2 + 3 * b3 * (a0 - x)) +
-            2 * std::pow(a2, 3) * (b0 - y)) -
-      3 * std::pow(a3, 3) * std::pow(b0 - y, 2) +
-      std::pow(a3, 2) * (2 * a2 * b1 * (b0 - y) -
-                         a1 * (std::pow(b1, 2) - 4 * b0 * b2 + 4 * b2 * y) -
-                         3 * (a0 - x) * (b1 * b2 - 2 * b0 * b3 + 2 * b3 * y)) +
-      a3 * (-(std::pow(a1, 2) * (std::pow(b2, 2) - 2 * b1 * b3)) +
-            a2 * (2 * std::pow(b2, 2) + b1 * b3) * (a0 - x) -
-            3 * std::pow(b3, 2) * std::pow(a0 - x, 2) +
-            a1 * b2 * b3 * (-a0 + x) + 2 * std::pow(a2, 2) * b2 * (-b0 + y) +
-            a1 * a2 * (b1 * b2 + 6 * b3 * (-b0 + y)));
+  double out = b3
+          * (-(std::pow(a1, 3) * b3)
+             - std::pow(a2, 2) * (a1 * b1 + 2 * b2 * (a0 - x))
+             + a1 * a2 * (a1 * b2 + 3 * b3 * (a0 - x))
+             + 2 * std::pow(a2, 3) * (b0 - y))
+      - 3 * std::pow(a3, 3) * std::pow(b0 - y, 2)
+      + std::pow(a3, 2)
+          * (2 * a2 * b1 * (b0 - y)
+             - a1 * (std::pow(b1, 2) - 4 * b0 * b2 + 4 * b2 * y)
+             - 3 * (a0 - x) * (b1 * b2 - 2 * b0 * b3 + 2 * b3 * y))
+      + a3
+          * (-(std::pow(a1, 2) * (std::pow(b2, 2) - 2 * b1 * b3))
+             + a2 * (2 * std::pow(b2, 2) + b1 * b3) * (a0 - x)
+             - 3 * std::pow(b3, 2) * std::pow(a0 - x, 2)
+             + a1 * b2 * b3 * (-a0 + x) + 2 * std::pow(a2, 2) * b2 * (-b0 + y)
+             + a1 * a2 * (b1 * b2 + 6 * b3 * (-b0 + y)));
   return out;
 }
 //}  // namespace planning

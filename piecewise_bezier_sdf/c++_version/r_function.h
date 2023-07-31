@@ -23,7 +23,8 @@ class RFunction {
  public:
   RFunction() = default;
   //  RFunction(std::vector<double> &px, std::vector<double> &py, const std::array<Point, 4> &control_points);
-  RFunction(std::vector<double> &px, std::vector<double> &py, const std::vector<Point> &control_points);
+  RFunction(std::vector<double> &px, std::vector<double> &py,
+            const std::vector<Point> &control_points);
 
   /**
    * @brief 凸包裁剪等势面
@@ -79,7 +80,8 @@ class RFunction {
    * @param numPoints
    * @return
    */
-  static std::vector<double> linspace(double start, double end, size_t numPoints);
+  static std::vector<double> linspace(double start, double end,
+                                      size_t numPoints);
   static double generateLineSdf(double x, double y, Point &a, Point &b);
 
  public:

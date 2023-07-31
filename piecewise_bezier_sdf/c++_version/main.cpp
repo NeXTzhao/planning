@@ -14,8 +14,7 @@ namespace plt = matplotlibcpp;
 
 // 函数：生成弧长数据和坐标数据
 void generateData(int numPoints, double startAngle, double endAngle,
-                  double radius,
-                  std::vector<Point> &point) {
+                  double radius, std::vector<Point> &point) {
   point.resize(numPoints);
 
   std::vector<double> tdata(numPoints);
@@ -66,7 +65,7 @@ void generateMeshGrid(double startX, double endX, int numPointsX, double startY,
 
 int main() {
   std::vector<Point> points;
-
+  //
   for (int i = 0; i <= 50; i++) {
     points.push_back({static_cast<double>(i), 0});
   }
@@ -89,25 +88,27 @@ int main() {
     points.push_back({static_cast<double>(i), 0});
   }
 
-  for (const auto &point : points) {
-    std::cout << "x = " << point.x << " , "
-              << " y = " << point.y << '\n';
-  }
+  //    for (const auto &point : points) {
+  //      std::cout << "x = " << point.x << " , "
+  //                << " y = " << point.y << '\n';
+  //    }
 
   // 调用函数生成弧长数据和坐标数据
-  //    int numPoints = 30;
-  //    double startAngle = 0.0;
-  //    double endAngle = M_PI;
-  //    double radius = 100.0;
-  //
-  //    generateData(numPoints, startAngle, endAngle, radius, points);
+  int numPoints = 100;
+  double startAngle = 0.0;
+  double endAngle = M_PI;
+  double radius = 100.0;
 
-  double error = 2;
+  //  generateData(numPoints, startAngle, endAngle, radius, points);
+
+  double error = 4;
 
   auto start_Construct = std::chrono::high_resolution_clock::now();
   auto pieceBez = std::make_shared<PiecewiseBezierFit2>(points, 2, error);
   auto end_Construct = std::chrono::high_resolution_clock::now();
-  auto Construct_time = std::chrono::duration_cast<std::chrono::microseconds>(end_Construct - start_Construct).count();
+  auto Construct_time = std::chrono::duration_cast<std::chrono::microseconds>(
+                            end_Construct - start_Construct)
+                            .count();
   std::cout << "Construct time: " << Construct_time / 1000.0 << "ms\n";
 
   auto control_point = pieceBez->getControlPoints();
@@ -135,11 +136,13 @@ int main() {
   auto end_cal_dis = std::chrono::high_resolution_clock::now();
 
   // 计算执行时间并输出
-  auto cal_dis_time = std::chrono::duration_cast<std::chrono::microseconds>(end_cal_dis - start_cal_dis).count();
+  auto cal_dis_time = std::chrono::duration_cast<std::chrono::microseconds>(
+                          end_cal_dis - start_cal_dis)
+                          .count();
   std::cout << "cal dis time: " << cal_dis_time / 1000.0 << "ms\n";
 
   std::cout << "dis = " << dis << std::endl;
-  //  /**************************************************/
+  //  //  /**************************************************/
   //  std::vector<double> row_x, row_y;
   //  for (const auto point : points) {
   //    row_x.push_back(point.x);
@@ -163,9 +166,9 @@ int main() {
   //        con_y.push_back(con.y);
   //      }
   //    }
-  //    //        plt::named_plot("con_point", con_x, con_y, "*");
+  //            plt::named_plot("con_point", con_x, con_y, "*");
   //  }
-  //  plt::contour(X, Y, Z);
+  //  //    plt::contour(X, Y, Z);
   //  plt::grid("true");
   //  plt::axis("equal");
   //  plt::legend();
