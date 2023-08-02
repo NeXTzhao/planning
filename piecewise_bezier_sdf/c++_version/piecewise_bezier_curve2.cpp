@@ -265,7 +265,7 @@ PiecewiseBezierFit2::cal_bezier_value(double t, const Eigen::Vector2d &p0,
 
   return t_1_minus_t * t_1_minus_t * p0 + 2 * t_1_minus_t * t * p1 + t_2 * p2;
 }
-//
+
 //double PiecewiseBezierFit2::objective_function(
 //    const Eigen::Vector2d &p1, const Eigen::VectorXd &t_values,
 //    const std::vector<Eigen::Vector2d> &control_points,
@@ -324,9 +324,9 @@ double PiecewiseBezierFit2::objective_function(
     Eigen::Vector2d curve = cal_bezier_value(t, p0, p1, p2);
     error += (sample - curve).squaredNorm();
   }
-
   return error;
 }
+
 Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(
     const Eigen::Vector2d &p1, const Eigen::VectorXd &t_values,
     const std::vector<Eigen::Vector2d> &control_points,
@@ -364,6 +364,7 @@ Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(
 //  }
 //  return gradient;
 //}
+
 // L-BFGS objective function
 lbfgsfloatval_t PiecewiseBezierFit2::lbfgs_objective(void *instance,
                                                      const lbfgsfloatval_t *x,
@@ -373,23 +374,10 @@ lbfgsfloatval_t PiecewiseBezierFit2::lbfgs_objective(void *instance,
   Eigen::Vector2d p1(x[0], x[1]);
   double f =
       fit->objective_function(p1, fit->t_value, fit->con_pt, fit->row_point);
-
-  // Compute gradient using numerical differentiation for comparison
-  const double epsilon = 1e-6;
-  Eigen::Vector2d gradient_numerical;
-  for (int i = 0; i < 2; ++i) {
-    lbfgsfloatval_t x_plus_epsilon[2] = {x[0], x[1]};
-    x_plus_epsilon[i] += epsilon;
-    double f_plus_epsilon =
-        fit->objective_function(Eigen::Vector2d(x_plus_epsilon[0], x_plus_epsilon[1]),
-                                fit->t_value, fit->con_pt, fit->row_point);
-    g[i] = (f_plus_epsilon - f) / epsilon;
-    gradient_numerical[i] = g[i];
-  }
-
-  // Use the computed numerical gradient for debugging and comparison
-  std::cout << "Numerical Gradient: " << gradient_numerical.transpose() << std::endl;
-
+  Eigen::Vector2d gradient =
+      fit->compute_gradient(p1, fit->t_value, fit->con_pt, fit->row_point);
+  g[0] = gradient.x();
+  g[1] = gradient.y();
   return f;
 }
 
@@ -443,7 +431,7 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_LBFGS(
   param.max_iterations = max_iterations;
   // 设置求解精度（tolerance）
   param.epsilon = tolerance;
-  param.linesearch = LBFGS_LINESEARCH_BACKTRACKING_WOLFE;
+  param.linesearch = LBFGS_LINESEARCH_BACKTRACKING;
   param.max_linesearch = 1000;
   param.wolfe = 0.9;// Adjust this value to influence Wolfe condition
 

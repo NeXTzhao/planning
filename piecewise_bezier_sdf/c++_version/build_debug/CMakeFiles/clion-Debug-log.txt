@@ -1,10 +1,50 @@
-/home/vtd/clion-2023.1.4/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version -B /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug
+/snap/clion/248/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/bin/make -G "Unix Makefiles" -S /home/next/planning/piecewise_bezier_sdf/c++_version -B /home/next/planning/piecewise_bezier_sdf/c++_version/build_debug
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found CXSparse: /usr/include/suitesparse (found suitable version "3.2.0", minimum required is "3.2.0") 
+-- Found AMD headers in: /usr/include/suitesparse
+-- Found AMD library: /usr/lib/x86_64-linux-gnu/libamd.so
+-- Found CAMD headers in: /usr/include/suitesparse
+-- Found CAMD library: /usr/lib/x86_64-linux-gnu/libcamd.so
+-- Found CCOLAMD headers in: /usr/include/suitesparse
+-- Found CCOLAMD library: /usr/lib/x86_64-linux-gnu/libccolamd.so
+-- Found CHOLMOD headers in: /usr/include/suitesparse
+-- Found CHOLMOD library: /usr/lib/x86_64-linux-gnu/libcholmod.so
+-- Found COLAMD headers in: /usr/include/suitesparse
+-- Found COLAMD library: /usr/lib/x86_64-linux-gnu/libcolamd.so
+-- Found SPQR headers in: /usr/include/suitesparse
+-- Found SPQR library: /usr/lib/x86_64-linux-gnu/libspqr.so
+-- Found Config headers in: /usr/include/suitesparse
+-- Found Config library: /usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so
+-- Found Intel Thread Building Blocks (TBB) library (2020.1 / 11101) include location: . Assuming SuiteSparseQR was compiled with TBB.
+-- Looking for shm_open in rt
+-- Looking for shm_open in rt - found
+-- Adding librt to SuiteSparse_config libraries (required on Linux & Unix [not OSX] if SuiteSparse is compiled with timing).
+-- Found METIS: /usr/include (found version "5.1.0") 
+-- Found SuiteSparse: /usr/include/suitesparse (found suitable version "5.7.1", minimum required is "5.7.1") found components: AMD CAMD CCOLAMD CHOLMOD COLAMD SPQR Config 
 -- Found required Ceres dependency: Eigen version 3.3.7 in /usr/lib/cmake/eigen3
 -- Found required Ceres dependency: glog
 -- Found required Ceres dependency: gflags
--- Found Ceres version: 2.2.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SchurSpecializations]
+-- Found Ceres version: 2.1.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SuiteSparse, CXSparse, SchurSpecializations, Multithreading]
 -- Found Python3: /usr/bin/python3.8 (found version "3.8.10") found components: Interpreter Development Development.Module Development.Embed 
 -- Found Python3: /usr/include/python3.8 (found version "3.8.10") found components: NumPy Interpreter Development.Module 
--- Configuring done
--- Generating done
--- Build files have been written to: /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug
+-- Configuring done (2.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/next/planning/piecewise_bezier_sdf/c++_version/build_debug
