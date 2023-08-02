@@ -234,27 +234,30 @@ class FittingObjective {
 };
 
 int main() {
-  std::vector<Eigen::Vector2d> data;
-  for (double t = 1.0; t >= 0.0; t -= 0.1) {
-    //    double noise = 0.1 * ((double)std::rand() / RAND_MAX - 0.5);
-    auto x = 100 * std::cos(t);
-    auto y = 100 * std::sin(t);
-    printf("x = %f, y = %f\n", x, y);
-    Eigen::Vector2d point(x, y);
-    data.push_back(point);
-  }
-
   //  std::vector<Eigen::Vector2d> data;
-  //  for (double t = 0.0; t <= 1.0; t += 0.1) {
-  //    double noise = 0.1 * ((double)std::rand() / RAND_MAX - 0.5);
-  //    Eigen::Vector2d point(t, t * t + noise);
+  //  for (double t = 1.0; t >= 0.0; t -= 0.1) {
+  //    //    double noise = 0.1 * ((double)std::rand() / RAND_MAX - 0.5);
+  //    auto x = 100 * std::cos(t);
+  //    auto y = 100 * std::sin(t);
+  //    printf("x = %f, y = %f\n", x, y);
+  //    Eigen::Vector2d point(x, y);
   //    data.push_back(point);
   //  }
+
+  std::vector<Eigen::Vector2d> data;
+  for (double t = 0.0; t <= 1.0; t += 0.1) {
+    double noise = 0.1 * ((double) std::rand() / RAND_MAX - 0.5);
+    //      Eigen::Vector2d point(t, t * t + noise);
+    Eigen::Vector2d point(35 * std::cos(t), 35 * std::sin(t));
+
+    data.push_back(point);
+  }
 
   // Set up L-BFGS parameters
   lbfgs_parameter_t lbfgs_params;
   lbfgs_parameter_init(&lbfgs_params);
-  lbfgs_params.max_iterations = 100;
+  lbfgs_params.max_iterations = 2000;
+  lbfgs_params.epsilon = 1e-3;
   lbfgs_params.linesearch = LBFGS_LINESEARCH_BACKTRACKING;
 
   // Initialize Bezier control points

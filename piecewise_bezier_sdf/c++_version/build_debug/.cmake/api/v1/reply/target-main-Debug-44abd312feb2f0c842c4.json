@@ -1,0 +1,493 @@
+{
+  "artifacts": [
+    {
+      "path": "main"
+    }
+  ],
+  "backtrace": 1,
+  "backtraceGraph": {
+    "commands": [
+      "add_executable",
+      "target_link_libraries",
+      "set_target_properties",
+      "include",
+      "find_package",
+      "set_property",
+      "find_dependency",
+      "_add_blas_target",
+      "_add_lapack_target",
+      "add_compile_options",
+      "include_directories"
+    ],
+    "files": [
+      "CMakeLists.txt",
+      "/usr/local/lib/cmake/Ceres/CeresTargets.cmake",
+      "/usr/local/lib/cmake/Ceres/CeresConfig.cmake",
+      "/usr/local/lib/cmake/Ceres/FindSuiteSparse.cmake",
+      "/snap/clion/248/bin/cmake/linux/x64/share/cmake-3.26/Modules/CMakeFindDependencyMacro.cmake",
+      "/snap/clion/248/bin/cmake/linux/x64/share/cmake-3.26/Modules/FindThreads.cmake",
+      "/snap/clion/248/bin/cmake/linux/x64/share/cmake-3.26/Modules/FindBLAS.cmake",
+      "/snap/clion/248/bin/cmake/linux/x64/share/cmake-3.26/Modules/FindLAPACK.cmake"
+    ],
+    "nodes": [
+      {
+        "file": 0
+      },
+      {
+        "command": 0,
+        "file": 0,
+        "line": 82,
+        "parent": 0
+      },
+      {
+        "command": 1,
+        "file": 0,
+        "line": 90,
+        "parent": 0
+      },
+      {
+        "command": 1,
+        "file": 0,
+        "line": 92,
+        "parent": 0
+      },
+      {
+        "command": 1,
+        "file": 0,
+        "line": 46,
+        "parent": 0
+      },
+      {
+        "command": 4,
+        "file": 0,
+        "line": 9,
+        "parent": 0
+      },
+      {
+        "file": 2,
+        "parent": 5
+      },
+      {
+        "command": 3,
+        "file": 2,
+        "line": 272,
+        "parent": 6
+      },
+      {
+        "file": 1,
+        "parent": 7
+      },
+      {
+        "command": 2,
+        "file": 1,
+        "line": 56,
+        "parent": 8
+      },
+      {
+        "command": 6,
+        "file": 2,
+        "line": 183,
+        "parent": 6
+      },
+      {
+        "command": 4,
+        "file": 4,
+        "line": 76,
+        "parent": 10
+      },
+      {
+        "file": 3,
+        "parent": 11
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 427,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 433,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 433,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 433,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 433,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 461,
+        "parent": 12
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 357,
+        "parent": 12
+      },
+      {
+        "command": 6,
+        "file": 2,
+        "line": 179,
+        "parent": 6
+      },
+      {
+        "command": 4,
+        "file": 4,
+        "line": 76,
+        "parent": 20
+      },
+      {
+        "file": 5,
+        "parent": 21
+      },
+      {
+        "command": 5,
+        "file": 5,
+        "line": 238,
+        "parent": 22
+      },
+      {
+        "command": 4,
+        "file": 3,
+        "line": 288,
+        "parent": 12
+      },
+      {
+        "file": 6,
+        "parent": 24
+      },
+      {
+        "command": 7,
+        "file": 6,
+        "line": 1349,
+        "parent": 25
+      },
+      {
+        "command": 2,
+        "file": 6,
+        "line": 262,
+        "parent": 26
+      },
+      {
+        "command": 4,
+        "file": 3,
+        "line": 295,
+        "parent": 12
+      },
+      {
+        "file": 7,
+        "parent": 28
+      },
+      {
+        "command": 8,
+        "file": 7,
+        "line": 773,
+        "parent": 29
+      },
+      {
+        "command": 2,
+        "file": 7,
+        "line": 136,
+        "parent": 30
+      },
+      {
+        "command": 5,
+        "file": 3,
+        "line": 333,
+        "parent": 12
+      },
+      {
+        "command": 9,
+        "file": 0,
+        "line": 5,
+        "parent": 0
+      },
+      {
+        "command": 10,
+        "file": 0,
+        "line": 23,
+        "parent": 0
+      }
+    ]
+  },
+  "compileGroups": [
+    {
+      "compileCommandFragments": [
+        {
+          "fragment": "-g -std=gnu++2a -fdiagnostics-color=always"
+        },
+        {
+          "backtrace": 33,
+          "fragment": "-O0"
+        },
+        {
+          "backtrace": 33,
+          "fragment": "-Wall"
+        },
+        {
+          "backtrace": 33,
+          "fragment": "-Wextra"
+        },
+        {
+          "backtrace": 33,
+          "fragment": "-Wpedantic"
+        }
+      ],
+      "defines": [
+        {
+          "backtrace": 2,
+          "define": "GFLAGS_IS_A_DLL=0"
+        },
+        {
+          "backtrace": 2,
+          "define": "GLOG_CUSTOM_PREFIX_SUPPORT"
+        }
+      ],
+      "includes": [
+        {
+          "backtrace": 34,
+          "path": "/home/next/planning/piecewise_bezier_sdf/c++_version/."
+        },
+        {
+          "backtrace": 34,
+          "path": "/usr/local/include/*"
+        },
+        {
+          "backtrace": 2,
+          "path": "/home/next/planning/piecewise_bezier_sdf/c++_version/src"
+        },
+        {
+          "backtrace": 34,
+          "isSystem": true,
+          "path": "/usr/include/eigen3"
+        },
+        {
+          "backtrace": 2,
+          "isSystem": true,
+          "path": "/usr/include/python3.8"
+        },
+        {
+          "backtrace": 2,
+          "isSystem": true,
+          "path": "/usr/local/lib/python3.8/dist-packages/numpy/core/include"
+        }
+      ],
+      "language": "CXX",
+      "languageStandard": {
+        "backtraces": [
+          2,
+          2
+        ],
+        "standard": "20"
+      },
+      "sourceIndexes": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "id": "main::@6890427a1f51a3e7e1df",
+  "link": {
+    "commandFragments": [
+      {
+        "fragment": "-g",
+        "role": "flags"
+      },
+      {
+        "fragment": "",
+        "role": "flags"
+      },
+      {
+        "fragment": "-Wl,-rpath,/usr/local/lib",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 2,
+        "fragment": "/usr/local/lib/libceres.a",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 3,
+        "fragment": "/usr/local/lib/liblbfgs.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 4,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libpython3.8.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/local/lib/libglog.so.0.6.0",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/local/lib/libgflags.so.2.2.2",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libspqr.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libcholmod.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 13,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libmetis.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 14,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libamd.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 15,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libcamd.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 16,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libccolamd.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 17,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libcolamd.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 18,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libsuitesparseconfig.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 19,
+        "fragment": "-lrt",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 23,
+        "fragment": "-lpthread",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 27,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libopenblas.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 31,
+        "fragment": "-lm",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 31,
+        "fragment": "-ldl",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 32,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libtbb.so.2",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libcxsparse.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/liblapack.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libf77blas.so",
+        "role": "libraries"
+      },
+      {
+        "backtrace": 9,
+        "fragment": "/usr/lib/x86_64-linux-gnu/libatlas.so",
+        "role": "libraries"
+      }
+    ],
+    "language": "CXX"
+  },
+  "name": "main",
+  "nameOnDisk": "main",
+  "paths": {
+    "build": ".",
+    "source": "."
+  },
+  "sourceGroups": [
+    {
+      "name": "Source Files",
+      "sourceIndexes": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "backtrace": 1,
+      "compileGroupIndex": 0,
+      "path": "main.cpp",
+      "sourceGroupIndex": 0
+    },
+    {
+      "backtrace": 1,
+      "compileGroupIndex": 0,
+      "path": "bezier_to_poly.cpp",
+      "sourceGroupIndex": 0
+    },
+    {
+      "backtrace": 1,
+      "compileGroupIndex": 0,
+      "path": "implicit_curve.cpp",
+      "sourceGroupIndex": 0
+    },
+    {
+      "backtrace": 1,
+      "compileGroupIndex": 0,
+      "path": "piecewise_bezier_curve2.cpp",
+      "sourceGroupIndex": 0
+    },
+    {
+      "backtrace": 1,
+      "compileGroupIndex": 0,
+      "path": "r_function.cpp",
+      "sourceGroupIndex": 0
+    }
+  ],
+  "type": "EXECUTABLE"
+}
