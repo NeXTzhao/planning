@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/sdf.dir/implicit_curve.cpp.o CMakeFiles/sdf.dir/main.cpp.o CMakeFiles/sdf.dir/piecewise_bezier_curve.cpp.o -o sdf  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

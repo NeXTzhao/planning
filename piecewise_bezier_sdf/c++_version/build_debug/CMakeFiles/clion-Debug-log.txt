@@ -1,0 +1,10 @@
+/home/vtd/clion-2023.1.4/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version -B /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug
+-- Found required Ceres dependency: Eigen version 3.3.7 in /usr/lib/cmake/eigen3
+-- Found required Ceres dependency: glog
+-- Found required Ceres dependency: gflags
+-- Found Ceres version: 2.2.0 installed in: /usr/local with components: [EigenSparse, SparseLinearAlgebraLibrary, LAPACK, SchurSpecializations]
+-- Found Python3: /usr/bin/python3.8 (found version "3.8.10") found components: Interpreter Development Development.Module Development.Embed 
+-- Found Python3: /usr/include/python3.8 (found version "3.8.10") found components: NumPy Interpreter Development.Module 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug

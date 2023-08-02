@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/bezier_curve.dir/bezier.cpp.o CMakeFiles/bezier_curve.dir/bezier_test.cpp.o -o bezier_curve  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

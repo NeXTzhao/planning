@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/second_bezier.dir/second_bezier.cpp.o -o second_bezier  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

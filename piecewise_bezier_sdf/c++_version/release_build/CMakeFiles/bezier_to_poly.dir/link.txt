@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/bezier_to_poly.dir/bezier_to_poly.cpp.o CMakeFiles/bezier_to_poly.dir/bezier_to_poly_test.cpp.o -o bezier_to_poly  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/second_bezier.dir/time.cpp.o -o second_bezier  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

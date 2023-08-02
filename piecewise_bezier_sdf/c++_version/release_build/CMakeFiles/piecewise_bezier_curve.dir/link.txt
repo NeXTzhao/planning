@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/piecewise_bezier_curve.dir/piecewise_bezier_curve.cpp.o CMakeFiles/piecewise_bezier_curve.dir/piecewise_bezier_curve_test.cpp.o -o piecewise_bezier_curve  /usr/lib/x86_64-linux-gnu/libpython3.8.so 

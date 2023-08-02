@@ -4,14 +4,26 @@ project(YourProjectName)
 # 添加编译选项
 add_compile_options(-O0 -Wall -Wextra -Wpedantic)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+
+find_package(Ceres REQUIRED)
 
 # 添加Eigen库
 find_package(Eigen3 REQUIRED)
 
+
+# Find the L-BFGS library
+#find_package(LBFGS REQUIRED)
+
+
+set(LBFGS_INCLUDE_DIRS "/usr/local/include/*")
+set(LBFGS_LIBRARIES "/usr/local/lib/liblbfgs.so")
+
+# Add include directories
 include_directories(
         .
-        ${EIGEN3_INCLUDE_DIR})
+        ${EIGEN3_INCLUDE_DIR}
+        ${LBFGS_INCLUDE_DIRS})
 
 ############################################################################
 # matplotlib-cpp
@@ -71,11 +83,15 @@ add_executable(main
         main.cpp
         bezier_to_poly.cpp
         implicit_curve.cpp
-#        piecewise_bezier_curve.cpp
+        #        piecewise_bezier_curve.cpp
         piecewise_bezier_curve2.cpp
         r_function.cpp
         )
-target_link_libraries(main PUBLIC matplotlib_cpp)
+target_link_libraries(main PUBLIC matplotlib_cpp Ceres::ceres)
+target_include_directories(main PRIVATE ${LBFGS_INCLUDE_DIRS})
+target_link_libraries(main PRIVATE ${LBFGS_LIBRARIES})
 
 #add_executable(second_bezier second_bezier.cpp)
 #target_link_libraries(second_bezier PUBLIC matplotlib_cpp)
+
+#add_executable(time time.cpp)

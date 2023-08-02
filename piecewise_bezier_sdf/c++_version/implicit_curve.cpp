@@ -173,28 +173,55 @@ double Poly_Implicit::eval2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
 
-  double out = std::pow(a2, 2) * std::pow(b0, 2) - a1 * a2 * b0 * b1
-      + a0 * a2 * std::pow(b1, 2) + std::pow(a1, 2) * b0 * b2
-      - 2 * a0 * a2 * b0 * b2 - a0 * a1 * b1 * b2
-      + std::pow(a0, 2) * std::pow(b2, 2) - a2 * std::pow(b1, 2) * x
-      + 2 * a2 * b0 * b2 * x + a1 * b1 * b2 * x - 2 * a0 * std::pow(b2, 2) * x
-      + std::pow(b2, 2) * std::pow(x, 2) - 2 * std::pow(a2, 2) * b0 * y
-      + a1 * a2 * b1 * y - std::pow(a1, 2) * b2 * y + 2 * a0 * a2 * b2 * y
-      - 2 * a2 * b2 * x * y + std::pow(a2, 2) * std::pow(y, 2);
-  return out / scale;
+  //  double result = std::pow(a2, 2) * std::pow(b0, 2) - a1 * a2 * b0 * b1
+  //      + a0 * a2 * std::pow(b1, 2) + std::pow(a1, 2) * b0 * b2
+  //      - 2 * a0 * a2 * b0 * b2 - a0 * a1 * b1 * b2
+  //      + std::pow(a0, 2) * std::pow(b2, 2) - a2 * std::pow(b1, 2) * x
+  //      + 2 * a2 * b0 * b2 * x + a1 * b1 * b2 * x - 2 * a0 * std::pow(b2, 2) * x
+  //      + std::pow(b2, 2) * std::pow(x, 2) - 2 * std::pow(a2, 2) * b0 * y
+  //      + a1 * a2 * b1 * y - std::pow(a1, 2) * b2 * y + 2 * a0 * a2 * b2 * y
+  //      - 2 * a2 * b2 * x * y + std::pow(a2, 2) * std::pow(y, 2);
+
+  double a2_squared = a2 * a2;
+  double a1_squared = a1 * a1;
+
+  double b2_squared = b2 * b2;
+  double b1_squared = b1 * b1;
+
+  double a1_a2 = a1 * a2;
+  double a0_a2 = a0 * a2;
+  double b1_b2 = b1 * b2;
+  double b0_b2 = b0 * b2;
+
+  double result = a2_squared * b0 * b0 - a1_a2 * b0 * b1 + a0_a2 * b1_squared
+      + a1_squared * b0_b2 - 2 * a0_a2 * b0_b2 - a0 * a1 * b1_b2
+      + a0 * a0 * b2_squared - a2 * b1_squared * x + 2 * a2 * b0_b2 * x
+      + a1 * b1_b2 * x - 2 * a0 * b2_squared * x + b2_squared * x * x
+      - 2 * a2_squared * b0 * y + a1_a2 * b1 * y - a1_squared * b2 * y
+      + 2 * a0_a2 * b2 * y - 2 * a2 * b2 * x * y + a2_squared * y * y;
+
+  return result / scale;
 }
 double Poly_Implicit::gradx2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
+
+  double b2_squared = b2 * b2;
   double out = -(a2 * std::pow(b1, 2)) + 2 * a2 * b0 * b2 + a1 * b1 * b2
-      - 2 * a0 * std::pow(b2, 2) + 2 * std::pow(b2, 2) * x - 2 * a2 * b2 * y;
+      - 2 * a0 * b2_squared + 2 * b2_squared * x - 2 * a2 * b2 * y;
+  //  double out = -(a2 * std::pow(b1, 2)) + 2 * a2 * b0 * b2 + a1 * b1 * b2
+  //      - 2 * a0 * std::pow(b2, 2) + 2 * std::pow(b2, 2) * x - 2 * a2 * b2 * y;
   return out;
 }
 double Poly_Implicit::grady2(double x, double y) {
   double a2 = px[1], a1 = px[2], a0 = px[3];
   double b2 = py[1], b1 = py[2], b0 = py[3];
-  double out = -2 * std::pow(a2, 2) * b0 + a1 * a2 * b1 - std::pow(a1, 2) * b2
-      + 2 * a0 * a2 * b2 - 2 * a2 * b2 * x + 2 * std::pow(a2, 2) * y;
+
+  double a2_squared = a2 * a2;
+  double out = -2 * a2_squared * b0 + a1 * a2 * b1 - std::pow(a1, 2) * b2
+      + 2 * a0 * a2 * b2 - 2 * a2 * b2 * x + 2 * a2_squared * y;
+  //  double out = -2 * std::pow(a2, 2) * b0 + a1 * a2 * b1 - std::pow(a1, 2) * b2
+  //      + 2 * a0 * a2 * b2 - 2 * a2 * b2 * x + 2 * std::pow(a2, 2) * y;
   return out;
 }
 
