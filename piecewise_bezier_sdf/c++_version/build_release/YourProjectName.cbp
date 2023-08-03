@@ -75,6 +75,118 @@
 					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="lbgfs_fit_test">
+				<Option output="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/lbgfs_fit_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/."/>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include/*"/>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/src"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/home/vtd/.local/lib/python3.8/site-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 lbgfs_fit_test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="lbgfs_fit_test/fast">
+				<Option output="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/lbgfs_fit_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/."/>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include/*"/>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/src"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/home/vtd/.local/lib/python3.8/site-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 lbgfs_fit_test/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="findFootPoints">
+				<Option output="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/findFootPoints" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/."/>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include/*"/>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/src"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/home/vtd/.local/lib/python3.8/site-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 findFootPoints"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="findFootPoints/fast">
+				<Option output="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/findFootPoints" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/."/>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include/*"/>
+					<Add directory="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/src"/>
+					<Add directory="/usr/include/python3.8"/>
+					<Add directory="/home/vtd/.local/lib/python3.8/site-packages/numpy/core/include"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 findFootPoints/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 			<Target title="edit_cache">
 				<Option working_dir="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release"/>
 				<Option type="4"/>
@@ -142,11 +254,17 @@
 		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/bezier_to_poly.h">
 			<Option target="main"/>
 		</Unit>
+		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/findFootPoints.cpp">
+			<Option target="findFootPoints"/>
+		</Unit>
 		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/implicit_curve.cpp">
 			<Option target="main"/>
 		</Unit>
 		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/implicit_curve.h">
 			<Option target="main"/>
+		</Unit>
+		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/lbgfs_fit_test.cpp">
+			<Option target="lbgfs_fit_test"/>
 		</Unit>
 		<Unit filename="/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/main.cpp">
 			<Option target="main"/>

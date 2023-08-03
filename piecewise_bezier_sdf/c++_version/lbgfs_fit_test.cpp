@@ -3,7 +3,6 @@
 #include <cmath>
 #include <iostream>
 #include <lbfgs.h>
-#include <utility>
 #include <vector>
 
 namespace plt = matplotlibcpp;
@@ -246,7 +245,7 @@ int main() {
 
   std::vector<Eigen::Vector2d> data;
   for (double t = 0.0; t <= 1.0; t += 0.1) {
-    double noise = 0.1 * ((double) std::rand() / RAND_MAX - 0.5);
+//    double noise = 0.1 * ((double) std::rand() / RAND_MAX - 0.5);
     //      Eigen::Vector2d point(t, t * t + noise);
     Eigen::Vector2d point(35 * std::cos(t), 35 * std::sin(t));
 
@@ -294,13 +293,16 @@ int main() {
 
   con_x = {p0.x(), p1.x(), p2.x()};
   con_y = {p0.y(), p1.y(), p2.y()};
+  con_x.push_back(p0.x());
+  con_y.push_back(p0.y());
+
 
   for (const auto &point : data) {
     row_x.emplace_back(point.x());
     row_y.emplace_back(point.y());
   }
-  plt::named_plot("fit_curve", fit_x, fit_y, "-");
-  plt::named_plot("con_pt", con_x, con_y, "o");
+  plt::named_plot("fit_curve", fit_x, fit_y, "r-");
+  plt::named_plot("con_pt", con_x, con_y, "o--");
   plt::named_plot("row_data", row_x, row_y, ".");
   plt::legend();
   plt::show();

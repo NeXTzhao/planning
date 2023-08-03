@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/findFootPoints.dir/findFootPoints.cpp.o -o findFootPoints  -Wl,-rpath,/usr/local/lib /usr/local/lib/liblbfgs.so /usr/lib/x86_64-linux-gnu/libpython3.8.so 

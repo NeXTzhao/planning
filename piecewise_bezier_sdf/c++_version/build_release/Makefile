@@ -174,6 +174,32 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+#=============================================================================
+# Target rules for targets named lbgfs_fit_test
+
+# Build rule for target.
+lbgfs_fit_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lbgfs_fit_test
+.PHONY : lbgfs_fit_test
+
+# fast build rule for target.
+lbgfs_fit_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lbgfs_fit_test.dir/build.make CMakeFiles/lbgfs_fit_test.dir/build
+.PHONY : lbgfs_fit_test/fast
+
+#=============================================================================
+# Target rules for targets named findFootPoints
+
+# Build rule for target.
+findFootPoints: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 findFootPoints
+.PHONY : findFootPoints
+
+# fast build rule for target.
+findFootPoints/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/findFootPoints.dir/build.make CMakeFiles/findFootPoints.dir/build
+.PHONY : findFootPoints/fast
+
 bezier_to_poly.o: bezier_to_poly.cpp.o
 .PHONY : bezier_to_poly.o
 
@@ -198,6 +224,30 @@ bezier_to_poly.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/bezier_to_poly.cpp.s
 .PHONY : bezier_to_poly.cpp.s
 
+findFootPoints.o: findFootPoints.cpp.o
+.PHONY : findFootPoints.o
+
+# target to build an object file
+findFootPoints.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/findFootPoints.dir/build.make CMakeFiles/findFootPoints.dir/findFootPoints.cpp.o
+.PHONY : findFootPoints.cpp.o
+
+findFootPoints.i: findFootPoints.cpp.i
+.PHONY : findFootPoints.i
+
+# target to preprocess a source file
+findFootPoints.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/findFootPoints.dir/build.make CMakeFiles/findFootPoints.dir/findFootPoints.cpp.i
+.PHONY : findFootPoints.cpp.i
+
+findFootPoints.s: findFootPoints.cpp.s
+.PHONY : findFootPoints.s
+
+# target to generate assembly for a file
+findFootPoints.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/findFootPoints.dir/build.make CMakeFiles/findFootPoints.dir/findFootPoints.cpp.s
+.PHONY : findFootPoints.cpp.s
+
 implicit_curve.o: implicit_curve.cpp.o
 .PHONY : implicit_curve.o
 
@@ -221,6 +271,30 @@ implicit_curve.s: implicit_curve.cpp.s
 implicit_curve.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/implicit_curve.cpp.s
 .PHONY : implicit_curve.cpp.s
+
+lbgfs_fit_test.o: lbgfs_fit_test.cpp.o
+.PHONY : lbgfs_fit_test.o
+
+# target to build an object file
+lbgfs_fit_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lbgfs_fit_test.dir/build.make CMakeFiles/lbgfs_fit_test.dir/lbgfs_fit_test.cpp.o
+.PHONY : lbgfs_fit_test.cpp.o
+
+lbgfs_fit_test.i: lbgfs_fit_test.cpp.i
+.PHONY : lbgfs_fit_test.i
+
+# target to preprocess a source file
+lbgfs_fit_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lbgfs_fit_test.dir/build.make CMakeFiles/lbgfs_fit_test.dir/lbgfs_fit_test.cpp.i
+.PHONY : lbgfs_fit_test.cpp.i
+
+lbgfs_fit_test.s: lbgfs_fit_test.cpp.s
+.PHONY : lbgfs_fit_test.s
+
+# target to generate assembly for a file
+lbgfs_fit_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lbgfs_fit_test.dir/build.make CMakeFiles/lbgfs_fit_test.dir/lbgfs_fit_test.cpp.s
+.PHONY : lbgfs_fit_test.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
@@ -306,13 +380,21 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... findFootPoints"
+	@echo "... lbgfs_fit_test"
 	@echo "... main"
 	@echo "... bezier_to_poly.o"
 	@echo "... bezier_to_poly.i"
 	@echo "... bezier_to_poly.s"
+	@echo "... findFootPoints.o"
+	@echo "... findFootPoints.i"
+	@echo "... findFootPoints.s"
 	@echo "... implicit_curve.o"
 	@echo "... implicit_curve.i"
 	@echo "... implicit_curve.s"
+	@echo "... lbgfs_fit_test.o"
+	@echo "... lbgfs_fit_test.i"
+	@echo "... lbgfs_fit_test.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

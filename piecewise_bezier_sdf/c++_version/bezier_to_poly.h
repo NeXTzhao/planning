@@ -9,6 +9,11 @@
 struct Point {
   double x;
   double y;
+  double squaredNorm() const { return x * x + y * y; }
+  double dot(const Point &other) const { return x * other.x + y * other.y; }
+//  Point operator-(const Point &other) const {
+//    return {x - other.x, y - other.y};
+
 };
 class Bezier2Poly {
  public:

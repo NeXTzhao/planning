@@ -4,6 +4,8 @@
 #include <iostream>
 #include <numeric>
 
+
+
 Bezier2Poly::Bezier2Poly(const std::array<Point, 4> &controlPoints, int degree)
     : controlPoints4_(controlPoints), degree_(degree) {
   tValues_ = linspace(0.0, 1.0, 30);

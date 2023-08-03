@@ -37,21 +37,21 @@ target_include_directories(matplotlib_cpp
         INTERFACE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
-)
+        )
 target_compile_features(matplotlib_cpp INTERFACE
         cxx_std_20
-)
+        )
 # TODO: Use `Development.Embed` component when requiring cmake >= 3.18
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 target_link_libraries(matplotlib_cpp INTERFACE
         Python3::Python
         Python3::Module
-)
+        )
 find_package(Python3 COMPONENTS NumPy)
 if (Python3_NumPy_FOUND)
     target_link_libraries(matplotlib_cpp INTERFACE
             Python3::NumPy
-    )
+            )
 else ()
     target_compile_definitions(matplotlib_cpp INTERFACE WITHOUT_NUMPY)
 endif ()
@@ -79,17 +79,17 @@ install(
 #add_executable(r_fun r_function.cpp r_function.h r_function_test.cpp implicit_curve.cpp bezier_to_poly.cpp)
 #target_link_libraries(r_fun PUBLIC matplotlib_cpp)
 
-#add_executable(main
-#        main.cpp
-#        bezier_to_poly.cpp
-#        implicit_curve.cpp
-#        #        piecewise_bezier_curve.cpp
-#        piecewise_bezier_curve2.cpp
-#        r_function.cpp
-#)
-#target_link_libraries(main PUBLIC matplotlib_cpp Ceres::ceres)
-#target_include_directories(main PRIVATE ${LBFGS_INCLUDE_DIRS})
-#target_link_libraries(main PRIVATE ${LBFGS_LIBRARIES})
+add_executable(main
+        main.cpp
+        bezier_to_poly.cpp
+        implicit_curve.cpp
+        #        piecewise_bezier_curve.cpp
+        piecewise_bezier_curve2.cpp
+        r_function.cpp
+)
+target_link_libraries(main PUBLIC matplotlib_cpp Ceres::ceres)
+target_include_directories(main PRIVATE ${LBFGS_INCLUDE_DIRS})
+target_link_libraries(main PRIVATE ${LBFGS_LIBRARIES})
 
 #add_executable(second_bezier second_bezier.cpp)
 #target_link_libraries(second_bezier PUBLIC matplotlib_cpp)
@@ -98,7 +98,13 @@ install(
 
 add_executable(lbgfs_fit_test
         lbgfs_fit_test.cpp
-)
+        )
 target_link_libraries(lbgfs_fit_test PUBLIC matplotlib_cpp)
 target_include_directories(lbgfs_fit_test PRIVATE ${LBFGS_INCLUDE_DIRS})
 target_link_libraries(lbgfs_fit_test PRIVATE ${LBFGS_LIBRARIES})
+
+add_executable(findFootPoints
+        findFootPoints.cpp)
+target_link_libraries(findFootPoints PUBLIC matplotlib_cpp)
+target_include_directories(findFootPoints PRIVATE ${LBFGS_INCLUDE_DIRS})
+target_link_libraries(findFootPoints PRIVATE ${LBFGS_LIBRARIES})

@@ -1,4 +1,6 @@
 /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/main.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/lbgfs_fit_test.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/findFootPoints.dir
 /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/edit_cache.dir
 /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/rebuild_cache.dir
 /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_release/CMakeFiles/list_install_components.dir

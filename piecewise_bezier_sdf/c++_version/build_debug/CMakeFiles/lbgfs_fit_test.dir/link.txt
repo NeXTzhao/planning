@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/lbgfs_fit_test.dir/lbgfs_fit_test.cpp.o -o lbgfs_fit_test  -Wl,-rpath,/usr/local/lib /usr/local/lib/liblbfgs.so /usr/lib/x86_64-linux-gnu/libpython3.8.so 

@@ -137,7 +137,7 @@ int main() {
   generateData(points);
 
   auto start_Construct = std::chrono::high_resolution_clock::now();
-  auto pieceBez = std::make_shared<PiecewiseBezierFit2>(points, 2, 6);
+  auto pieceBez = std::make_shared<PiecewiseBezierFit2>(points, 2, 3);
   auto end_Construct = std::chrono::high_resolution_clock::now();
   auto Construct_time = std::chrono::duration_cast<std::chrono::microseconds>(
                             end_Construct - start_Construct)

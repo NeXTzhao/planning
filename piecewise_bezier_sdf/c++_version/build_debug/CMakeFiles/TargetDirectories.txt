@@ -1,7 +1,9 @@
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/main.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/edit_cache.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/rebuild_cache.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/list_install_components.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install/local.dir
-/home/next/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install/strip.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/main.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/lbgfs_fit_test.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/findFootPoints.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/edit_cache.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/rebuild_cache.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/list_install_components.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install/local.dir
+/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/install/strip.dir

@@ -1,0 +1,61 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-gCuNHf
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_eace6/fast && /usr/bin/make  -f CMakeFiles/cmTC_eace6.dir/build.make CMakeFiles/cmTC_eace6.dir/build
+make[1]: Entering directory '/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-gCuNHf'
+Building C object CMakeFiles/cmTC_eace6.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -fdiagnostics-color=always -o CMakeFiles/cmTC_eace6.dir/src.c.o -c /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-gCuNHf/src.c
+Linking C executable cmTC_eace6
+/home/vtd/clion-2023.1.4/bin/cmake/linux/x64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eace6.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_eace6.dir/src.c.o -o cmTC_eace6 
+/usr/bin/ld: CMakeFiles/cmTC_eace6.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x5e): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.c:(.text+0x6f): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_eace6.dir/build.make:99: cmTC_eace6] Error 1
+make[1]: Leaving directory '/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-gCuNHf'
+make: *** [Makefile:127: cmTC_eace6/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-GCakIf
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_7af77/fast && /usr/bin/make  -f CMakeFiles/cmTC_7af77.dir/build.make CMakeFiles/cmTC_7af77.dir/build
+make[1]: Entering directory '/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-GCakIf'
+Building C object CMakeFiles/cmTC_7af77.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -fdiagnostics-color=always -o CMakeFiles/cmTC_7af77.dir/CheckFunctionExists.c.o -c /home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-GCakIf/CheckFunctionExists.c
+Linking C executable cmTC_7af77
+/home/vtd/clion-2023.1.4/bin/cmake/linux/x64/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7af77.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_7af77.dir/CheckFunctionExists.c.o -o cmTC_7af77  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_7af77.dir/build.make:99: cmTC_7af77] Error 1
+make[1]: Leaving directory '/home/vtd/Documents/planning/piecewise_bezier_sdf/c++_version/build_debug/CMakeFiles/CMakeScratch/TryCompile-GCakIf'
+make: *** [Makefile:127: cmTC_7af77/fast] Error 2
+
+
+
