@@ -33,7 +33,7 @@ BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
-ColumnLimit: 80  # Set the column limit to 80 for automatic line wrapping
+ColumnLimit: 0
 CompactNamespaces: false
 ContinuationIndentWidth: 4
 IndentCaseLabels: true

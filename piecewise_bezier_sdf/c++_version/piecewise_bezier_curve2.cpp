@@ -34,12 +34,12 @@ void PiecewiseBezierFit2::fitCurve(std::vector<Point> &points,
   Point leftTangent = normalize(points[1] - points[0]);
   Point rightTangent =
       normalize(points[points.size() - 2] - points[points.size() - 1]);
-//  start_velocity_ = Eigen::Vector2d{leftTangent.x, leftTangent.y};
-//  end_velocity_ = Eigen::Vector2d{rightTangent.x, rightTangent.y};
+  //  start_velocity_ = Eigen::Vector2d{leftTangent.x, leftTangent.y};
+  //  end_velocity_ = Eigen::Vector2d{rightTangent.x, rightTangent.y};
 
   control_points_ = fitCubicBezier(points, leftTangent, rightTangent, maxError);
   composeTrimmingSdf();
-    generate_bezier_curves(control_points_, 50);
+  generate_bezier_curves(control_points_, 50);
 }
 
 std::vector<std::vector<Point>> PiecewiseBezierFit2::getControlPoints() const {
@@ -90,8 +90,9 @@ Point PiecewiseBezierFit2::qprimeprime(const std::vector<Point> &ctrlPoly,
  */
 Point PiecewiseBezierFit2::BezierII(int degree, const std::vector<Point> &V,
                                     double t) {
-  Point Q{};                                   // Point on curve at parameter t
-  std::vector<Point> Vtemp(V.begin(), V.end());// Local copy of control points
+  Point Q{};// Point on curve at parameter t
+  std::vector<Point> Vtemp(V.begin(),
+                           V.end());// Local copy of control points
 
   // Triangle computation
   for (int i = 1; i <= degree; i++) {
@@ -122,7 +123,8 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_GD(
   Eigen::VectorXd t_value =
       Eigen::Map<Eigen::VectorXd>(parameters.data(), parameters.size());
 
-  // Initial value can be taken as the average of the endpoints of the Bezier curve
+  // Initial value can be taken as the average of the endpoints of the Bezier
+  // curve
   Eigen::Vector2d initial_p1{0.0, 0.0};
   Point leftTangent = normalize(row_points[1] - row_points[0]);
 
@@ -134,8 +136,8 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_GD(
   projection.x = segLength * leftTangent.x;
   projection.y = segLength * leftTangent.y;
   double l = std::hypot(projection.x, projection.y);
-  initial_p1.x() = control_points[0].x +  l;
-  initial_p1.y() = control_points[0].y +   l;
+  initial_p1.x() = control_points[0].x + l;
+  initial_p1.y() = control_points[0].y + l;
   //    Eigen::Vector2d initial_p1 = (con_pt[0] + con_pt[1]) / 2.0;
 
   Eigen::Vector2d p1 = initial_p1;
@@ -144,7 +146,7 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_GD(
     Eigen::Vector2d gradient = compute_gradient(p1, t_value, con_pt, row_point);
     p1 -= learning_rate * gradient;
     if (gradient.lpNorm<2>() < tolerance) {
-//      printf("iteration = %d\n ", iteration);
+      //      printf("iteration = %d\n ", iteration);
       break;
     }
   }
@@ -156,50 +158,15 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_GD(
   return conpt;
 }
 
-Eigen::Vector2d
-PiecewiseBezierFit2::cal_bezier_value(double t, const Eigen::Vector2d &p0,
-                                      const Eigen::Vector2d &p1,
-                                      const Eigen::Vector2d &p2) {
+Eigen::Vector2d PiecewiseBezierFit2::cal_bezier_value(
+    double t, const Eigen::Vector2d &p0, const Eigen::Vector2d &p1,
+    const Eigen::Vector2d &p2) {
   //  return (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
   double t_2 = t * t;
   double t_1_minus_t = (1 - t);
 
   return t_1_minus_t * t_1_minus_t * p0 + 2 * t_1_minus_t * t * p1 + t_2 * p2;
 }
-
-//Eigen::Vector2d
-//PiecewiseBezierFit2::cal_bezier_derivative(double t, const Eigen::Vector2d &p0,
-//                                           const Eigen::Vector2d &p1,
-//                                           const Eigen::Vector2d &p2) {
-//  double t_1_minus_t = 1.0 - t;
-//
-//  Eigen::Vector2d derivative =
-//      2.0 * t_1_minus_t * (p1 - p0) + 2.0 * t * (p2 - p1);
-//
-//  return derivative;
-//}
-
-//Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(
-//    const Eigen::Vector2d &p1, const Eigen::VectorXd &t_values,
-//    const std::vector<Eigen::Vector2d> &control_points,
-//    const std::vector<Eigen::Vector2d> &row_points, double epsilon) {
-//  Eigen::Vector2d gradient(0.0, 0.0);
-//
-//  const Eigen::Vector2d &p0 = control_points[0];
-//  const Eigen::Vector2d &p2 = control_points[1];
-//
-//  for (int i = 0; i < row_points.size(); ++i) {
-//    double t = t_values(i);
-//    const Eigen::Vector2d &sample = row_points[i];
-//
-//    Eigen::Vector2d curve = cal_bezier_value(t, p0, p1, p2);
-//    Eigen::Vector2d d_curve = cal_bezier_derivative(t, p0, p1, p2);
-//
-//    gradient += 2.0 * (curve - sample).dot(d_curve) * d_curve;
-//  }
-//
-//  return gradient;
-//}
 
 // 计算目标函数关于 p1 的梯度
 Eigen::Vector2d PiecewiseBezierFit2::compute_gradient(
@@ -271,14 +238,16 @@ std::vector<Point> PiecewiseBezierFit2::generateBezierControlPoint_LBFGS(
   this->con_pt = con_pt;
   this->row_point = row_pt;
 
-  // Initial value can be taken as the average of the endpoints of the Bezier curve
+  // Initial value can be taken as the average of the endpoints of the Bezier
+  // curve
   Point leftTangent = normalize(row_points[1] - row_points[0]);
   double segLength = std::sqrt(
       std::pow(row_points[0].x - row_points[row_points.size() - 1].x, 2)
       + std::pow(row_points[0].y - row_points[row_points.size() - 1].y, 2));
   Eigen::Vector2d initial_p1{0.0, 0.0};
-  //  initial_p1.x() = control_points[0].x + leftTangent.x * (segLength / 2.0);
-  //  initial_p1.y() = control_points[0].y + leftTangent.y * (segLength / 2.0);
+  //  initial_p1.x() = control_points[0].x + leftTangent.x * (segLength
+  //  / 2.0); initial_p1.y() = control_points[0].y + leftTangent.y *
+  //  (segLength / 2.0);
   //      Eigen::Vector2d initial_p1 = (con_pt[0] + con_pt[1]) / 2.0;
   //    Eigen::Vector2d p1 = initial_p1;
 
@@ -331,10 +300,9 @@ Point PiecewiseBezierFit2::normalize(const Point &v) {
 //   return vec1.x * vec2.x + vec1.y * vec2.y;
 // }
 
-std::vector<std::vector<Point>>
-PiecewiseBezierFit2::fitCubicBezier(std::vector<Point> &points,
-                                    const Point &leftTangent,
-                                    const Point &rightTangent, double error) {
+std::vector<std::vector<Point>> PiecewiseBezierFit2::fitCubicBezier(
+    std::vector<Point> &points, const Point &leftTangent,
+    const Point &rightTangent, double error) {
   std::vector<std::vector<Point>> bezCtlPts;
   if ((int) points.size() == 3) {
     double dist = std::sqrt(std::pow(points[0].x - points[1].x, 2)
@@ -350,7 +318,8 @@ PiecewiseBezierFit2::fitCubicBezier(std::vector<Point> &points,
   std::vector<double> u = chordLengthParameterize(points);
 
   auto control_point = generateBezierControlPoint_GD(con_pt, points, u);
-  //    auto control_point = generateBezierControlPoint_LBFGS(con_pt, points, u);
+  //    auto control_point = generateBezierControlPoint_LBFGS(con_pt, points,
+  //    u);
 
   auto error_split = computeMaxError(points, control_point, u);
   double point2CurveMaxError = error_split.first;
@@ -397,10 +366,9 @@ PiecewiseBezierFit2::fitCubicBezier(std::vector<Point> &points,
   return bezCtlPts;
 }
 
-std::vector<double>
-PiecewiseBezierFit2::reparameterize(const std::vector<Point> &bezier,
-                                    const std::vector<Point> &points,
-                                    const std::vector<double> &parameters) {
+std::vector<double> PiecewiseBezierFit2::reparameterize(
+    const std::vector<Point> &bezier, const std::vector<Point> &points,
+    const std::vector<double> &parameters) {
   std::vector<double> newParameters;
   for (size_t i = 0; i < points.size(); ++i) {
     double u = parameters[i];
@@ -418,14 +386,14 @@ double PiecewiseBezierFit2::newtonRaphsonRootFind(const std::vector<Point> &bez,
   Point d_curve = qprime(bez, u);
   Point dd_curve = qprimeprime(bez, u);
   /*
-    牛顿迭代法（又名：牛顿-拉弗森法）
-    不断地计算 u = u - f(u)/f'(u)
-      1. f(u) = (x-x_p)* x' + (y - y_p)* y'
-      2. f'(u) = (x')^2 + (y')^2 + (x-x_p)* x'' + (y - y_p)* y''
-      3. if abs(f'(u)) < eplison; return
-      4. else u - f(u)/f'(u)
-      最终得到一个u，使得目标带点距离曲线最近
-  */
+      牛顿迭代法（又名：牛顿-拉弗森法）
+      不断地计算 u = u - f(u)/f'(u)
+        1. f(u) = (x-x_p)* x' + (y - y_p)* y'
+        2. f'(u) = (x')^2 + (y')^2 + (x-x_p)* x'' + (y - y_p)* y''
+        3. if abs(f'(u)) < eplison; return
+        4. else u - f(u)/f'(u)
+        最终得到一个u，使得目标带点距离曲线最近
+    */
 
   auto n = err * d_curve;
   auto den = d_curve * d_curve + err * dd_curve;
@@ -440,8 +408,8 @@ double PiecewiseBezierFit2::newtonRaphsonRootFind(const std::vector<Point> &bez,
   }
 }
 
-std::vector<double>
-PiecewiseBezierFit2::chordLengthParameterize(const std::vector<Point> &points) {
+std::vector<double> PiecewiseBezierFit2::chordLengthParameterize(
+    const std::vector<Point> &points) {
   std::vector<double> u(points.size(),
                         0.0);// 初始化参数 t 的向量，并设置初始值为 0
 
@@ -458,10 +426,9 @@ PiecewiseBezierFit2::chordLengthParameterize(const std::vector<Point> &points) {
   return u;
 }
 
-std::pair<double, int>
-PiecewiseBezierFit2::computeMaxError(const std::vector<Point> &points,
-                                     const std::vector<Point> &bez,
-                                     const std::vector<double> &parameters) {
+std::pair<double, int> PiecewiseBezierFit2::computeMaxError(
+    const std::vector<Point> &points, const std::vector<Point> &bez,
+    const std::vector<double> &parameters) {
   double maxDistSquared = 0.0;// 使用距离的平方作为比较，避免开方运算
   int splitPoint = static_cast<int>(points.size() / 2);
   //  std::vector<double> ts = GetTValuesForPoints(bez, points);
@@ -490,9 +457,8 @@ double PiecewiseBezierFit2::binomial_coefficient(int n, int k) {
 }
 
 // 贝塞尔曲线生成函数
-std::vector<Point>
-PiecewiseBezierFit2::bezier_curve(const std::vector<Point> &control_points,
-                                  int num_points) {
+std::vector<Point> PiecewiseBezierFit2::bezier_curve(
+    const std::vector<Point> &control_points, int num_points) {
   int n = control_points.size() - 1;
   std::vector<Point> curve_points(num_points);
 
@@ -591,10 +557,9 @@ void PiecewiseBezierFit2::GetFootPoint(const std::vector<Point> &bez,
       t0, fmax(t0 - 0.1, 0.0), fmin(t0 + 0.1, 1.0), get_digits, it);
 };
 
-std::vector<double>
-PiecewiseBezierFit2::GenerateKnotsFitting(const std::vector<Point> &bez,
-                                          const std::vector<Point> &data_points,
-                                          const size_t match_point_size) {
+std::vector<double> PiecewiseBezierFit2::GenerateKnotsFitting(
+    const std::vector<Point> &bez, const std::vector<Point> &data_points,
+    const size_t match_point_size) {
   size_t data_points_size = data_points.size();
 
   std::vector<double> knots_fitting(data_points_size);
@@ -621,9 +586,8 @@ PiecewiseBezierFit2::GenerateKnotsFitting(const std::vector<Point> &bez,
   return knots_fitting;
 };
 
-std::vector<double>
-PiecewiseBezierFit2::GetTValuesForPoints(const std::vector<Point> &bez,
-                                         const std::vector<Point> &row_points) {
+std::vector<double> PiecewiseBezierFit2::GetTValuesForPoints(
+    const std::vector<Point> &bez, const std::vector<Point> &row_points) {
   auto initial_t_guess = GenerateKnotsFitting(bez, row_points);
 
   std::vector<double> tValues;

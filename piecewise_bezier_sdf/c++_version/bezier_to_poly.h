@@ -11,15 +11,11 @@ struct Point {
   double y;
   double squaredNorm() const { return x * x + y * y; }
   double dot(const Point &other) const { return x * other.x + y * other.y; }
-//  Point operator-(const Point &other) const {
-//    return {x - other.x, y - other.y};
-
 };
 class Bezier2Poly {
  public:
   explicit Bezier2Poly(const std::array<Point, 4> &controlPoints, int degree);
   explicit Bezier2Poly(const std::vector<Point> &controlPoints, int degree);
-
 
   std::vector<double> getXCoefficients() const;
   std::vector<double> getYCoefficients() const;
@@ -27,7 +23,7 @@ class Bezier2Poly {
   double getScale() const;
 
  private:
-  std::array<Point, 4> controlPoints4_;
+  std::array<Point, 4> controlPoints4_{};
   std::vector<Point> controlPoints3_;
   int degree_;
 
@@ -35,7 +31,7 @@ class Bezier2Poly {
   std::vector<double> B0_, B1_, B2_, B3_;
   std::vector<double> C0_, C1_, C2_;
 
-//  std::vector<std::vector<double>> B;
+  //  std::vector<std::vector<double>> B;
   std::vector<double> poly_coeffs_x_, poly_coeffs_y_;
   std::function<double(double)> polyFuncX_, polyFuncY_;
   double xGrad_{}, yGrad_{}, scale_{};
@@ -45,7 +41,10 @@ class Bezier2Poly {
   void calculateGradients();
 
   std::vector<double> linspace(double start, double end, size_t numPoints);
-  static std::vector<double> polynomialFit(const std::vector<double> &x, const std::vector<double> &y, int order);
-  static std::function<double(double)> polynomialFunction(const std::vector<double> &coeffs);
+  static std::vector<double> polynomialFit(const std::vector<double> &x,
+                                           const std::vector<double> &y,
+                                           int order);
+  static std::function<double(double)>
+  polynomialFunction(const std::vector<double> &coeffs);
   double gradient(const std::function<double(double)> &func);
 };

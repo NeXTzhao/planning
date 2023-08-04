@@ -14,13 +14,12 @@ namespace plt = matplotlibcpp;
 // 函数：生成弧长数据和坐标数据
 void generateData(std::vector<Point> &points) {
 
-#if 0
+#if 1
   std::vector<double> x, y;
-
 
   int num_points = 30;
   for (int i = 0; i < num_points; ++i) {
-    double t = i * M_PI / (num_points - 1);
+    double t = i * M_PI*0.3 / (num_points - 1);
     x.push_back(100 * std::cos(t));
     y.push_back(100 * std::sin(t));
   }
@@ -35,7 +34,7 @@ void generateData(std::vector<Point> &points) {
     points.push_back(point);
   }
 #endif
-#if 1
+#if 0
   std::vector<double> x, y;
   std::vector<double> tdata1 = {-60, -50, -40, -30, -20, -10};
   std::vector<double> tdata2 = {-10, -20, -30, -40, -50, -60};
@@ -137,7 +136,7 @@ int main() {
   generateData(points);
 
   auto start_Construct = std::chrono::high_resolution_clock::now();
-  auto pieceBez = std::make_shared<PiecewiseBezierFit2>(points, 2, 3);
+  auto pieceBez = std::make_shared<PiecewiseBezierFit2>(points, 2, 6);
   auto end_Construct = std::chrono::high_resolution_clock::now();
   auto Construct_time = std::chrono::duration_cast<std::chrono::microseconds>(
                             end_Construct - start_Construct)
