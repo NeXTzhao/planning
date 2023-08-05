@@ -1,21 +1,21 @@
-#include "lane_line_construction.h"
+#include "LaneLineConstruction.h"
 
 #include <cmath>
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
 
-LaneLine::LaneLine(const std::vector<std::vector<double>> &config, double lane_num) : config_(config) {
+LaneLine::LaneLine(const std::vector<std::vector<double>> &config, const LaneStatus &lane_status) : config_(config),
+                                                                                                    init_status_(lane_status) {
   center_line_points_.clear();
   left_bound_points_.clear();
   right_bound_points_.clear();
-  generateCenterLineAndBounds(lane_num);
+  generateCenterLineAndBounds();
 
   //  std::string filename = "/home/vtd/Documents/planning/lane_line_construction/JSON/track.json";
   //  writeJsonToFile(filename);
 }
-void LaneLine::generateCenterLineAndBounds(double lane_num) {
+void LaneLine::generateCenterLineAndBounds() {
   double x = init_status_.start_x_;
   double y = init_status_.start_y_;
   double yaw = init_status_.start_yaw_;
@@ -82,10 +82,6 @@ void LaneLine::generateCenterLineAndBounds(double lane_num) {
             incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
       }
     }
-  }
-
-  if (lane_num > 1) {
-
   }
 
   if (center_line_points_.size() > 1) {
