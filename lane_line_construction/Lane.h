@@ -74,7 +74,7 @@ class Visualization {
   void vis_dynamic() const {
     const auto& center_line =
         lanes_.front()->getLaneLine()->getCenterLinePoints();
-    for (int i = 0; i < center_line.size() - 1; ++i) {
+    for (int i = 0; i < center_line.size(); ++i) {
       plt::clf();
       vis_lane();
       double car_x = center_line[i].x;
@@ -83,7 +83,7 @@ class Visualization {
       drawCar(car_x, car_y, car_yaw);
       plt::grid(true);
       plt::axis("equal");
-      plt::pause(0.0001);
+      plt::pause(0.01);
     }
   }
 
@@ -103,7 +103,7 @@ class Visualization {
     }
 
     plt::plot({car_x[0], car_x[1], car_x[2], car_x[3], car_x[4]},
-              {car_y[0], car_y[1], car_y[2], car_y[3], car_y[4]}, "b-");
+              {car_y[0], car_y[1], car_y[2], car_y[3], car_y[4]}, "k-");
   }
 
  private:

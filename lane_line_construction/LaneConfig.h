@@ -17,12 +17,12 @@ extern std::vector<LaneStatus> laneStatus{};
 void initLaneConfig(double lane_num) {
   Config initialConfig = {
       // straight line: length
-      {100},
+      {30},
       // curve: Angle Radius
       {-150, 40},
       {30},
-      {150, 50},
-      {150}
+      //      {150, 50},
+      //      {150}
       // ...
   };
 
@@ -35,7 +35,8 @@ void initLaneConfig(double lane_num) {
           config.push_back(item);
         } else if (item.size() == 2) {
           double angle = item[0];
-          double radius = angle < 0.0 ? item[1] + lane_width : item[1] - lane_width;
+          double radius =
+              angle < 0.0 ? item[1] + lane_width : item[1] - lane_width;
           config.push_back({angle, radius});
         } else {
           std::cout << "The size of config is wrong" << std::endl;
@@ -61,7 +62,7 @@ void initLaneStartStatus(double lane_num) {
       lane_status.start_y_ += prevStatus.start_y_;
     }
 
-    laneStatus.emplace_back(std::move(lane_status));
+    laneStatus.emplace_back(lane_status);
   }
 }
 
