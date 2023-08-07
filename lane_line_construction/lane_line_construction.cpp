@@ -1,12 +1,14 @@
-#include "LaneLineConstruction.h"
+#include "lane_line_construction.h"
 
 #include <cmath>
 #include <fstream>
 #include <iostream>
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
 
-LaneLine::LaneLine(const std::vector<std::vector<double>> &config, const LaneStatus &lane_status) : config_(config),
-                                                                                                    init_status_(lane_status) {
+LaneLine::LaneLine(const std::vector<std::vector<double>> &config,
+                   const LaneStatus &lane_status)
+    : config_(config),
+      init_status_(lane_status) {
   center_line_points_.clear();
   left_bound_points_.clear();
   right_bound_points_.clear();
@@ -31,7 +33,8 @@ void LaneLine::generateCenterLineAndBounds() {
         x += resolution * std::cos(yaw);
         y += resolution * std::sin(yaw);
         incremental_s += resolution;
-        center_line_points_.emplace_back(LinePoint{incremental_s, x, y, yaw, 0.0});
+        center_line_points_.emplace_back(
+            LinePoint{incremental_s, x, y, yaw, 0.0});
 
         double normal_yaw = yaw + M_PI / 2.0;
         double left_bound_x = x + left_bound_offset * std::cos(normal_yaw);
@@ -39,10 +42,10 @@ void LaneLine::generateCenterLineAndBounds() {
         double right_bound_x = x + right_bound_offset * std::cos(normal_yaw);
         double right_bound_y = y + right_bound_offset * std::sin(normal_yaw);
 
-        left_bound_points_.emplace_back(LinePoint{
-            incremental_s, left_bound_x, left_bound_y, yaw, 0.0});
-        right_bound_points_.emplace_back(LinePoint{
-            incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
+        left_bound_points_.emplace_back(
+            LinePoint{incremental_s, left_bound_x, left_bound_y, yaw, 0.0});
+        right_bound_points_.emplace_back(
+            LinePoint{incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
       }
     } else if (seg.size() == 2) {
       double degree = seg[0];
@@ -68,7 +71,8 @@ void LaneLine::generateCenterLineAndBounds() {
         y = yc + radius * std::sin(current_angle);
         incremental_s += resolution;
         yaw += angle_increment;
-        center_line_points_.emplace_back(LinePoint{incremental_s, x, y, yaw, kappa});
+        center_line_points_.emplace_back(
+            LinePoint{incremental_s, x, y, yaw, kappa});
 
         double normal_yaw = yaw + M_PI / 2.0;
         double left_bound_x = x + left_bound_offset * std::cos(normal_yaw);
@@ -76,10 +80,10 @@ void LaneLine::generateCenterLineAndBounds() {
         double right_bound_x = x + right_bound_offset * std::cos(normal_yaw);
         double right_bound_y = y + right_bound_offset * std::sin(normal_yaw);
 
-        left_bound_points_.emplace_back(LinePoint{
-            incremental_s, left_bound_x, left_bound_y, yaw, 0.0});
-        right_bound_points_.emplace_back(LinePoint{
-            incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
+        left_bound_points_.emplace_back(
+            LinePoint{incremental_s, left_bound_x, left_bound_y, yaw, 0.0});
+        right_bound_points_.emplace_back(
+            LinePoint{incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
       }
     }
   }
@@ -90,7 +94,7 @@ void LaneLine::generateCenterLineAndBounds() {
     right_bound_points_[0].kappa = right_bound_points_[1].kappa;
   }
 }
-
+#if 0
 void LaneLine::writeJsonToFile(const std::string &filename) {
   std::vector<double> center_x, center_y, center_kappa;
   for (const auto &point : center_line_points_) {
@@ -128,3 +132,4 @@ void LaneLine::writeJsonToFile(const std::string &filename) {
     std::cerr << "Failed to open file: " << filename << std::endl;
   }
 }
+#endif
