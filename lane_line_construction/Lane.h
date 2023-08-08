@@ -42,12 +42,12 @@ class Lane {
     plt::plot(left_x, left_y, "g-");
     plt::plot(right_x, right_y, "g-");
 
-    plt::xlabel("X Coordinate");
-    plt::ylabel("Y Coordinate");
-    plt::title("Lane Visualization");
-
-    plt::grid(true);
-    plt::axis("equal");
+    //    plt::xlabel("X Coordinate");
+    //    plt::ylabel("Y Coordinate");
+    //    plt::title("Lane Visualization");
+    //
+    //    plt::grid(true);
+    //    plt::axis("equal");
   }
 
   std::shared_ptr<LaneLine> getLaneLine() const { return laneLine_; };
@@ -70,15 +70,23 @@ class Visualization {
   void vis_dynamic() const {
     const auto& center_line =
         lanes_.front()->getLaneLine()->getCenterLinePoints();
-    for (int i = 0; i < center_line.size(); ++i) {
+    for (const auto& i : center_line) {
       plt::clf();
       vis_lane();
-      double car_x = center_line[i].x;
-      double car_y = center_line[i].y;
-      double car_yaw = center_line[i].theta;
+
+      double car_x = i.x;
+      double car_y = i.y;
+      double car_yaw = i.theta;
       drawCar(car_x, car_y, car_yaw);
+
+      double x_min = car_x - 30.0;
+      double x_max = car_x + 60.0;
+      double y_min = car_y - 10.0;
+      double y_max = car_y + 10.0;
+
+      plt::xlim(x_min, x_max);// 设置 x 轴范围
+      plt::ylim(y_min, y_max);// 设置 y 轴范围
       plt::grid(true);
-      plt::axis("equal");
       plt::pause(0.01);
     }
   }
@@ -100,6 +108,7 @@ class Visualization {
 
     plt::plot({car_x[0], car_x[1], car_x[2], car_x[3], car_x[4]},
               {car_y[0], car_y[1], car_y[2], car_y[3], car_y[4]}, "k-");
+    plt::axis("equal");
   }
 
  private:

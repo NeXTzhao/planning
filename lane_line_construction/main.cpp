@@ -2,7 +2,7 @@
 #include "lane_config.h"
 
 int main() {
-  int lane_num = three_lanes;
+  int lane_num = single_lane;
   initLane(lane_num);
 
   std::vector<std::shared_ptr<Lane>> lanes;
