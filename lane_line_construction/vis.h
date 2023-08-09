@@ -5,10 +5,10 @@
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 
-class Lane {
+class VisLane {
  public:
-  Lane(const std::vector<std::vector<double>>& config,
-       const LaneStatus& laneStatus)
+  VisLane(const std::vector<std::vector<double>>& config,
+          const LaneStatus& laneStatus)
       : config_(config),
         laneStatus_(laneStatus) {
     laneLine_ = std::make_shared<LaneLine>(config_, laneStatus_);
@@ -42,12 +42,23 @@ class Lane {
     plt::plot(left_x, left_y, "g-");
     plt::plot(right_x, right_y, "g-");
 
-    //    plt::xlabel("X Coordinate");
-    //    plt::ylabel("Y Coordinate");
-    //    plt::title("Lane Visualization");
-    //
-    //    plt::grid(true);
-    //    plt::axis("equal");
+    plt::xlabel("X Coordinate");
+    plt::ylabel("Y Coordinate");
+    plt::title("Lane Visualization");
+
+    plt::grid(true);
+    plt::axis("equal");
+  }
+
+  void vis_curvature() {
+    auto lane = laneLine_->getCenterLinePoints();
+    std::vector<double> kappa;
+    for (const auto& point : lane) { kappa.push_back(point.kappa); }
+    plt::figure();
+    plt::named_plot("reference line kappa", kappa);
+    plt::axis("equal");
+    plt::grid(true);
+    plt::show();
   }
 
   std::shared_ptr<LaneLine> getLaneLine() const { return laneLine_; };
@@ -58,9 +69,9 @@ class Lane {
   std::shared_ptr<LaneLine> laneLine_;
 };
 
-class Visualization {
+class VisLaneAndCar {
  public:
-  explicit Visualization(const std::vector<std::shared_ptr<Lane>>& lanes)
+  explicit VisLaneAndCar(const std::vector<std::shared_ptr<VisLane>>& lanes)
       : lanes_(lanes){};
 
   void vis_lane() const {
@@ -79,8 +90,8 @@ class Visualization {
       double car_yaw = i.theta;
       drawCar(car_x, car_y, car_yaw);
 
-      double x_min = car_x - 30.0;
-      double x_max = car_x + 60.0;
+      double x_min = car_x - 20.0;
+      double x_max = car_x + 50.0;
       double y_min = car_y - 10.0;
       double y_max = car_y + 10.0;
 
@@ -114,5 +125,5 @@ class Visualization {
  private:
   double car_length_ = 3.0;
   double car_width_ = 1.5;
-  std::vector<std::shared_ptr<Lane>> lanes_;
+  std::vector<std::shared_ptr<VisLane>> lanes_;
 };

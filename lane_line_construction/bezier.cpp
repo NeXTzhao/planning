@@ -157,9 +157,10 @@ double BezierCurve::dkappa(double t) const {
   return dkappa_res;
 }
 
-std::vector<Point> BezierCurve::getBezierCurvePoints(
-    const std::vector<Point> &control_points, int num_points) {
-  std::vector<Point> curve_points(num_points);
+void BezierCurve::getBezierCurve(int num_points) {
+  curvePoints_.resize(num_points);
+  curveKappa_.resize(num_points);
+  curveDkappa_.resize(num_points);
 
   for (int i = 0; i < num_points; i++) {
     double t = static_cast<double>(i) / (num_points - 1);
@@ -168,10 +169,11 @@ std::vector<Point> BezierCurve::getBezierCurvePoints(
     for (int j = 0; j <= degree_; j++) {
       double coeff = binomialCoefficient(degree_, j)
           * pow(one_minus_t, degree_ - j) * pow(t, j);
-      curve_points[i].x += coeff * control_points[j].x;
-      curve_points[i].y += coeff * control_points[j].y;
+      curvePoints_[i].x += coeff * controlPoints_[j].x;
+      curvePoints_[i].y += coeff * controlPoints_[j].y;
     }
-  }
 
-  return curve_points;
+    curveKappa_[i] = kappa(t);
+    curveDkappa_[i] = dkappa(t);
+  }
 }

@@ -3,21 +3,29 @@
 #include <iostream>
 #include <vector>
 
+#include "lane_line_construction.h"
+
 typedef std::vector<std::vector<double>> Config;
 
 constexpr double lane_width = 3.75;
 
 extern std::vector<Config> configs{};
 void initLaneConfig(double lane_num) {
-  Config initialConfig = {
-      // straight line: length
-      {150},
-      // curve: Angle Radius
-      {150, 50},
-      {50},
-      {-150, 50},
-      {150}
-      // ...
+  Config initialConfig = {// straight line: length
+                          {30},
+                          // curve: Angle Radius
+                          {90, 10},
+                          {100},
+                          {220, 20},
+                          {30},
+//                          {-90, 20},
+//                          {50},
+//                          {160, 15},
+//                          {50},
+//                          {-160, 15},
+//                          {30},
+//                          {180, 17},
+//                          {50}
   };
 
   configs.clear();

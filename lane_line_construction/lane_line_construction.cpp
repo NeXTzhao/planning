@@ -14,7 +14,8 @@ LaneLine::LaneLine(const std::vector<std::vector<double>> &config,
   right_bound_points_.clear();
   generateCenterLineAndBounds();
 
-  //  std::string filename = "/home/vtd/Documents/planning/lane_line_construction/JSON/track.json";
+  //  std::string filename =
+  //  "/home/vtd/Documents/planning/lane_line_construction/JSON/track.json";
   //  writeJsonToFile(filename);
 }
 void LaneLine::generateCenterLineAndBounds() {
@@ -54,9 +55,10 @@ void LaneLine::generateCenterLineAndBounds() {
       int arc_direction = (angle < 0) ? -1 : 1;
       double arc_length = angle * radius;
       double kappa = (arc_length != 0) ? (1.0 / radius * arc_direction) : 0.0;
+      // 为了让起始角度与x轴正方向平行，因为计算机在计算图形的时候是以y正方向为基准，这么做相当于把弧线旋转到以x轴正方向为基准
       double start_angle = yaw - M_PI / 2.0 * arc_direction;
       double end_angle = start_angle + angle;
-
+      // 这里是将当前圆弧的切线方向旋转90°得到圆心角的度数，也就是圆弧法线方向的角度
       double center_yaw = yaw + M_PI / 2.0 * arc_direction;
       double xc = x + radius * std::cos(center_yaw);
       double yc = y + radius * std::sin(center_yaw);
@@ -73,7 +75,7 @@ void LaneLine::generateCenterLineAndBounds() {
         yaw += angle_increment;
         center_line_points_.emplace_back(
             LinePoint{incremental_s, x, y, yaw, kappa});
-
+        // 同理center_yaw原理一样
         double normal_yaw = yaw + M_PI / 2.0;
         double left_bound_x = x + left_bound_offset * std::cos(normal_yaw);
         double left_bound_y = y + left_bound_offset * std::sin(normal_yaw);
