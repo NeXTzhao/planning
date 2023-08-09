@@ -2,8 +2,6 @@
 
 #include <algorithm>
 #include <cmath>
-//namespace hiphi {
-//namespace planning {
 PolyCurveFit::PolyCurveFit(const std::vector<double> &sdata,
                            const std::vector<double> &xdata,
                            const std::vector<double> &ydata, int degree)
@@ -318,5 +316,3 @@ double Poly_Implicit::grady3(double x, double y) {
              + a1 * a2 * (b1 * b2 + 6 * b3 * (-b0 + y)));
   return out;
 }
-//}  // namespace planning
-//}  // namespace hiphi

@@ -22,7 +22,7 @@ class VisLane {
     std::vector<double> cen_x, cen_y, cen_kappa, left_x, left_y, right_x,
         right_y;
 
-    for (int i = 0; i < center_line.size(); ++i) {
+    for (int i = 0; i < (int)center_line.size(); ++i) {
       cen_x.push_back(center_line[i].x);
       cen_y.push_back(center_line[i].y);
       cen_kappa.push_back(center_line[i].kappa);

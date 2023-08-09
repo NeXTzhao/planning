@@ -20,7 +20,6 @@ add_executable(lane_line_construction
         lane_line_construction.cpp
         trajectory_planning.cpp
         bezier.cpp
-#        purepursuit.cpp
 )
 target_link_libraries(lane_line_construction
         Python3::Python

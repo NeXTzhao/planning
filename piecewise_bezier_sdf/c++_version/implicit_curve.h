@@ -5,11 +5,6 @@
 #include <iostream>
 #include <vector>
 
-//#include "modules/planning/reference_line/reference_line.h"
-
-//namespace hiphi {
-//namespace planning {
-
 class PolyCurveFit {
  private:
   std::vector<double> sdata_;
@@ -71,5 +66,3 @@ class Poly_Implicit {
   double gradx3(double x, double y);
   double grady3(double x, double y);
 };
-//}  // namespace planning
-//}  // namespace hiphi

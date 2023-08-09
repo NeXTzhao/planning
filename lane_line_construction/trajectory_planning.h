@@ -1,8 +1,5 @@
 #pragma once
 #include "bezier.h"
-#include "matplotlibcpp.h"
-
-namespace plt = matplotlibcpp;
 
 class BezierTurn : public BezierCurve {
  private:
@@ -24,32 +21,9 @@ class BezierTurn : public BezierCurve {
     Point P4 = 2 * D * ua + Pi;
     Point P5 = 4 * D * ua + Pi;
 
-    //    std::vector<Point> con_pts{P0, P1, P2, P3, P4, P5};
     controlPoints_ = {P0, P1, P2, P3, P4, P5};
-    degree_ = controlPoints_.size() - 1;
-    //    return con_pts;
+    degree_ = (int) controlPoints_.size() - 1;
   }
-
-  //  void vis_curvature() {
-  //    std::vector<double> x, y, kappa, dkappa;
-  //    auto points = this->getCurvePoints();
-  //    auto k = this->getCurveKappa();
-  //    auto dk = this->getCurveDkappa();
-  //
-  //    for (int i = 0; i < points.size(); ++i) {
-  //      x.push_back(points.at(i).x);
-  //      y.push_back(points.at(i).y);
-  //
-  //      kappa.push_back(k[i]);
-  //      dkappa.push_back(dk[i]);
-  //    }
-  //    plt::named_plot("local trajectory", x, y, "r");
-  //    plt::figure();
-  //    plt::named_plot("local trajectory kappa", kappa, "b-");
-  //    plt::named_plot("local trajectory dkappa", dkappa, "r-");
-  //    plt::grid(true);
-  //    plt::legend();
-  //  }
 };
 
 class BezierLaneChange : public BezierCurve {
@@ -62,7 +36,7 @@ class BezierLaneChange : public BezierCurve {
 
  public:
   BezierLaneChange() { cal_control_points(); };
-  Point getPLCC(bool isRightTurn) {
+  Point cal_PLCC(bool isRightTurn) {
     auto ua = cal_ua();
     double theta = std::atan2(ua.y, ua.x);
     // 如果是向右变换，则为-号，如果是向左变换，则为+号
@@ -81,7 +55,7 @@ class BezierLaneChange : public BezierCurve {
   void cal_control_points() {
     auto ua = cal_ua();
     auto ub = cal_ub();
-    auto PLCC = getPLCC(true);
+    auto PLCC = cal_PLCC(true);
 
     Point P0 = ub * D * 2.5 + PLC;
     Point P1 = ub * D * 1.5 + PLC;
@@ -91,8 +65,61 @@ class BezierLaneChange : public BezierCurve {
     Point P5 = ua * D * 2.5 + PLCC;
 
     controlPoints_ = {P0, P1, P2, P3, P4, P5};
-    degree_ = controlPoints_.size() - 1;
+    degree_ = (int) controlPoints_.size() - 1;
   }
 };
 
-class BezierRoundabouts : public BezierCurve {};
+class BezierRoundabouts : public BezierCurve {
+ private:
+  Point Pr{20, 110}, Pa{14, 79}, Pii{20.0, 71.0}, Pb{43.0, 87.0}, Pi{43, 85};
+  double ai = 20 * M_PI / 180, a0 = 20 * M_PI / 180, D = 3.75, R = 20;
+
+ public:
+  BezierRoundabouts() { cal_RE(); };
+
+  Point cal_ub() { return (Pb - Pi).normalized(); }
+  Point cal_ua() { return (Pa - Pii).normalized(); }
+
+  Point cal_Pe() {
+    auto ub = cal_ub();
+    double theta_e = std::atan2(ub.y, ub.x);
+    //   环岛分为顺时针和逆时针，国内应该都是逆时针？
+    theta_e += ai;
+    Point Pe{};
+    Pe.x = Pr.x + R * std::cos(theta_e);
+    Pe.y = Pr.y + R * std::sin(theta_e);
+
+    return Pe;
+  }
+
+  Point cal_Pex() {
+    auto ua = cal_ua();
+    double theta_ex = std::atan2(ua.y, ua.x);
+    theta_ex -= a0;
+    Point Pex{};
+    Pex.x = Pr.x + R * std::cos(theta_ex);
+    Pex.y = Pr.y + R * std::sin(theta_ex);
+
+    return Pex;
+  }
+
+  void cal_RE() {
+    auto Pe = cal_Pe();
+    double theta_e = std::atan2(Pe.y - Pr.y, Pe.x - Pr.x);
+    Point u_theta_e{std::cos(theta_e + D / R), std::sin(theta_e + D / R)};
+    Point ue = (Pe - Pb).normalized();
+
+    Point P0 = D * ue * 1.5 + Pe;
+    Point P1 = D * ue * 0.5 + Pe;
+    Point P2 = Pe;
+    Point P4 = Pr + R * u_theta_e.normalized();
+    Point arc{29, 130};
+    Point P3 = D * (arc - P4).normalized() + P4;
+
+    controlPoints_ = {P0, P1, P2, P3, P4};
+
+    degree_ = (int) controlPoints_.size() - 1;
+  }
+
+  void cal_REX() {}
+};

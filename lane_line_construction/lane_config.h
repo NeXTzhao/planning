@@ -9,23 +9,24 @@ typedef std::vector<std::vector<double>> Config;
 
 constexpr double lane_width = 3.75;
 
-extern std::vector<Config> configs{};
+std::vector<Config> configs{};
 void initLaneConfig(double lane_num) {
-  Config initialConfig = {// straight line: length
-                          {30},
-                          // curve: Angle Radius
-                          {90, 10},
-                          {100},
-                          {220, 20},
-                          {30},
-//                          {-90, 20},
-//                          {50},
-//                          {160, 15},
-//                          {50},
-//                          {-160, 15},
-//                          {30},
-//                          {180, 17},
-//                          {50}
+  Config initialConfig = {
+      // straight line: length
+      {30},
+      // curve: Angle Radius
+      {90, 10},
+      {100},
+      {220, 20},
+      {30},
+      //                          {-90, 20},
+      //                          {50},
+      //                          {160, 15},
+      //                          {50},
+      //                          {-160, 15},
+      //                          {30},
+      //                          {180, 17},
+      //                          {50}
   };
 
   configs.clear();
@@ -50,7 +51,7 @@ void initLaneConfig(double lane_num) {
   }
 }
 
-extern std::vector<LaneStatus> laneStatus{};
+std::vector<LaneStatus> laneStatus{};
 void initLaneStartStatus(double lane_num) {
   laneStatus.clear();
   LaneStatus initStatus{};
@@ -58,7 +59,8 @@ void initLaneStartStatus(double lane_num) {
   initStatus.right_bound_offset_ = -lane_width * 0.5;
   for (int i = 0; i < lane_num; ++i) {
     const auto& prevStatus = (i == 0) ? initStatus : laneStatus.back();
-    LaneStatus lane_status{i};
+    LaneStatus lane_status{};
+    lane_status.id = i;
     lane_status.left_bound_offset_ = lane_width * 0.5;
     lane_status.right_bound_offset_ = -lane_width * 0.5;
 

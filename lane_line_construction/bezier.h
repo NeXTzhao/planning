@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <vector>
+
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 
@@ -58,27 +59,9 @@ class BezierCurve {
   std::vector<Point> getCurvePoints() { return curvePoints_; };
   std::vector<double> getCurveKappa() { return curveKappa_; };
   std::vector<double> getCurveDkappa() { return curveDkappa_; };
+  void getBezierCurve(int num_points = 50);
 
-  void getBezierCurve(int num_points = 50) ;
-
-  void vis_curvature() {
-    std::vector<double> x, y, kappa, dkappa;
-    auto points = this->getCurvePoints();
-    auto k = this->getCurveKappa();
-    auto dk = this->getCurveDkappa();
-
-    for (int i = 0; i < points.size(); ++i) {
-      x.push_back(points.at(i).x);
-      y.push_back(points.at(i).y);
-
-      kappa.push_back(k[i]);
-      dkappa.push_back(dk[i]);
-    }
-    plt::named_plot("local trajectory", x, y, "r");
-//    plt::figure();
-//    plt::named_plot("local trajectory kappa", kappa, "b-");
-//    plt::named_plot("local trajectory dkappa", dkappa, "r-");
-    plt::grid(true);
-    plt::legend();
-  }
+  void printDebug();
+  void vis_curve();
+  void vis_curvature();
 };

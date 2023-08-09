@@ -177,3 +177,46 @@ void BezierCurve::getBezierCurve(int num_points) {
     curveDkappa_[i] = dkappa(t);
   }
 }
+
+void BezierCurve::printDebug() {
+  std::cout << "degree = " << degree_ << std::endl;
+  int i = 0;
+  for (const auto &point : controlPoints_) {
+    i++;
+    std::cout << "Control_Point" << i << " (" << point.x << "," << point.y
+              << ")" << std::endl;
+  }
+}
+
+void BezierCurve::vis_curve() {
+  std::vector<double> x, y, kappa, dkappa;
+  auto points = this->getCurvePoints();
+  auto k = this->getCurveKappa();
+  auto dk = this->getCurveDkappa();
+
+  for (int i = 0; i < points.size(); ++i) {
+    x.push_back(points.at(i).x);
+    y.push_back(points.at(i).y);
+
+    kappa.push_back(k[i]);
+    dkappa.push_back(dk[i]);
+  }
+  plt::plot(x, y, "r");
+  plt::grid(true);
+}
+
+void BezierCurve::vis_curvature() {
+  std::vector<double> kappa, dkappa;
+  auto k = this->getCurveKappa();
+  auto dk = this->getCurveDkappa();
+
+  for (int i = 0; i < (int) k.size(); ++i) {
+    kappa.push_back(k[i]);
+    dkappa.push_back(dk[i]);
+  }
+  plt::figure();
+  plt::named_plot("local trajectory kappa", kappa, "b-");
+  plt::named_plot("local trajectory dkappa", dkappa, "r-");
+  plt::grid(true);
+  plt::legend();
+}
