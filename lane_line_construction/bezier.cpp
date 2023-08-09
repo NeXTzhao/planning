@@ -182,9 +182,9 @@ void BezierCurve::printDebug() {
   std::cout << "degree = " << degree_ << std::endl;
   int i = 0;
   for (const auto &point : controlPoints_) {
-    i++;
     std::cout << "Control_Point" << i << " (" << point.x << "," << point.y
               << ")" << std::endl;
+    i++;
   }
 }
 
