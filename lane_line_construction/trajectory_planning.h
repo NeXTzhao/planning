@@ -71,7 +71,11 @@ class BezierLaneChange : public BezierCurve {
 
 class BezierRoundabouts : public BezierCurve {
  private:
+<<<<<<< HEAD
   Point Pr{20, 120}, Pa{14, 79}, Pii{20.0, 71.0}, Pb{43.0, 87.0}, Pi{-14, 140};
+=======
+  Point Pr{20, 110}, Pa{14, 79}, Pii{20.0, 71.0}, Pb{43.0, 87.0}, Pi{-14, 140};
+>>>>>>> 6a140fbdd2107f423e5ade0e00a835ab8b10b573
   double ai = 20 * M_PI / 180, a0 = 20 * M_PI / 180, D = 3.75, R = 20 + 3.75;
 
  public:
@@ -108,14 +112,23 @@ class BezierRoundabouts : public BezierCurve {
     auto Pe = cal_Pe();
     double theta_e = std::atan2(Pe.y - Pr.y, Pe.x - Pr.x);
     Point u_theta_e{std::cos(theta_e + D / R), std::sin(theta_e + D / R)};
+<<<<<<< HEAD
     Point ue = (Pe - Pb).normalized() * -1;
+=======
+    std::cout << "pe = " << Pe.x << "," << Pe.y << std::endl;
+    Point ue = (Pe - Pb).normalized();
+>>>>>>> 6a140fbdd2107f423e5ade0e00a835ab8b10b573
 
     Point P0 = D * ue * 1.5 + Pe;
     Point P1 = D * ue * 0.5 + Pe;
     Point P2 = Pe;
     Point P4 = Pr + R * u_theta_e.normalized();
     Point arc{38, 126};
+<<<<<<< HEAD
     Point P3 = D * (P4 - arc).normalized() + P4;
+=======
+    Point P3 = D * P4.normalized() + P4;
+>>>>>>> 6a140fbdd2107f423e5ade0e00a835ab8b10b573
 
     controlPoints_ = {P0, P1, P2, P3, P4};
 
