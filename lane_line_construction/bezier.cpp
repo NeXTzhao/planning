@@ -178,29 +178,32 @@ void BezierCurve::getBezierCurve(int num_points) {
   }
 }
 
-void BezierCurve::printDebug() {
+void BezierCurve::print_debug() {
   std::cout << "degree = " << degree_ << std::endl;
   int i = 0;
   for (const auto &point : controlPoints_) {
-    i++;
     std::cout << "Control_Point" << i << " (" << point.x << "," << point.y
               << ")" << std::endl;
+    i++;
   }
 }
 
 void BezierCurve::vis_curve() {
   std::vector<double> x, y, kappa, dkappa;
   auto points = this->getCurvePoints();
-  auto k = this->getCurveKappa();
-  auto dk = this->getCurveDkappa();
 
-  for (int i = 0; i < points.size(); ++i) {
-    x.push_back(points.at(i).x);
-    y.push_back(points.at(i).y);
-
-    kappa.push_back(k[i]);
-    dkappa.push_back(dk[i]);
+  for (auto &point : points) {
+    x.push_back(point.x);
+    y.push_back(point.y);
   }
+
+  std::vector<double> con_x, con_y;
+  for (const auto &con_pt : controlPoints_) {
+    con_x.push_back(con_pt.x);
+    con_y.push_back(con_pt.y);
+  }
+
+  plt::plot(con_x, con_y, "k.");
   plt::plot(x, y, "r");
   plt::grid(true);
 }

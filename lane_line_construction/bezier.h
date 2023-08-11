@@ -61,7 +61,7 @@ class BezierCurve {
   std::vector<double> getCurveDkappa() { return curveDkappa_; };
   void getBezierCurve(int num_points = 50);
 
-  void printDebug();
+  void print_debug();
   void vis_curve();
   void vis_curvature();
 };

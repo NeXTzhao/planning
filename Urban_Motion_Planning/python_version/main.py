@@ -1,16 +1,19 @@
-# 这是一个示例 Python 脚本。
+import geopandas as gpd
+import matplotlib.pyplot as plt
 
-# 按 Alt+Shift+X 执行或将其替换为您的代码。
-# 按 双击 Shift 在所有地方搜索类、文件、工具窗口、操作和设置。
+# 读取 Shapefile 文件
+# shapefile_path = "/home/vtd/Downloads/CNOA/hh05_deform_20230720/ROAD.shp"
+shapefile_path = "/home/vtd/Downloads/CNOA/hh05_deform_20230720/LANE_ADAS.shp"
+
+gdf = gpd.read_file(shapefile_path)
 
 
-def print_hi(name):
-    # 在下面的代码行中使用断点来调试脚本。
-    print(f'Hi, {name}')  # 按 Ctrl+Shift+B 切换断点。
+# 存储为 JSON 文件
+# output_json_path = "LANE_ADAS.json"
+# gdf.to_file(output_json_path, driver="GeoJSON")
+# print("GeoDataFrame saved as JSON:", output_json_path)
 
-
-# 按装订区域中的绿色按钮以运行脚本。
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# 访问 https://www.jetbrains.com/help/pycharm/ 获取 PyCharm 帮助
+# 绘制地图
+ax = gdf.plot()
+ax.set_title('Shapefile Visualization')
+plt.show()

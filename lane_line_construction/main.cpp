@@ -27,7 +27,7 @@ int main() {
   auto bez_R = std::make_shared<BezierRoundabouts>();
   bez_R->getBezierCurve();
   bez_R->vis_curve();
-  bez_R->printDebug();
+  bez_R->print_debug();
 
   plt::show();
   return 0;

@@ -26,6 +26,7 @@ enum LaneNum {
   three_lanes = 3,
   four_lanes = 4
 };
+
 class LaneLine {
  public:
   explicit LaneLine(const std::vector<std::vector<double>> &config,
@@ -49,7 +50,13 @@ class LaneLine {
  private:
   std::vector<std::vector<double>> config_;
   LaneStatus init_status_;
+
   std::vector<LinePoint> center_line_points_;
   std::vector<LinePoint> left_bound_points_;
   std::vector<LinePoint> right_bound_points_;
+
+  int pre_lane;
+  int next_lane;
+  int left_id;
+  int right_id;
 };

@@ -71,20 +71,21 @@ class BezierLaneChange : public BezierCurve {
 
 class BezierRoundabouts : public BezierCurve {
  private:
-  Point Pr{20, 110}, Pa{14, 79}, Pii{20.0, 71.0}, Pb{43.0, 87.0}, Pi{43, 85};
-  double ai = 20 * M_PI / 180, a0 = 20 * M_PI / 180, D = 3.75, R = 20;
+  Point Pr{20, 120}, Pa{14, 79}, Pii{20.0, 71.0}, Pb{43.0, 87.0}, Pi{-14, 140};
+  double ai = 20 * M_PI / 180, a0 = 20 * M_PI / 180, D = 3.75, R = 20 + 3.75;
 
  public:
   BezierRoundabouts() { cal_RE(); };
 
   Point cal_ub() { return (Pb - Pi).normalized(); }
-  Point cal_ua() { return (Pa - Pii).normalized(); }
+  Point cal_ua() { return (Pa - Pi).normalized(); }
 
   Point cal_Pe() {
     auto ub = cal_ub();
     double theta_e = std::atan2(ub.y, ub.x);
     //   环岛分为顺时针和逆时针，国内应该都是逆时针？
     theta_e += ai;
+
     Point Pe{};
     Pe.x = Pr.x + R * std::cos(theta_e);
     Pe.y = Pr.y + R * std::sin(theta_e);
@@ -107,14 +108,14 @@ class BezierRoundabouts : public BezierCurve {
     auto Pe = cal_Pe();
     double theta_e = std::atan2(Pe.y - Pr.y, Pe.x - Pr.x);
     Point u_theta_e{std::cos(theta_e + D / R), std::sin(theta_e + D / R)};
-    Point ue = (Pe - Pb).normalized();
+    Point ue = (Pe - Pb).normalized() * -1;
 
     Point P0 = D * ue * 1.5 + Pe;
     Point P1 = D * ue * 0.5 + Pe;
     Point P2 = Pe;
     Point P4 = Pr + R * u_theta_e.normalized();
-    Point arc{29, 130};
-    Point P3 = D * (arc - P4).normalized() + P4;
+    Point arc{38, 126};
+    Point P3 = D * (P4 - arc).normalized() + P4;
 
     controlPoints_ = {P0, P1, P2, P3, P4};
 

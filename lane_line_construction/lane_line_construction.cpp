@@ -27,6 +27,7 @@ void LaneLine::generateCenterLineAndBounds() {
   double left_bound_offset = init_status_.left_bound_offset_;
   double right_bound_offset = init_status_.right_bound_offset_;
 
+  int id = 1;
   for (const auto &seg : config_) {
     if (seg.size() == 1) {
       int num_steps = static_cast<int>(std::floor(seg[0] / resolution));
@@ -48,6 +49,7 @@ void LaneLine::generateCenterLineAndBounds() {
         right_bound_points_.emplace_back(
             LinePoint{incremental_s, right_bound_x, right_bound_y, yaw, 0.0});
       }
+      id++;
     } else if (seg.size() == 2) {
       double degree = seg[0];
       double radius = seg[1];

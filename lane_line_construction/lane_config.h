@@ -9,6 +9,35 @@ typedef std::vector<std::vector<double>> Config;
 
 constexpr double lane_width = 3.75;
 
+Config straight_1{
+    {30}
+};
+
+Config intersection_2{
+    {90,10}
+};
+
+Config straight_3{
+    {50}
+};
+
+Config intersection_4{
+    {-90,10}
+};
+
+Config straight_5{
+    {60}
+};
+
+Config roundabouts_6{
+    {120,50}
+};
+
+Config straight_7{
+    {100}
+};
+
+
 std::vector<Config> configs{};
 void initLaneConfig(double lane_num) {
   Config initialConfig = {
@@ -18,15 +47,7 @@ void initLaneConfig(double lane_num) {
       {90, 10},
       {100},
       {220, 20},
-      {30},
-      //                          {-90, 20},
-      //                          {50},
-      //                          {160, 15},
-      //                          {50},
-      //                          {-160, 15},
-      //                          {30},
-      //                          {180, 17},
-      //                          {50}
+      {30}
   };
 
   configs.clear();
