@@ -3,15 +3,6 @@
 #include "vis.h"
 
 int main() {
-  //  int lane_num = dual_lanes;
-  //  initLane(lane_num);
-  //
-  //  std::vector<std::shared_ptr<VisLane>> lanes;
-  //  lanes.reserve(laneStatus.size());
-  //  for (const auto& status : laneStatus) {
-  //    lanes.push_back(std::make_shared<VisLane>(configs[status.id], status));
-  //  }
-  //
   //  auto vis = std::make_shared<VisLaneAndCar>(lanes);
   //  vis->vis_lane();
   ////  vis->vis_dynamic();
