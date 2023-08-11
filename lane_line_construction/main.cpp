@@ -23,14 +23,15 @@ int main() {
                                                  {30},
                                                  // curve: Angle Radius
                                                  {90, 10},
-                                                 {50},
-                                                 {220, 20},
+                                                 {80},
+                                                 {-180, 10},
                                                  {30}};
 
-  map map_use = map(dual_lanes, initialConfig);
-  Visualizer visualizer(map_use);
-  visualizer.vis_dynamic();
+  Map map = Map(dual_lanes, initialConfig);
+//  map.GetReferenceLine();
 
+  Visualizer visualizer(map);
+  visualizer.vis_dynamic();
 
   plt::show();
   return 0;

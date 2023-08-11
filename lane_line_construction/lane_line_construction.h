@@ -150,16 +150,23 @@ struct Road {
   }
 };
 
-struct map {
+struct Map {
  private:
-  std::vector<Road> Roads;
+  std::vector<Road> roads_;
+  std::vector<LinePoint> reference_line_;
   LaneStatus initStatus{};
- public:
-  const std::vector<Road> &GetRoads() const { return Roads; }
 
  public:
-  map(const int lane_num, const std::vector<std::vector<double>> &road_configs) {
+  const std::vector<Road> &GetRoads() const { return roads_; }
+  const std::vector<LinePoint> &GetReferenceLine() const {
+    return reference_line_;
+  }
+
+ public:
+  Map(const int lane_num,
+      const std::vector<std::vector<double>> &road_configs) {
     generateRoadsFromConfig(lane_num, road_configs, initStatus);
+    generateReferenceLine();
   }
 
  private:
@@ -169,16 +176,34 @@ struct map {
     int id = 0;
     for (const auto &config : road_configs) {
       auto status = lane_status;
-      if (!Roads.empty()) {
+      if (!roads_.empty()) {
         auto next_start_point =
-            Roads.back().GetCenterLane().GetCenterLine().back();
+            roads_.back().GetCenterLane().GetCenterLine().back();
         status.start_x_ = next_start_point.x;
         status.start_y_ = next_start_point.y;
         status.start_yaw_ = next_start_point.theta;
       }
       Road road{id, lane_num, config, status};
-      Roads.push_back(road);
+      roads_.push_back(road);
       id++;
     }
+  }
+
+  void generateReferenceLine() {
+    for (const auto &road : roads_) {
+      auto ref = road.GetCenterLane().GetCenterLine();
+      reference_line_.insert(reference_line_.end(), ref.begin(), ref.end());
+    }
+#if 0
+    std::vector<double> x, y;
+    for (const auto &ref : reference_line_) {
+      std::cout << "ref = (" << ref.x << " , " << ref.y << ")" << std::endl;
+      x.emplace_back(ref.x);
+      y.emplace_back(ref.y);
+    }
+    plt::named_plot("ref", x, y, "r.");
+    plt::axis("equal");
+
+#endif
   }
 };

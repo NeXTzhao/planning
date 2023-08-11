@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <memory>
 #include <utility>
 
@@ -8,10 +9,16 @@ namespace plt = matplotlibcpp;
 
 class Visualizer {
  private:
-  map map_;
+  Map map_;
+  double car_length_ = 3.0;
+  double car_width_ = 1.5;
+  double vehicle_speed_ = 1.0;
+
+  std::vector<LinePoint> trajectory_;
+  std::chrono::high_resolution_clock::time_point last_update_time_;
 
  public:
-  explicit Visualizer(map map) : map_(std::move(map)) {}
+  explicit Visualizer(Map map) : map_(std::move(map)) {}
 
   static void vis_lane_curvature(const LaneLine& laneLine_) {
     auto lane = laneLine_.GetCenterLine();
@@ -43,11 +50,10 @@ class Visualizer {
       right_x.push_back(right_bound[i].x);
       right_y.push_back(right_bound[i].y);
     }
-    std::string lineName = "Lane " + std::to_string(lane.GetId());
-
-    //    plt::named_plot(lineName + " Center Line", cen_x, cen_y, "b--");
-    //    plt::named_plot(lineName + " Left Bound", left_x, left_y, "g-");
-    //    plt::named_plot(lineName + " Right Bound", right_x, right_y, "g-");
+    //  std::string lineName = "Lane " + std::to_string(lane.GetId());
+    //  plt::named_plot(lineName + " Center Line", cen_x, cen_y, "b--");
+    //  plt::named_plot(lineName + " Left Bound", left_x, left_y, "g-");
+    //  plt::named_plot(lineName + " Right Bound", right_x, right_y, "g-");
 
     plt::plot(cen_x, cen_y, "b--");
     plt::plot(left_x, left_y, "g-");
@@ -71,32 +77,47 @@ class Visualizer {
   }
 
   void vis_dynamic() {
-    addTrajectoryPoint(0, 50);
-    for (const auto& i : trajectory_) {
+    double car_x;
+    double car_y;
+    double car_yaw;
+    int start_index = 0;
+    int end_index = 200;
+
+    int temp_index = 0;
+    addTrajectoryPoint(start_index, end_index);
+
+    for (; temp_index < (int) trajectory_.size(); temp_index += 5) {
+      if (temp_index > (int) trajectory_.size() - 100) {
+        start_index += temp_index;
+        end_index = start_index + 200;
+        addTrajectoryPoint(start_index, end_index);
+        temp_index = 0;
+      }
       plt::clf();
-      //      vis_lane();
       vis_map();
-      double car_x = i.x;
-      double car_y = i.y;
-      double car_yaw = i.theta;
+      auto point = trajectory_[temp_index];
+      car_x = point.x + std::cos(car_yaw);
+      car_y = point.y + std::sin(car_yaw);
+      car_yaw = point.theta;
+      //      updateCarPosition(car_x, car_y, car_yaw);
+
       drawCar(car_x, car_y, car_yaw);
 
-      double x_min = car_x - 30.0;
-      double x_max = car_x + 60.0;
-      double y_min = car_y - 10.0;
-      double y_max = car_y + 10.0;
+      double x_min = car_x - 50.0;
+      double x_max = car_x + 50.0;
+      double y_min = car_y - 20.0;
+      double y_max = car_y + 20.0;
 
       std::vector<double> traj_x, traj_y;
-      for (const auto& point : trajectory_) {
-        traj_x.push_back(point.x);
-        traj_y.push_back(point.y);
+      for (int j = temp_index; j < (int) trajectory_.size(); ++j) {
+        traj_x.push_back(trajectory_[j].x);
+        traj_y.push_back(trajectory_[j].y);
       }
       plt::plot(traj_x, traj_y, "r-");
-
-      plt::xlim(x_min, x_max);// 设置 x 轴范围
-      plt::ylim(y_min, y_max);// 设置 y 轴范围
+      plt::xlim(x_min, x_max);
+      plt::ylim(y_min, y_max);
       plt::grid(true);
-      plt::pause(0.01);
+      plt::pause(0.0001);
     }
   }
 
@@ -120,17 +141,25 @@ class Visualizer {
     plt::axis("equal");
   }
 
-  void addTrajectoryPoint(int start_index, int num_points) {
-    auto points = map_.GetRoads().back().GetCenterLane().GetCenterLine();
-    for (int i = start_index; i < num_points; ++i) {
-      auto point = points[i];
-      trajectory_.emplace_back(point);
-    }
+  void updateCarPosition(double& car_x, double& car_y, double car_yaw) {
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+        current_time - last_update_time_);
+    double time_elapsed = elapsed_time.count() / 1000.0;// Convert to seconds
+    last_update_time_ = current_time;
+
+    car_x += vehicle_speed_ * time_elapsed * std::cos(car_yaw);
+    car_y += vehicle_speed_ * time_elapsed * std::sin(car_yaw);
   }
 
- private:
-  double car_length_ = 3.0;
-  double car_width_ = 1.5;
-
-  std::vector<LinePoint> trajectory_;
+  void addTrajectoryPoint(int start_index, int end_index) {
+    auto ref = map_.GetReferenceLine();
+    if (start_index < 0) start_index = 0;
+    if (start_index >= (int) ref.size()) start_index = (int) ref.size() - 1;
+    if (end_index <= 0) end_index = 1;
+    if (end_index >= (int) ref.size()) end_index = (int) ref.size() - 1;
+    trajectory_.clear();
+    trajectory_.insert(trajectory_.begin(), ref.begin() + start_index,
+                       ref.begin() + end_index);
+  }
 };

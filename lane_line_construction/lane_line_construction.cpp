@@ -1,7 +1,7 @@
 #include "lane_line_construction.h"
 
 #include <cmath>
-#include <fstream>
+//#include <fstream>
 #include <iostream>
 //#include <nlohmann/json.hpp>
 
@@ -57,7 +57,7 @@ void LaneLine::generateCenterLineAndBounds() {
     double kappa = (arc_length != 0) ? (1.0 / radius * arc_direction) : 0.0;
     // 为了让起始角度与x轴正方向平行，因为计算机在计算图形的时候是以y正方向为基准，这么做相当于把弧线旋转到以x轴正方向为基准
     double start_angle = yaw - M_PI / 2.0 * arc_direction;
-    double end_angle = start_angle + angle;
+//    double end_angle = start_angle + angle;
     // 这里是将当前圆弧的切线方向旋转90°得到圆心角的度数，也就是圆弧法线方向的角度
     double center_yaw = yaw + M_PI / 2.0 * arc_direction;
     double xc = x + radius * std::cos(center_yaw);

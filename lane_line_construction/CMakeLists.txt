@@ -26,10 +26,10 @@ target_link_libraries(lane_line_construction
         Python3::NumPy
         #[[nlohmann_json::nlohmann_json]])
 
-add_executable(pp
-        purepursuit.cpp
-)
-target_link_libraries(pp
-        Python3::Python
-        Python3::NumPy
-        #[[nlohmann_json::nlohmann_json]])
+#add_executable(pp
+#        purepursuit.cpp
+#)
+#target_link_libraries(pp
+#        Python3::Python
+#        Python3::NumPy
+#        #[[nlohmann_json::nlohmann_json]])
