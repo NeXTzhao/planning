@@ -1,24 +1,142 @@
 #pragma once
 #include <chrono>
 #include <memory>
+#include <random>
 #include <utility>
 
 #include "lane_line_construction.h"
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 
-class Visualizer {
+class Car {
  private:
-  Map map_;
   double car_length_ = 3.0;
   double car_width_ = 1.5;
   double vehicle_speed_ = 1.0;
-
-  std::vector<LinePoint> trajectory_;
   std::chrono::high_resolution_clock::time_point last_update_time_;
 
+ private:
+  std::array<double, 5> car_x_{};
+  std::array<double, 5> car_y_{};
+
  public:
-  explicit Visualizer(Map map) : map_(std::move(map)) {}
+  const std::array<double, 5>& GetCarX() const { return car_x_; }
+  const std::array<double, 5>& GetCarY() const { return car_y_; }
+
+ public:
+  void drawCar(double x, double y, double yaw, const std::string& color) {
+    car_x_ = {x - car_length_ / 2, x + car_length_ / 2, x + car_length_ / 2,
+              x - car_length_ / 2, x - car_length_ / 2};
+    car_y_ = {y - car_width_ / 2, y - car_width_ / 2, y + car_width_ / 2,
+              y + car_width_ / 2, y - car_width_ / 2};
+
+    for (int i = 0; i < 5; ++i) {
+      double temp_x = car_x_[i];
+      car_x_[i] = (temp_x - x) * cos(yaw) - (car_y_[i] - y) * sin(yaw) + x;
+      car_y_[i] = (temp_x - x) * sin(yaw) + (car_y_[i] - y) * cos(yaw) + y;
+    }
+
+    plt::plot({car_x_[0], car_x_[1], car_x_[2], car_x_[3], car_x_[4]},
+              {car_y_[0], car_y_[1], car_y_[2], car_y_[3], car_y_[4]}, color);
+    plt::axis("equal");
+  }
+
+  void updateCarPosition(double& car_x, double& car_y, double car_yaw) {
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+        current_time - last_update_time_);
+    double time_elapsed = elapsed_time.count() / 1000.0;// Convert to seconds
+    last_update_time_ = current_time;
+
+    car_x += vehicle_speed_ * time_elapsed * std::cos(car_yaw);
+    car_y += vehicle_speed_ * time_elapsed * std::sin(car_yaw);
+  }
+};
+
+class Obstacle : public Car {
+ private:
+  Map map_;
+
+  struct ObstaclePose {
+    double x;
+    double y;
+    double yaw;
+  };
+
+  std::vector<ObstaclePose> obs;
+
+ public:
+  const std::vector<ObstaclePose>& GetObs() const { return obs; }
+
+ public:
+  Obstacle() = default;
+  explicit Obstacle(Map map) : map_(std::move(map)) {}
+
+  void drawObs() {
+    for (const auto& pose : obs) { drawCar(pose.x, pose.y, pose.yaw, "b-"); }
+  }
+
+  void addRandomObstacles(int num_obstacles) {
+    auto reference_line = map_.GetReferenceLine();
+    double start_s = (reference_line.begin() + 10)->s;
+    double end_s = (reference_line.end() - 10)->s;
+
+    if (num_obstacles <= 0) return;
+    if (start_s < 0) start_s = 0;
+    if (end_s > reference_line.back().s) end_s = reference_line.back().s;
+
+    for (int i = 0; i < num_obstacles; ++i) {
+      double random_s = generateRandomS(i, start_s, end_s);
+
+      int closest_index = findClosestIndex(reference_line, random_s);
+      if (closest_index != -1) {
+        double pose_x = reference_line[closest_index].x;
+        double pose_y = reference_line[closest_index].y;
+        double pose_yaw = reference_line[closest_index].theta;
+        //        std::cout << "start_s = " << start_s << " ,end_s = " << end_s
+        //                  << " ,s = " << random_s << " ,index = " << closest_index
+        //                  << " ,pose (" << pose_x << " , " << pose_y << " , " << pose_yaw
+        //                  << " )" << std::endl;
+        obs.push_back({pose_x, pose_y, pose_yaw});
+      }
+    }
+  }
+
+ private:
+  static double generateRandomS(int seed, double start_s, double end_s) {
+    // 使用固定的种子值
+    std::mt19937 gen(seed + 80);
+    std::uniform_real_distribution<> dis(start_s, end_s);
+    return dis(gen);
+  }
+
+  static int findClosestIndex(const std::vector<LinePoint>& reference_line,
+                              double target_s) {
+    int closest_index = -1;
+    double min_distance = std::numeric_limits<double>::max();
+    for (int j = 0; j < (int) reference_line.size(); ++j) {
+      double distance = std::abs(reference_line[j].s - target_s);
+      if (distance < min_distance) {
+        min_distance = distance;
+        closest_index = j;
+      }
+    }
+    return closest_index;
+  }
+};
+
+class Visualizer {
+ private:
+  Map map_;
+  Car car_;
+  Obstacle obs_;
+  std::vector<LinePoint> trajectory_;
+
+ public:
+  explicit Visualizer(Map map) : map_(std::move(map)) {
+    Obstacle obs(map_);
+    obs_ = std::move(obs);
+  }
 
   static void vis_lane_curvature(const LaneLine& laneLine_) {
     auto lane = laneLine_.GetCenterLine();
@@ -85,7 +203,7 @@ class Visualizer {
 
     int temp_index = 0;
     addTrajectoryPoint(start_index, end_index);
-
+    obs_.addRandomObstacles(3);
     for (; temp_index < (int) trajectory_.size(); temp_index += 5) {
       if (temp_index > (int) trajectory_.size() - 100) {
         start_index += temp_index;
@@ -101,12 +219,13 @@ class Visualizer {
       car_yaw = point.theta;
       //      updateCarPosition(car_x, car_y, car_yaw);
 
-      drawCar(car_x, car_y, car_yaw);
+      car_.drawCar(car_x, car_y, car_yaw, "k-");
+      obs_.drawObs();
 
-      double x_min = car_x - 50.0;
+      double x_min = car_x - 20.0;
       double x_max = car_x + 50.0;
       double y_min = car_y - 20.0;
-      double y_max = car_y + 20.0;
+      double y_max = car_y + 50.0;
 
       std::vector<double> traj_x, traj_y;
       for (int j = temp_index; j < (int) trajectory_.size(); ++j) {
@@ -114,6 +233,7 @@ class Visualizer {
         traj_y.push_back(trajectory_[j].y);
       }
       plt::plot(traj_x, traj_y, "r-");
+
       plt::xlim(x_min, x_max);
       plt::ylim(y_min, y_max);
       plt::grid(true);
@@ -122,36 +242,6 @@ class Visualizer {
   }
 
  private:
-  void drawCar(double x, double y, double yaw) const {
-    double car_x[5] = {x - car_length_ / 2, x + car_length_ / 2,
-                       x + car_length_ / 2, x - car_length_ / 2,
-                       x - car_length_ / 2};
-    double car_y[5] = {y - car_width_ / 2, y - car_width_ / 2,
-                       y + car_width_ / 2, y + car_width_ / 2,
-                       y - car_width_ / 2};
-
-    for (int i = 0; i < 5; ++i) {
-      double temp_x = car_x[i];
-      car_x[i] = (temp_x - x) * cos(yaw) - (car_y[i] - y) * sin(yaw) + x;
-      car_y[i] = (temp_x - x) * sin(yaw) + (car_y[i] - y) * cos(yaw) + y;
-    }
-
-    plt::plot({car_x[0], car_x[1], car_x[2], car_x[3], car_x[4]},
-              {car_y[0], car_y[1], car_y[2], car_y[3], car_y[4]}, "k-");
-    plt::axis("equal");
-  }
-
-  void updateCarPosition(double& car_x, double& car_y, double car_yaw) {
-    auto current_time = std::chrono::high_resolution_clock::now();
-    auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-        current_time - last_update_time_);
-    double time_elapsed = elapsed_time.count() / 1000.0;// Convert to seconds
-    last_update_time_ = current_time;
-
-    car_x += vehicle_speed_ * time_elapsed * std::cos(car_yaw);
-    car_y += vehicle_speed_ * time_elapsed * std::sin(car_yaw);
-  }
-
   void addTrajectoryPoint(int start_index, int end_index) {
     auto ref = map_.GetReferenceLine();
     if (start_index < 0) start_index = 0;

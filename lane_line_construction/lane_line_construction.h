@@ -23,16 +23,12 @@ struct LaneStatus {
   double start_y_ = 0.0;
   double start_yaw_ = 0.0;
   double resolution_ = 0.1;
+  double start_s = 0.0;
   double left_bound_offset_ = lane_width * 0.5;
   double right_bound_offset_ = -lane_width * 0.5;
 };
 
-enum LaneNum {
-  single_lane = 1,
-  dual_lanes = 2,
-  three_lanes = 3,
-  four_lanes = 4
-};
+enum LaneNum { single_lane = 1, dual_lanes = 2, three_lanes = 3, four_lanes = 4 };
 
 class LaneLine {
  private:
@@ -52,8 +48,7 @@ class LaneLine {
 
  public:
   LaneLine() = default;
-  explicit LaneLine(int id, const std::vector<double> &config,
-                    const LaneStatus &lane_status);
+  explicit LaneLine(int id, const std::vector<double> &config, const LaneStatus &lane_status);
 
  private:
   void generateCenterLineAndBounds();
@@ -65,24 +60,36 @@ struct Road {
   using RoadConfig = std::vector<laneConfig>;
 
  private:
-  int id;
+  int id_{};
   LaneLine centerLane;
   std::vector<LaneLine> lanes;
-  std::shared_ptr<Road> pre_road;
-  std::shared_ptr<Road> next_road;
+
+ private:
+  Road *suc_road_ = nullptr;
+  Road *pre_road_ = nullptr;
 
  public:
-  int GetId() const { return id; }
+ public:
+  int GetId() const { return id_; }
   const LaneLine &GetCenterLane() const { return centerLane; }
   const std::vector<LaneLine> &GetLanes() const { return lanes; }
-  const std::shared_ptr<Road> &GetPreRoad() const { return pre_road; }
-  const std::shared_ptr<Road> &GetNextRoad() const { return next_road; }
+  Road *GetPreRoad() const { return pre_road_; }
+  Road *GetSucRoad() const { return suc_road_; }
 
  public:
-  explicit Road(int road_id, int lane_num,
-                const std::vector<double> &road_config, LaneStatus &lane_status)
-      : id(road_id) {
+  void SetPreRoad(Road *p_road) { Road::pre_road_ = p_road; }
+  void SetSucRoad(Road *n_road) { Road::suc_road_ = n_road; }
+
+ public:
+  Road() = default;
+  explicit Road(int road_id, int lane_num, const std::vector<double> &road_config,
+                LaneStatus &lane_status)
+      : id_(road_id) {
     generateLanes(lane_num, road_config, lane_status);
+  }
+
+  void print_laneId() const {
+    for (const auto &lane : lanes) { std::cout << "lane ID: " << lane.GetId() << std::endl; }
   }
 
  private:
@@ -90,13 +97,10 @@ struct Road {
                      LaneStatus &lane_status) {
     auto laneConfig = generateLaneConfigs(lane_num, road_config);
     auto laneStart = generateLaneStartStatus(lane_num, lane_status);
-    for (int i = 0; i < lane_num; ++i) {
-      generateLaneFromConfig(i, laneConfig[i], laneStart[i]);
-    }
+    for (int i = 0; i < lane_num; ++i) { generateLaneFromConfig(i, laneConfig[i], laneStart[i]); }
   }
 
-  static std::vector<LaneStatus> generateLaneStartStatus(
-      int lane_num, LaneStatus &lane_status) {
+  static std::vector<LaneStatus> generateLaneStartStatus(int lane_num, LaneStatus &lane_status) {
     std::vector<LaneStatus> laneStatus{};
     LaneStatus initStatus = lane_status;
 
@@ -104,10 +108,10 @@ struct Road {
       if (i == 0) { laneStatus.emplace_back(initStatus); }
       const auto &prevStatus = laneStatus.back();
       LaneStatus status{};
-      status.start_x_ = prevStatus.start_x_
-          + lane_width * std::cos(prevStatus.start_yaw_ - M_PI / 2.0);
-      status.start_y_ = prevStatus.start_y_
-          + lane_width * std::sin(prevStatus.start_yaw_ - M_PI / 2.0);
+      status.start_x_ =
+          prevStatus.start_x_ + lane_width * std::cos(prevStatus.start_yaw_ - M_PI / 2.0);
+      status.start_y_ =
+          prevStatus.start_y_ + lane_width * std::sin(prevStatus.start_yaw_ - M_PI / 2.0);
       status.start_yaw_ = prevStatus.start_yaw_;
       status.left_bound_offset_ = lane_width * 0.5;
       status.right_bound_offset_ = -lane_width * 0.5;
@@ -117,8 +121,7 @@ struct Road {
     return laneStatus;
   }
 
-  static RoadConfig generateLaneConfigs(
-      int lane_num, const std::vector<double> &lane_config) {
+  static RoadConfig generateLaneConfigs(int lane_num, const std::vector<double> &lane_config) {
     RoadConfig road_configs;
 
     for (int i = 0; i < lane_num; ++i) {
@@ -130,8 +133,7 @@ struct Road {
           road_configs.push_back(pre_config);
         } else if (pre_config.size() == 2) {
           double angle = pre_config[0];
-          double radius = angle < 0.0 ? pre_config[1] - lane_width
-                                      : pre_config[1] + lane_width;
+          double radius = angle < 0.0 ? pre_config[1] - lane_width : pre_config[1] + lane_width;
           laneConfig config{angle, radius};
           road_configs.push_back(config);
         }
@@ -141,8 +143,7 @@ struct Road {
     return road_configs;
   }
 
-  void generateLaneFromConfig(int lane_id,
-                              const std::vector<double> &lane_config,
+  void generateLaneFromConfig(int lane_id, const std::vector<double> &lane_config,
                               const LaneStatus &lane_status) {
     LaneLine laneLine(lane_id, lane_config, lane_status);
     if (lane_id == 0) { centerLane = laneLine; }
@@ -158,52 +159,86 @@ struct Map {
 
  public:
   const std::vector<Road> &GetRoads() const { return roads_; }
-  const std::vector<LinePoint> &GetReferenceLine() const {
-    return reference_line_;
-  }
+  const std::vector<LinePoint> &GetReferenceLine() const { return reference_line_; }
 
  public:
-  Map(const int lane_num,
-      const std::vector<std::vector<double>> &road_configs) {
-    generateRoadsFromConfig(lane_num, road_configs, initStatus);
-    generateReferenceLine();
+  Map() = default;
+  Map(const int lane_num, const std::vector<std::vector<double>> &road_configs) {
+    generateRoadsFromConfigs(lane_num, road_configs, initStatus);
+    generateGlobalReferenceLine();
+    print_road_topo();
   }
 
- private:
-  void generateRoadsFromConfig(
-      int lane_num, const std::vector<std::vector<double>> &road_configs,
-      const LaneStatus &lane_status) {
-    int id = 0;
-    for (const auto &config : road_configs) {
-      auto status = lane_status;
-      if (!roads_.empty()) {
-        auto next_start_point =
-            roads_.back().GetCenterLane().GetCenterLine().back();
-        status.start_x_ = next_start_point.x;
-        status.start_y_ = next_start_point.y;
-        status.start_yaw_ = next_start_point.theta;
-      }
-      Road road{id, lane_num, config, status};
-      roads_.push_back(road);
-      id++;
+  // print road topo
+  void print_road_topo() {
+    for (const auto &road : roads_) {
+      const int curRoadId = road.GetId();
+      const int preRoadId = road.GetPreRoad() ? road.GetPreRoad()->GetId() : -1;
+      const int nextRoadId = road.GetSucRoad() ? road.GetSucRoad()->GetId() : -1;
+
+      std::cout << "Cur Road ID: " << curRoadId << ", Pre ID: " << preRoadId
+                << ", Suc ID: " << nextRoadId << " , ";
+      std::cout << std::endl;
+
+      road.print_laneId();
+      std::cout << std::endl;
     }
   }
 
-  void generateReferenceLine() {
+ private:
+  void generateRoadsFromConfigs(int lane_num, const std::vector<std::vector<double>> &road_configs,
+                                const LaneStatus &lane_status) {
+    int id = 0;
+    Road *pre_road = nullptr;
+    LaneStatus current_lane_status = lane_status;// Make a copy of initial lane status
+    for (const auto &config : road_configs) {
+      if (pre_road) {
+        auto next_start_point = pre_road->GetCenterLane().GetCenterLine().back();
+        current_lane_status.start_x_ = next_start_point.x;
+        current_lane_status.start_y_ = next_start_point.y;
+        current_lane_status.start_yaw_ = next_start_point.theta;
+        current_lane_status.start_s = next_start_point.s;
+      }
+      //      Road road{id, lane_num, config, current_lane_status};
+      Road *road = new Road{id, lane_num, config, current_lane_status};
+
+      if (pre_road) {
+        //        pre_road->SetNextRoad(&road);
+        //        road.SetPreRoad(pre_road);
+        pre_road->SetSucRoad(road);
+        road->SetPreRoad(pre_road);
+      }
+
+      //      roads_.push_back(road);
+      roads_.push_back(*road);
+
+      pre_road = &roads_.back();
+      id++;
+    }
+    if (!roads_.empty()) { roads_.back().SetSucRoad(nullptr); }
+  }
+
+  void generateGlobalReferenceLine() {
     for (const auto &road : roads_) {
       auto ref = road.GetCenterLane().GetCenterLine();
       reference_line_.insert(reference_line_.end(), ref.begin(), ref.end());
     }
+
 #if 0
+    auto first = reference_line_.begin() +1 ;
+    auto end = reference_line_.end()-1;
+    std::cout << "first s = " << first->s << " , end s = " << end->s
+              << std::endl;
+
     std::vector<double> x, y;
     for (const auto &ref : reference_line_) {
-      std::cout << "ref = (" << ref.x << " , " << ref.y << ")" << std::endl;
+      std::cout << "ref = (" << ref.x << " , " << ref.y << ") , s = " << ref.s
+                << std::endl;
       x.emplace_back(ref.x);
       y.emplace_back(ref.y);
     }
     plt::named_plot("ref", x, y, "r.");
     plt::axis("equal");
-
 #endif
   }
 };
