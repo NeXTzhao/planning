@@ -4,19 +4,14 @@
 #include <string>
 #include <vector>
 
+#include "bezier.h"
 #include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
 constexpr double lane_width = 3.75;
 
-struct LinePoint {
-  double s;
-  double x;
-  double y;
-  double theta;
-  double kappa;
-};
+
 
 struct LaneStatus {
   double start_x_ = 0.0;
@@ -166,22 +161,39 @@ struct Map {
   Map(const int lane_num, const std::vector<std::vector<double>> &road_configs) {
     generateRoadsFromConfigs(lane_num, road_configs, initStatus);
     generateGlobalReferenceLine();
-    print_road_topo();
+  }
+
+  int cal_nearest_index(const Point &current_point) {
+    double min_distance = std::numeric_limits<double>::max();// 初始最小距离为正无穷大
+    int index = -1;                                          // 初始索引为无效值
+
+    for (int i = 0; i < (int) reference_line_.size(); ++i) {
+      const LinePoint &ref_point = reference_line_[i];
+      double distance =
+          std::sqrt((current_point.x - ref_point.x) * (current_point.x - ref_point.x)
+                    + (current_point.y - ref_point.y) * (current_point.y - ref_point.y));
+
+      if (distance < min_distance) {
+        min_distance = distance;
+        index = static_cast<int>(i);
+      }
+    }
+    return index;
   }
 
   // print road topo
   void print_road_topo() {
+    std::cout << "Road Topo : " << std::endl;
     for (const auto &road : roads_) {
       const int curRoadId = road.GetId();
       const int preRoadId = road.GetPreRoad() ? road.GetPreRoad()->GetId() : -1;
       const int nextRoadId = road.GetSucRoad() ? road.GetSucRoad()->GetId() : -1;
 
       std::cout << "Cur Road ID: " << curRoadId << ", Pre ID: " << preRoadId
-                << ", Suc ID: " << nextRoadId << " , ";
+                << ", Suc ID: " << nextRoadId;
       std::cout << std::endl;
 
       road.print_laneId();
-      std::cout << std::endl;
     }
   }
 

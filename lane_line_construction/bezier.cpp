@@ -9,21 +9,15 @@ double Point::norm() const { return std::sqrt(x * x + y * y); }
 
 Point Point::normalized() const {
   double length = norm();
-  if (length == 0.0) {
-    throw std::runtime_error("Normalization failed: Zero length vector");
-  }
+  if (length == 0.0) { throw std::runtime_error("Normalization failed: Zero length vector"); }
   return *this * (1.0 / length);
 }
 
 double Point::squaredNorm() const { return x * x + y * y; }
 
-double Point::dot(const Point &other) const {
-  return x * other.x + y * other.y;
-}
+double Point::dot(const Point &other) const { return x * other.x + y * other.y; }
 
-double Point::cross(const Point &other) const {
-  return x * other.y - y * other.x;
-}
+double Point::cross(const Point &other) const { return x * other.y - y * other.x; }
 
 Point &Point::operator+=(const Point &other) {
   x += other.x;
@@ -50,13 +44,9 @@ Point &Point::operator/=(double scalar) {
   return *this;
 }
 
-Point Point::operator+(const Point &other) const {
-  return {x + other.x, y + other.y};
-}
+Point Point::operator+(const Point &other) const { return {x + other.x, y + other.y}; }
 
-Point Point::operator-(const Point &other) const {
-  return {x - other.x, y - other.y};
-}
+Point Point::operator-(const Point &other) const { return {x - other.x, y - other.y}; }
 
 Point Point::operator*(double scalar) const { return {x * scalar, y * scalar}; }
 
@@ -65,24 +55,18 @@ Point Point::operator/(double scalar) const {
   return {x / scalar, y / scalar};
 }
 
-Point operator*(double scalar, const Point &p) {
-  return {scalar * p.x, scalar * p.y};
-}
+Point operator*(double scalar, const Point &p) { return {scalar * p.x, scalar * p.y}; }
 
-Point operator*(const Point &p1, const Point &p2) {
-  return {p1.x * p2.x, p1.y * p2.y};
-}
+Point operator*(const Point &p1, const Point &p2) { return {p1.x * p2.x, p1.y * p2.y}; }
 
-BezierCurve::BezierCurve(const std::vector<Point> &controlPoints)
-    : controlPoints_(controlPoints) {
-  degree_ = controlPoints_.size() - 1;
+BezierCurve::BezierCurve(const std::vector<Point> &controlPoints) : controlPoints_(controlPoints) {
+  degree_ = (int) controlPoints_.size() - 1;
 }
 
 Point BezierCurve::evaluate(double t) const {
   Point result = {0.0, 0.0};
   for (int i = 0; i <= degree_; ++i) {
-    double blend = binomialCoefficient(degree_, i) * std::pow(t, i)
-        * std::pow(1 - t, degree_ - i);
+    double blend = binomialCoefficient(degree_, i) * std::pow(t, i) * std::pow(1 - t, degree_ - i);
     result = result + (controlPoints_[i] * blend);
   }
   return result;
@@ -101,12 +85,10 @@ Point BezierCurve::firstDerivative(double t) const {
 Point BezierCurve::secondDerivative(double t) const {
   Point result = {0.0, 0.0};
   for (int i = 0; i <= degree_ - 2; ++i) {
-    double blend = binomialCoefficient(degree_ - 2, i) * (degree_ - 1)
-        * (degree_ - 2) * (std::pow(t, i) * std::pow(1 - t, degree_ - 2 - i));
-    result = result
-        + ((controlPoints_[i + 2] - 2 * controlPoints_[i + 1]
-            + controlPoints_[i])
-           * blend);
+    double blend = binomialCoefficient(degree_ - 2, i) * (degree_ - 1) * (degree_ - 2)
+        * (std::pow(t, i) * std::pow(1 - t, degree_ - 2 - i));
+    result =
+        result + ((controlPoints_[i + 2] - 2 * controlPoints_[i + 1] + controlPoints_[i]) * blend);
   }
   return result;
 }
@@ -114,12 +96,11 @@ Point BezierCurve::secondDerivative(double t) const {
 Point BezierCurve::thirdDerivative(double t) const {
   Point result = {0.0, 0.0};
   for (int i = 0; i <= degree_ - 3; ++i) {
-    double blend = binomialCoefficient(degree_ - 3, i) * (degree_ - 1)
-        * (degree_ - 2) * (degree_ - 3)
-        * (std::pow(t, i) * std::pow(1 - t, degree_ - 3 - i));
+    double blend = binomialCoefficient(degree_ - 3, i) * (degree_ - 1) * (degree_ - 2)
+        * (degree_ - 3) * (std::pow(t, i) * std::pow(1 - t, degree_ - 3 - i));
     result = result
-        + ((controlPoints_[i + 3] - 3 * controlPoints_[i + 2]
-            + 3 * controlPoints_[i + 1] - controlPoints_[i])
+        + ((controlPoints_[i + 3] - 3 * controlPoints_[i + 2] + 3 * controlPoints_[i + 1]
+            - controlPoints_[i])
            * blend);
   }
   return result;
@@ -134,8 +115,8 @@ double BezierCurve::kappa(double t) const {
   Point first_derivative = firstDerivative(t);
   Point second_derivative = secondDerivative(t);
 
-  double cross_product = first_derivative.x * second_derivative.y
-      - first_derivative.y * second_derivative.x;
+  double cross_product =
+      first_derivative.x * second_derivative.y - first_derivative.y * second_derivative.x;
   double squared_norm_first = first_derivative.squaredNorm();
 
   double curvature = cross_product / std::pow(squared_norm_first, 1.5);
@@ -157,24 +138,46 @@ double BezierCurve::dkappa(double t) const {
   return dkappa_res;
 }
 
-void BezierCurve::getBezierCurve(int num_points) {
-  curvePoints_.resize(num_points);
-  curveKappa_.resize(num_points);
-  curveDkappa_.resize(num_points);
-
+void BezierCurve::GetBezierCurve(int num_points) {
+  //  curvePoints_.resize(num_points);
+  //  curveKappa_.resize(num_points);
+  //  curveDkappa_.resize(num_points);
+  double total_s = 0.0;// 累积弧长
+  double prev_x = 0.0;
+  double prev_y = 0.0;
+  trajectory_.resize(num_points);
   for (int i = 0; i < num_points; i++) {
     double t = static_cast<double>(i) / (num_points - 1);
     double one_minus_t = 1.0 - t;
 
     for (int j = 0; j <= degree_; j++) {
-      double coeff = binomialCoefficient(degree_, j)
-          * pow(one_minus_t, degree_ - j) * pow(t, j);
-      curvePoints_[i].x += coeff * controlPoints_[j].x;
-      curvePoints_[i].y += coeff * controlPoints_[j].y;
+      double coeff = binomialCoefficient(degree_, j) * pow(one_minus_t, degree_ - j) * pow(t, j);
+      //      curvePoints_[i].x += coeff * controlPoints_[j].x;
+      //      curvePoints_[i].y += coeff * controlPoints_[j].y;
+
+      trajectory_[i].x += coeff * controlPoints_[j].x;
+      trajectory_[i].y += coeff * controlPoints_[j].y;
     }
 
-    curveKappa_[i] = kappa(t);
-    curveDkappa_[i] = dkappa(t);
+    // 计算当前点与前一个点之间的弧长并累加
+    double dx = trajectory_[i].x - prev_x;
+    double dy = trajectory_[i].y - prev_y;
+    double ds = sqrt(dx * dx + dy * dy);
+    total_s += ds;
+    trajectory_[i].s = total_s;
+
+    if (i > 0) {
+      double dx_prev = trajectory_[i - 1].x - prev_x;
+      double dy_prev = trajectory_[i - 1].y - prev_y;
+      trajectory_[i - 1].theta = atan2(dy_prev, dx_prev);
+    }
+
+    prev_x = trajectory_[i].x;
+    prev_y = trajectory_[i].y;
+
+    //    curveKappa_[i] = kappa(t);
+    //    curveDkappa_[i] = dkappa(t);
+    trajectory_[i].kappa = kappa(t);
   }
 }
 
@@ -182,17 +185,15 @@ void BezierCurve::print_debug() {
   std::cout << "degree = " << degree_ << std::endl;
   int i = 0;
   for (const auto &point : controlPoints_) {
-    std::cout << "Control_Point" << i << " (" << point.x << "," << point.y
-              << ")" << std::endl;
+    std::cout << "Control_Point" << i << " (" << point.x << "," << point.y << ")" << std::endl;
     i++;
   }
 }
 
 void BezierCurve::vis_curve() {
-  std::vector<double> x, y, kappa, dkappa;
-  auto points = this->getCurvePoints();
-
-  for (auto &point : points) {
+  GetBezierCurve();
+  std::vector<double> x, y;
+  for (const auto &point : trajectory_) {
     x.push_back(point.x);
     y.push_back(point.y);
   }
@@ -210,16 +211,15 @@ void BezierCurve::vis_curve() {
 
 void BezierCurve::vis_curvature() {
   std::vector<double> kappa, dkappa;
-  auto k = this->getCurveKappa();
-  auto dk = this->getCurveDkappa();
+  GetBezierCurve();
 
-  for (int i = 0; i < (int) k.size(); ++i) {
-    kappa.push_back(k[i]);
-    dkappa.push_back(dk[i]);
+  for (int i = 0; i < (int) trajectory_.size(); ++i) {
+    kappa.push_back(trajectory_[i].kappa);
+    //    dkappa.push_back(dk[i]);
   }
   plt::figure();
   plt::named_plot("local trajectory kappa", kappa, "b-");
-  plt::named_plot("local trajectory dkappa", dkappa, "r-");
+  //  plt::named_plot("local trajectory dkappa", dkappa, "r-");
   plt::grid(true);
   plt::legend();
 }

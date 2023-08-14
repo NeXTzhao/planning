@@ -6,6 +6,14 @@
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 
+struct LinePoint {
+  double s;
+  double x;
+  double y;
+  double theta;
+  double kappa;
+};
+
 struct Point {
   double x, y;
 
@@ -34,18 +42,28 @@ Point operator*(const Point &p1, const Point &p2);
 
 class BezierCurve {
  private:
-  std::vector<Point> curvePoints_;
-  std::vector<double> curveKappa_;
-  std::vector<double> curveDkappa_;
-  int binomialCoefficient(int n, int k) const;
+  //  std::vector<Point> curvePoints_;
+  //  std::vector<double> curveKappa_;
+  //  std::vector<double> curveDkappa_;
+  std::vector<LinePoint> trajectory_;
 
  protected:
   int degree_{};
   std::vector<Point> controlPoints_;
 
+ private:
+  int binomialCoefficient(int n, int k) const;
+  void GetBezierCurve(int num_points = 50);
+
  public:
-  explicit BezierCurve(const std::vector<Point> &controlPoints);
+  //  const std::vector<Point> & GetCurvePoints() const { return curvePoints_; }
+  //  const std::vector<double> & GetCurveKappa() const { return curveKappa_; }
+  //  const std::vector<double> & GetCurveDkappa() const { return curveDkappa_; }
+  const std::vector<LinePoint> &GetTrajectory() const { return trajectory_; }
+
+ public:
   BezierCurve() = default;
+  explicit BezierCurve(const std::vector<Point> &controlPoints);
 
   Point evaluate(double t) const;
 
@@ -56,10 +74,9 @@ class BezierCurve {
   double kappa(double t) const;
   double dkappa(double t) const;
 
-  std::vector<Point> getCurvePoints() { return curvePoints_; };
-  std::vector<double> getCurveKappa() { return curveKappa_; };
-  std::vector<double> getCurveDkappa() { return curveDkappa_; };
-  void getBezierCurve(int num_points = 50);
+  //  std::vector<Point> GetCurvePoints() { return curvePoints_; };
+  //  std::vector<double> GetCurveKappa() { return curveKappa_; };
+  //  std::vector<double> GetCurveDkappa() { return curveDkappa_; };
 
   void print_debug();
   void vis_curve();
