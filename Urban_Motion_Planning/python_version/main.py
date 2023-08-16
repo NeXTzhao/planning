@@ -1,19 +1,21 @@
-import geopandas as gpd
+# import functions to read xml file and visualize commonroad objects
 import matplotlib.pyplot as plt
 
-# 读取 Shapefile 文件
-# shapefile_path = "/home/vtd/Downloads/CNOA/hh05_deform_20230720/ROAD.shp"
-shapefile_path = "/home/vtd/Downloads/CNOA/hh05_deform_20230720/LANE_ADAS.shp"
+from commonroad.common.file_reader import CommonRoadFileReader
+from commonroad.visualization.mp_renderer import MPRenderer
+from commonroad.visualization.draw_params import MPDrawParams
 
-gdf = gpd.read_file(shapefile_path)
+# generate path of the file to be opened
+file_path = "DEU_Flensburg-1_1_T-1.xml"
 
+# read in the scenario and planning problem set
+scenario, planning_problem_set = CommonRoadFileReader(file_path).open()
 
-# 存储为 JSON 文件
-# output_json_path = "LANE_ADAS.json"
-# gdf.to_file(output_json_path, driver="GeoJSON")
-# print("GeoDataFrame saved as JSON:", output_json_path)
-
-# 绘制地图
-ax = gdf.plot()
-ax.set_title('Shapefile Visualization')
+# plot the planning problem and the scenario for the fifth time step
+plt.figure(figsize=(25, 10))
+rnd = MPRenderer()
+rnd.draw_params.time_begin = 5
+scenario.draw(rnd)
+planning_problem_set.draw(rnd)
+rnd.render()
 plt.show()

@@ -150,7 +150,7 @@ class Simulation {
           auto lane_change = std::make_shared<BezierLaneChange>(pb, pi, plc);
           auto trajectory = lane_change->GetTrajectory();
           //          trajectory_.clear();
-                    trajectory_ = trajectory;
+//                    trajectory_ = trajectory;
           lane_change->vis_curve();
           lane_change.reset();
         }

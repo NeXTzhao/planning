@@ -11,8 +11,6 @@ namespace plt = matplotlibcpp;
 
 constexpr double lane_width = 3.75;
 
-
-
 struct LaneStatus {
   double start_x_ = 0.0;
   double start_y_ = 0.0;
@@ -77,8 +75,7 @@ struct Road {
 
  public:
   Road() = default;
-  explicit Road(int road_id, int lane_num, const std::vector<double> &road_config,
-                LaneStatus &lane_status)
+  explicit Road(int road_id, int lane_num, const std::vector<double> &road_config, LaneStatus &lane_status)
       : id_(road_id) {
     generateLanes(lane_num, road_config, lane_status);
   }
@@ -88,8 +85,7 @@ struct Road {
   }
 
  private:
-  void generateLanes(int lane_num, const std::vector<double> &road_config,
-                     LaneStatus &lane_status) {
+  void generateLanes(int lane_num, const std::vector<double> &road_config, LaneStatus &lane_status) {
     auto laneConfig = generateLaneConfigs(lane_num, road_config);
     auto laneStart = generateLaneStartStatus(lane_num, lane_status);
     for (int i = 0; i < lane_num; ++i) { generateLaneFromConfig(i, laneConfig[i], laneStart[i]); }
@@ -103,10 +99,8 @@ struct Road {
       if (i == 0) { laneStatus.emplace_back(initStatus); }
       const auto &prevStatus = laneStatus.back();
       LaneStatus status{};
-      status.start_x_ =
-          prevStatus.start_x_ + lane_width * std::cos(prevStatus.start_yaw_ - M_PI / 2.0);
-      status.start_y_ =
-          prevStatus.start_y_ + lane_width * std::sin(prevStatus.start_yaw_ - M_PI / 2.0);
+      status.start_x_ = prevStatus.start_x_ + lane_width * std::cos(prevStatus.start_yaw_ - M_PI / 2.0);
+      status.start_y_ = prevStatus.start_y_ + lane_width * std::sin(prevStatus.start_yaw_ - M_PI / 2.0);
       status.start_yaw_ = prevStatus.start_yaw_;
       status.left_bound_offset_ = lane_width * 0.5;
       status.right_bound_offset_ = -lane_width * 0.5;
@@ -118,7 +112,6 @@ struct Road {
 
   static RoadConfig generateLaneConfigs(int lane_num, const std::vector<double> &lane_config) {
     RoadConfig road_configs;
-
     for (int i = 0; i < lane_num; ++i) {
       if (i == 0) {
         road_configs.push_back(lane_config);
@@ -138,8 +131,7 @@ struct Road {
     return road_configs;
   }
 
-  void generateLaneFromConfig(int lane_id, const std::vector<double> &lane_config,
-                              const LaneStatus &lane_status) {
+  void generateLaneFromConfig(int lane_id, const std::vector<double> &lane_config, const LaneStatus &lane_status) {
     LaneLine laneLine(lane_id, lane_config, lane_status);
     if (lane_id == 0) { centerLane = laneLine; }
     lanes.push_back(laneLine);
@@ -164,14 +156,13 @@ struct Map {
   }
 
   int cal_nearest_index(const Point &current_point) {
-    double min_distance = std::numeric_limits<double>::max();// 初始最小距离为正无穷大
-    int index = -1;                                          // 初始索引为无效值
+    double min_distance = std::numeric_limits<double>::max();
+    int index = -1;
 
     for (int i = 0; i < (int) reference_line_.size(); ++i) {
       const LinePoint &ref_point = reference_line_[i];
-      double distance =
-          std::sqrt((current_point.x - ref_point.x) * (current_point.x - ref_point.x)
-                    + (current_point.y - ref_point.y) * (current_point.y - ref_point.y));
+      double distance = std::sqrt((current_point.x - ref_point.x) * (current_point.x - ref_point.x)
+                                  + (current_point.y - ref_point.y) * (current_point.y - ref_point.y));
 
       if (distance < min_distance) {
         min_distance = distance;
@@ -181,7 +172,6 @@ struct Map {
     return index;
   }
 
-  // print road topo
   void print_road_topo() {
     std::cout << "Road Topo : " << std::endl;
     for (const auto &road : roads_) {
@@ -189,8 +179,7 @@ struct Map {
       const int preRoadId = road.GetPreRoad() ? road.GetPreRoad()->GetId() : -1;
       const int nextRoadId = road.GetSucRoad() ? road.GetSucRoad()->GetId() : -1;
 
-      std::cout << "Cur Road ID: " << curRoadId << ", Pre ID: " << preRoadId
-                << ", Suc ID: " << nextRoadId;
+      std::cout << "Cur Road ID: " << curRoadId << ", Pre ID: " << preRoadId << ", Suc ID: " << nextRoadId;
       std::cout << std::endl;
 
       road.print_laneId();
@@ -202,7 +191,7 @@ struct Map {
                                 const LaneStatus &lane_status) {
     int id = 0;
     Road *pre_road = nullptr;
-    LaneStatus current_lane_status = lane_status;// Make a copy of initial lane status
+    LaneStatus current_lane_status = lane_status;
     for (const auto &config : road_configs) {
       if (pre_road) {
         auto next_start_point = pre_road->GetCenterLane().GetCenterLine().back();

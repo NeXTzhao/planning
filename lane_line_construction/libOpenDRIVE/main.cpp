@@ -8,7 +8,7 @@
 #include "Mesh.h"
 #include "OpenDriveMap.h"
 #include "Road.h"
-#include "../../libOpenDRIVE-master/include/matplotlibcpp.h"
+#include "visualization/matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
@@ -17,10 +17,9 @@ int main(int argc, char **argv) {
   //    printf("ERROR: too few arguments\n");
   //    return -1;
   //  }
-  odr::OpenDriveMap odr_map(
-      "/home/next/Videos/Carla_OpenDrive/map/Town03.xodr");
+  std::string map_path = "/home/vtd/Documents/xord_map/intersection.xodr";
+  odr::OpenDriveMap odr_map(map_path);
   const double eps = 0.1;
-
   std::vector<odr::Vec3D> lane_pts;
   std::vector<odr::Vec3D> roadmark_broken_pts;
   std::vector<odr::Vec3D> roadmark_solid_pts;

@@ -4,7 +4,7 @@ libOpenDRIVE is a **lightweight, dependency-free, fast C++ library** providing O
 It's small and can be easily integrated in other projects. It can be compiled to a **WebAssembly** library and includes JavaScript bindings. A core function is the parsing of OpenDRIVE files and the generation of 3D models. The library targets OpenDRIVE version 1.4.
 
 ## Example
-Here's an example of how code using libOpenDRIVE looks. For a more complete example refer to [test.cpp](test.cpp).
+Here's an example of how code using libOpenDRIVE looks. For a more complete example refer to [test.cpp](main.cpp).
 
 ```c++
 // load map

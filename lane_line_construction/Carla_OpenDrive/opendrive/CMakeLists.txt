@@ -5,11 +5,11 @@ project(opendrive)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # 设置静态库文件目录
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-# 动态库文件目录
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
-# 可执行文件目录
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+## 动态库文件目录
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+## 可执行文件目录
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 #PROJECT_SOURCE_DIR : current directory including the CMakeList.txt file
 set(carla_opendrive_source_path "${PROJECT_SOURCE_DIR}/src/")
@@ -186,7 +186,7 @@ set(libopendrive_sources "${libopendrive_sources};${streaming_sources}")
 #message("[cmake debug] road_signal_header:" ${road_signal_header})
 
 #build shared library
-add_library(opendrive SHARED ${libopendrive_sources})
+add_library(opendrive ${libopendrive_sources})
 
 install(TARGETS opendrive DESTINATION ${carla_opendrive_source_path}/../lib)
 
