@@ -4,6 +4,10 @@
 
   ros工作空间中，purepursuit功能包使用purepursuit算法对spline生成的样条曲线进行了路径跟踪。lqr_steering功能包使用lqr算法对生成的五次多项式轨迹进行横向路径跟踪。
 
+<img src="Astart改进/loadToMap3.jpg" alt="loadToMap3" style="zoom:150%;" /><img src="Astart改进/loadToMap2.jpg" alt="loadToMap2" style="zoom:150%;" />
+
+
+
 ## 2 算法介绍
 
 ### ***2.2 ROS（Gazebo仿真）***
