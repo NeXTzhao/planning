@@ -25,8 +25,8 @@ done
 echo "软件安装完成。"
 
 echo "配置git"
-git config --global user.name "wangdezhao"
-git config --global user.email "dezhao_wang1@human-horizons.com"
+git config --global user.name " "
+git config --global user.email " "
 git config --global credential.helper store
 pip config set global.index-url <https://mirrors.aliyun.com/pypi/simple/>
 
